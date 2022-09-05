@@ -1,7 +1,8 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.dateprovider;
+
+import com.openclassrooms.realestatemanager.dateprovider.DateProvider;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class DeterministicDateProvider implements DateProvider {
 

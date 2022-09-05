@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.dateprovider;
 
 import java.time.LocalDate;
 import java.util.Date;

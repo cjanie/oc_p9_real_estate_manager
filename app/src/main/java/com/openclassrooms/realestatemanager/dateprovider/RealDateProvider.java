@@ -1,10 +1,12 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.dateprovider;
 
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+
+import androidx.annotation.RequiresApi;
+
+import com.openclassrooms.realestatemanager.dateprovider.DateProvider;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class RealDateProvider implements DateProvider {
 

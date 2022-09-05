@@ -3,7 +3,10 @@ package com.openclassrooms.realestatemanager;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+
+import androidx.annotation.RequiresApi;
+
+import com.openclassrooms.realestatemanager.dateprovider.DateProvider;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
