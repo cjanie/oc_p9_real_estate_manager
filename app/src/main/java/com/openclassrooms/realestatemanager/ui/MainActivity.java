@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +26,14 @@ public class MainActivity extends AppCompatActivity {
         this.configureTextViewMain();
         this.configureTextViewQuantity();
 
+        this.textViewMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void configureTextViewMain(){
@@ -36,4 +46,5 @@ public class MainActivity extends AppCompatActivity {
         this.textViewQuantity.setTextSize(20);
         this.textViewQuantity.setText(quantity);
     }
+
 }

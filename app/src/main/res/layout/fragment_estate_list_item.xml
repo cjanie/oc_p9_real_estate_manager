@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/estate_list_item_photo"
+        android:layout_width="@dimen/photo_size"
+        android:layout_height="@dimen/photo_size"
         android:src="@drawable/ic_launcher_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:padding="@dimen/padding"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="parent"
-        android:padding="@dimen/padding">
+        app:layout_constraintStart_toEndOf="@+id/estate_list_item_photo"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/estate_list_item_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/estate_list_item_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            app:layout_constraintTop_toBottomOf="@+id/estate_list_item_type"/>
+            app:layout_constraintTop_toBottomOf="@+id/estate_list_item_type" />
 
         <TextView
             android:id="@+id/estate_list_item_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            android:textSize="@dimen/big_text"
             android:textColor="@color/colorAccent"
-            app:layout_constraintTop_toBottomOf="@+id/estate_list_item_location"/>
-    </android.support.constraint.ConstraintLayout>
+            android:textSize="@dimen/big_text"
+            app:layout_constraintTop_toBottomOf="@+id/estate_list_item_location" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
