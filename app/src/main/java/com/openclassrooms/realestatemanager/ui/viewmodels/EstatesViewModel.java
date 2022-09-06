@@ -1,25 +1,30 @@
 package com.openclassrooms.realestatemanager.ui.viewmodels;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.GetEstatesUseCase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EstatesViewModel extends ViewModel {
 
-
+    private MutableLiveData<List<Estate>> estates;
 
     private GetEstatesUseCase getEstatesUseCase;
 
     public EstatesViewModel(GetEstatesUseCase getEstatesUseCase) {
         this.getEstatesUseCase = getEstatesUseCase;
+        this.estates = new MutableLiveData<>(new ArrayList<>());
     }
 
-    public List<Estate> getEstates() {
+    public MutableLiveData<List<Estate>> getEstates() {
+        return this.estates;
+    }
 
-        System.out.println("estates size" + this.getEstatesUseCase.handle().size());
-        return this.getEstatesUseCase.handle();
+    public void fetchEstatesToUpdateLiveData() {
+        this.estates.postValue(this.getEstatesUseCase.handle());
     }
 }

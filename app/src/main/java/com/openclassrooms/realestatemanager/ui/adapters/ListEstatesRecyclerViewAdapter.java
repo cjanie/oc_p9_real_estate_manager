@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.ui.EstateDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +69,16 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                     .error(R.drawable.ic_baseline_error_outline_24)
                     .into(((ItemViewHolder) holder).photo);
 
-
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, EstateDetailsActivity.class);
+                    context.startActivity(intent);
+                }
+            });
         }
+
     }
 
     @Override
