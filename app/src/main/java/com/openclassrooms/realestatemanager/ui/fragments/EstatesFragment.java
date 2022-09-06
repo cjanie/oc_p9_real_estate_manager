@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui;
+package com.openclassrooms.realestatemanager.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -44,9 +44,10 @@ public class EstatesFragment extends Fragment {
 
         EstatesViewModelFactory viewModelFactory = ((Launch)this.getActivity().getApplication()).estatesViewModelFactory();
         this.viewModel = new ViewModelProvider(this, viewModelFactory).get(EstatesViewModel.class);
-
-        this.adapter.updateList(viewModel.getEstates());
-
+        this.viewModel.getEstates().observe(this.getViewLifecycleOwner(),
+                estates -> this.adapter.updateList(estates)
+                );
+        this.viewModel.fetchEstatesToUpdateLiveData();
         return root;
     }
 }
