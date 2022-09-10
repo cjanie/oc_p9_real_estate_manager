@@ -2,6 +2,8 @@ package com.openclassrooms.realestatemanager.ui.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.ui.EstateDetailsActivity;
+import com.openclassrooms.realestatemanager.ui.SharedPreferencesConfig;
+import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +30,12 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     private static final int TYPE_ITEM_VIEW = 1;
 
+    private SharedViewModel sharedViewModel;
+
     private List<Estate> estates;
 
-    public ListEstatesRecyclerViewAdapter() {
+    public ListEstatesRecyclerViewAdapter(SharedViewModel sharedViewModel) {
+        this.sharedViewModel = sharedViewModel;
         this.estates = new ArrayList<>();
     }
 
@@ -75,8 +82,22 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                     Context context = view.getContext();
                     Intent intent = new Intent(context, EstateDetailsActivity.class);
                     context.startActivity(intent);
+                    sharedViewModel.updateEstateSelection(estate);
+
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(SharedPreferencesConfig.IS_ESTATE_SELECTED, true);
+                    editor.putLong(SharedPreferencesConfig.ESTATE_ID, estate.getId());
+                    editor.putString(SharedPreferencesConfig.ESTATE_TYPE, estate.getType().toString());
+                    editor.putString(SharedPreferencesConfig.ESTATE_LOCATION, estate.getLocation());
+                    editor.putFloat(SharedPreferencesConfig.ESTATE_PRICE, estate.getPrice());
+                    editor.putString(SharedPreferencesConfig.ESTATE_DEVISE, estate.getDevise().toString());
+                    editor.commit();
+
+
                 }
             });
+
         }
 
     }

@@ -16,14 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.ui.adapters.ListEstatesRecyclerViewAdapter;
-import com.openclassrooms.realestatemanager.ui.viewmodels.EstatesViewModel;
+import com.openclassrooms.realestatemanager.ui.viewmodels.SearchViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
-import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
+import com.openclassrooms.realestatemanager.ui.viewmodels.factories.SearchViewModelFactory;
 
-public class EstatesFragment extends Fragment {
+public class SearchResultsFragment extends Fragment {
 
-    private EstatesViewModel estatesViewModel;
+    private SearchViewModel searchViewModel;
 
     private SharedViewModel sharedViewModel;
 
@@ -34,8 +35,6 @@ public class EstatesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
         View root = inflater.inflate(R.layout.fragment_recycler_view, container, false);
         Context context = root.getContext();
         this.recyclerView = (RecyclerView) root;
@@ -43,18 +42,15 @@ public class EstatesFragment extends Fragment {
         this.recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
         this.sharedViewModel = new ViewModelProvider(this.requireActivity()).get(SharedViewModel.class);
-        this.adapter = new ListEstatesRecyclerViewAdapter(this.sharedViewModel);
+        this.adapter = new ListEstatesRecyclerViewAdapter(sharedViewModel);
         this.recyclerView.setAdapter(adapter);
 
-        EstatesViewModelFactory viewModelFactory = ((Launch)this.getActivity().getApplication()).estatesViewModelFactory();
-        this.estatesViewModel = new ViewModelProvider(this, viewModelFactory).get(EstatesViewModel.class);
-
-
-
-        this.estatesViewModel.getEstates().observe(this.getViewLifecycleOwner(),
+        SearchViewModelFactory viewModelFactory = ((Launch)this.getActivity().getApplication()).searchViewModelFactory();
+        this.searchViewModel = new ViewModelProvider(this, viewModelFactory).get(SearchViewModel.class);
+        this.searchViewModel.getSearchResults().observe(this.getViewLifecycleOwner(),
                 estates -> this.adapter.updateList(estates)
-                );
-        this.estatesViewModel.fetchEstatesToUpdateLiveData();
+        );
+        this.searchViewModel.fetchSearchResultsToUpdateLiveData(EstateType.DUPLEX); // TODO
         return root;
     }
 }

@@ -6,6 +6,8 @@ import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 
 public class Estate {
 
+    private Integer id;
+
     private EstateType type;
 
     private String location;
@@ -15,6 +17,14 @@ public class Estate {
     private Devise devise;
 
     private String photoUrl;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public EstateType getType() {
         return type;

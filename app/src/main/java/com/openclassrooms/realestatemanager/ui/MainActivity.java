@@ -1,10 +1,16 @@
 package com.openclassrooms.realestatemanager.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.openclassrooms.realestatemanager.R;
@@ -14,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textViewMain;
     private TextView textViewQuantity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
     private void configureTextViewMain(){
@@ -46,5 +54,6 @@ public class MainActivity extends AppCompatActivity {
         this.textViewQuantity.setTextSize(20);
         this.textViewQuantity.setText(quantity);
     }
+
 
 }

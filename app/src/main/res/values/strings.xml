@@ -4,4 +4,12 @@
     <string name="number_of_rooms">Number of rooms</string>
     <string name="number_of_bathrooms">Number of bathrooms</string>
     <string name="number_of_bedrooms">Number of bedrooms</string>
+    <string name="location">Location</string>
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="search">Search</string>
+    <string name="home">Home</string>
+    <string name="type">Type</string>
+    <string name="price">Price</string>
+    <string name="save">Save</string>
 </resources>

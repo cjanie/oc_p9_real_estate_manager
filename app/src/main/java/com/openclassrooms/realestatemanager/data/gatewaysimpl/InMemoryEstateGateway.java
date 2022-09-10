@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.data.gatewaysimpl;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.businesslogic.gateways.EstateGateway;
 
 import java.util.ArrayList;
@@ -20,6 +21,11 @@ public class InMemoryEstateGateway implements EstateGateway {
 
     @Override
     public List<Estate> getEstates() {
+        return this.estates;
+    }
+
+    @Override
+    public List<Estate> search(EstateType type) {
         return this.estates;
     }
 }
