@@ -4,6 +4,8 @@ package com.openclassrooms.realestatemanager.businesslogic.entities;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 
+import java.util.List;
+
 public class Estate {
 
     private Integer id;
@@ -17,6 +19,15 @@ public class Estate {
     private Devise devise;
 
     private String photoUrl;
+
+    private Integer surface;
+
+    private Integer numberOfRooms;
+
+    private Integer numberOfBathrooms;
+
+    private Integer numberOfBedrooms;
+
 
     public Integer getId() {
         return id;
@@ -64,5 +75,37 @@ public class Estate {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public Integer getSurface() {
+        return surface;
+    }
+
+    public void setSurface(Integer surface) {
+        this.surface = surface;
+    }
+
+    public Integer getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    public void setNumberOfRooms(Integer numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
+    }
+
+    public Integer getNumberOfBathrooms() {
+        return numberOfBathrooms;
+    }
+
+    public void setNumberOfBathrooms(Integer numberOfBathrooms) {
+        this.numberOfBathrooms = numberOfBathrooms;
+    }
+
+    public Integer getNumberOfBedrooms() {
+        return numberOfBedrooms;
+    }
+
+    public void setNumberOfBedrooms(Integer numberOfBedrooms) {
+        this.numberOfBedrooms = numberOfBedrooms;
     }
 }

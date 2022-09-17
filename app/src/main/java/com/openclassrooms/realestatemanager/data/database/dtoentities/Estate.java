@@ -21,6 +21,15 @@ public class Estate {
 
     private Float priceInDollars;
 
+    private Integer surfaceInMeterSquare;
+
+    private Integer numberOfRooms;
+
+    private Integer numberOfBathrooms;
+
+    private Integer numberOfBedrooms;
+
+
     public Integer getId() {
         return id;
     }
@@ -51,5 +60,37 @@ public class Estate {
 
     public void setPriceInDollars(Float priceInDollars) {
         this.priceInDollars = priceInDollars;
+    }
+
+    public Integer getSurfaceInMeterSquare() {
+        return surfaceInMeterSquare;
+    }
+
+    public void setSurfaceInMeterSquare(Integer surfaceInMeterSquare) {
+        this.surfaceInMeterSquare = surfaceInMeterSquare;
+    }
+
+    public Integer getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    public void setNumberOfRooms(Integer numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
+    }
+
+    public Integer getNumberOfBathrooms() {
+        return numberOfBathrooms;
+    }
+
+    public void setNumberOfBathrooms(Integer numberOfBathrooms) {
+        this.numberOfBathrooms = numberOfBathrooms;
+    }
+
+    public Integer getNumberOfBedrooms() {
+        return numberOfBedrooms;
+    }
+
+    public void setNumberOfBedrooms(Integer numberOfBedrooms) {
+        this.numberOfBedrooms = numberOfBedrooms;
     }
 }

@@ -17,8 +17,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
-import com.openclassrooms.realestatemanager.ui.EstateDetailsActivity;
-import com.openclassrooms.realestatemanager.ui.SharedPreferencesConfig;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
 import java.util.ArrayList;
@@ -76,27 +74,10 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                     .error(R.drawable.ic_baseline_error_outline_24)
                     .into(((ItemViewHolder) holder).photo);
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, EstateDetailsActivity.class);
-                    context.startActivity(intent);
-                    sharedViewModel.updateEstateSelection(estate);
-
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean(SharedPreferencesConfig.IS_ESTATE_SELECTED, true);
-                    editor.putLong(SharedPreferencesConfig.ESTATE_ID, estate.getId());
-                    editor.putString(SharedPreferencesConfig.ESTATE_TYPE, estate.getType().toString());
-                    editor.putString(SharedPreferencesConfig.ESTATE_LOCATION, estate.getLocation());
-                    editor.putFloat(SharedPreferencesConfig.ESTATE_PRICE, estate.getPrice());
-                    editor.putString(SharedPreferencesConfig.ESTATE_DEVISE, estate.getDevise().toString());
-                    editor.commit();
-
-
-                }
-            });
+            holder.itemView.setOnClickListener(view ->
+                    // View Model Action
+                    sharedViewModel.updateEstateSelection(estate)
+            );
 
         }
 

@@ -1,10 +1,7 @@
 package com.openclassrooms.realestatemanager.ui;
 
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -15,19 +12,22 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.ui.fragments.EstateDetailsFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.EstatesFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.FormAddEstateFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.FormFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.SearchResultsFragment;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
 public class SecondActivity extends AppCompatActivity {
 
     private SharedViewModel sharedViewModel;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor sharedPreferenceEditor;
 
     private EstatesFragment estatesFragment;
     private SearchResultsFragment searchResultsFragment;
-    private FormFragment formFragment;
+    private FormAddEstateFragment formAddEstateFragment;
+    private FormUpdateEstateFragment formUpdateEstateFragment;
+    private EstateDetailsFragment estateDetailsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +35,6 @@ public class SecondActivity extends AppCompatActivity {
         setContentView(R.layout.activity_second);
 
         this.sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        this.sharedPreferenceEditor = this.sharedPreferences.edit();
 
         this.sharedViewModel.getMenuAction().observe(this, action -> {
             if(action.equals(MenuAction.SEARCH)) {
@@ -52,17 +50,26 @@ public class SecondActivity extends AppCompatActivity {
                 this.showFragment(estatesFragment);
             }
             if(action.equals(MenuAction.ADD)) {
-                if(this.formFragment == null) {
-                    this.formFragment = new FormFragment();
+                if(this.formAddEstateFragment == null) {
+                    this.formAddEstateFragment = new FormAddEstateFragment();
                 }
-                this.showFragment(formFragment);
+                this.showFragment(formAddEstateFragment);
             }
             if(action.equals(MenuAction.EDIT)) {
-                if(this.formFragment == null) {
-                    this.formFragment = new FormFragment();
+                if(this.formUpdateEstateFragment == null) {
+                    this.formUpdateEstateFragment = new FormUpdateEstateFragment();
                 }
-                this.showFragment(formFragment);
+                this.showFragment(formUpdateEstateFragment);
             }
+        });
+
+        this.sharedViewModel.getEstateSelection().observe(this, estateSelection -> {
+            FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
+            if(this.estateDetailsFragment == null) {
+                this.estateDetailsFragment = new EstateDetailsFragment();
+            }
+            transaction.replace(R.id.frame_layout_details, this.estateDetailsFragment);
+            transaction.commit();
         });
     }
 
@@ -103,15 +110,12 @@ public class SecondActivity extends AppCompatActivity {
 
     private void onAddCalled() {
         this.sharedViewModel.updateMenuAction(MenuAction.ADD);
-        this.sharedPreferenceEditor.putString(SharedPreferencesConfig.MODE, MenuAction.ADD.toString());
-        this.sharedPreferenceEditor.commit();
+        this.sharedViewModel.initEstateSelection();
 
     }
 
     private void onEditCalled() {
         this.sharedViewModel.updateMenuAction(MenuAction.EDIT);
-        this.sharedPreferenceEditor.putString(SharedPreferencesConfig.MODE, MenuAction.EDIT.toString());
-        this.sharedPreferenceEditor.commit();
 
     }
 

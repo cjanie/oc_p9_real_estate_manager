@@ -43,6 +43,10 @@ public class EstateGatewayImpl implements EstateGateway {
                 estate.setLocation(dto.getLocation());
                 estate.setPrice(dto.getPriceInDollars());
                 estate.setDevise(Devise.DOLLAR);
+                estate.setSurface(dto.getSurfaceInMeterSquare());
+                estate.setNumberOfRooms(dto.getNumberOfRooms());
+                estate.setNumberOfBathrooms(dto.getNumberOfBathrooms());
+                estate.setNumberOfBedrooms(dto.getNumberOfBedrooms());
                 estates.add(estate);
             }
         }

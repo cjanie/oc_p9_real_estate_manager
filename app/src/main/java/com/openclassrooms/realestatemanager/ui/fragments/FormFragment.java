@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui;
+package com.openclassrooms.realestatemanager.ui.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -32,35 +32,29 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FormFragment extends Fragment implements AdapterView.OnItemClickListener{
+public abstract class FormFragment extends Fragment implements AdapterView.OnItemClickListener{
 
-    private FormViewModel formViewModel;
+    protected FormViewModel formViewModel;
 
-    private SharedViewModel sharedViewModel;
+    protected Integer id = 0;
 
-    private Integer id = 0;
+    protected AutoCompleteTextView type;
 
-    private AutoCompleteTextView type;
+    protected EditText location;
 
-    private EditText location;
-
-    private EditText price;
+    protected EditText price;
 
     private Button save;
 
     private EstateType estateType;
-
-    private SharedPreferences sharedPreferences;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_form, container, false);
 
-
         FormViewModelFactory viewModelFactory = ((Launch)this.getActivity().getApplication()).formViewModelFactory();
         this.formViewModel = new ViewModelProvider(this, viewModelFactory).get(FormViewModel.class);
-        this.sharedViewModel = new ViewModelProvider(this.requireActivity()).get(SharedViewModel.class);
 
         this.type = root.findViewById(R.id.spinner_type);
         this.location = root.findViewById(R.id.editText_location);
@@ -68,16 +62,11 @@ public class FormFragment extends Fragment implements AdapterView.OnItemClickLis
 
         this.save = root.findViewById(R.id.button_save);
 
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-
         List<String> types = new ArrayList<>();
         for(EstateType type: EstateType.values()) {
             types.add(type.toString());
         }
-        /*
-        types = Arrays.asList(EstateType.FLAT.toString(), EstateType.DUPLEX.toString(), EstateType.HOUSE.toString());
 
-         */
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, types
         );
@@ -86,46 +75,10 @@ public class FormFragment extends Fragment implements AdapterView.OnItemClickLis
 
         this.save.setOnClickListener(view -> save());
 
-        this.sharedViewModel.getMenuAction().observe(this.getViewLifecycleOwner(), action -> {
-            if(action.equals(MenuAction.EDIT)) {
-                this.sharedViewModel.getEstateSelection().observe(this.getViewLifecycleOwner(), estateSelection -> {
-                    this.id = estateSelection.getId();
-                    this.type.setText(estateSelection.getType().toString());
-                    this.location.setText(estateSelection.getLocation());
-                    this.price.setText(estateSelection.getPrice().toString());
-                });
-            } else {
-                this.id = 0;
-                this.type.setText("");
-                this.location.setText("");
-                this.price.setText("");
-            }
-
-        });
-
         return root;
     }
 
-    private Long save() {
-        Estate estate = new Estate();
-        estate.setId(this.id);
-        estate.setType(EstateType.FLAT); // TODO
-        if(!TextUtils.isEmpty(this.location.getText())
-                && !TextUtils.isEmpty(this.price.getText())) {
-            estate.setLocation(this.location.getText().toString());
-            try {
-                estate.setPrice(Float.parseFloat(this.price.getText().toString()));
-                estate.setDevise(Devise.DOLLAR);
-                return this.formViewModel.saveEstate(estate);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-            return 0L;
-
-        } else {
-            return 0L;
-        }
-    }
+    protected abstract Long save();
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

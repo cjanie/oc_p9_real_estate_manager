@@ -35,4 +35,8 @@ public class SharedViewModel extends ViewModel {
     public void updateEstateSelection(Estate estate) {
         this.estateSelection.setValue(estate);
     }
+
+    public void initEstateSelection() {
+        this.estateSelection = new MutableLiveData<>();
+    }
 }
