@@ -9,5 +9,9 @@ public interface EstateGateway {
 
     List<Estate> getEstates();
 
-    List<Estate> search(EstateType type);
+    List<Estate> searchByType(EstateType type);
+
+    List<Estate> searchByLocation(String location);
+
+
 }

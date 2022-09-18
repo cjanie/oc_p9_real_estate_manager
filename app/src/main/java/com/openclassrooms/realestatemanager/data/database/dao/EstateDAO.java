@@ -19,7 +19,10 @@ public interface EstateDAO {
     List<Estate> findAll();
 
     @Query("SELECT * FROM Estate WHERE type= :type")
-    List<Estate> search(String type);
+    List<Estate> searchByType(String type);
+
+    @Query("SELECT * FROM Estate WHERE location= :location")
+    List<Estate> searchByLocation(String location);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long save(Estate estate);

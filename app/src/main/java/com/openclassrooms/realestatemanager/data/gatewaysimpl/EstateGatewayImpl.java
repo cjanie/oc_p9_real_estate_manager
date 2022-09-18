@@ -7,7 +7,6 @@ import com.openclassrooms.realestatemanager.businesslogic.gateways.EstateGateway
 import com.openclassrooms.realestatemanager.data.database.dao.EstateDAO;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class EstateGatewayImpl implements EstateGateway {
@@ -27,9 +26,16 @@ public class EstateGatewayImpl implements EstateGateway {
     }
 
     @Override
-    public List<Estate> search(EstateType type) {
+    public List<Estate> searchByType(EstateType type) {
         List<com.openclassrooms.realestatemanager.data.database.dtoentities.Estate> estatesDto
-                = this.estateDAO.search(type.toString());
+                = this.estateDAO.searchByType(type.toString());
+        return this.convertDtoToEstate(estatesDto);
+    }
+
+    @Override
+    public List<Estate> searchByLocation(String location) {
+        List<com.openclassrooms.realestatemanager.data.database.dtoentities.Estate> estatesDto
+                = this.estateDAO.searchByLocation(location);
         return this.convertDtoToEstate(estatesDto);
     }
 

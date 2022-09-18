@@ -27,6 +27,6 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void fetchSearchResultsToUpdateLiveData(EstateType type) {
-        this.searchResults.postValue(this.searchEstatesUseCase.handle(type));
+        this.searchResults.postValue(this.searchEstatesUseCase.find(type));
     }
 }

@@ -25,7 +25,28 @@ public class InMemoryEstateGateway implements EstateGateway {
     }
 
     @Override
-    public List<Estate> search(EstateType type) {
-        return this.estates;
+    public List<Estate> searchByType(EstateType type) {
+        List<Estate> found = new ArrayList<>();
+        if(!this.estates.isEmpty()) {
+            for(Estate e: this.estates) {
+                if(e.getType() != null && e.getType().equals(type)) {
+                    found.add(e);
+                }
+            }
+        }
+        return found;
+    }
+
+    @Override
+    public List<Estate> searchByLocation(String location) {
+        List<Estate> found = new ArrayList<>();
+        if(!this.estates.isEmpty()) {
+            for(Estate e: this.estates) {
+                if(e.getLocation() != null && e.getLocation().equals(location)) {
+                    found.add(e);
+                }
+            }
+        }
+        return found;
     }
 }
