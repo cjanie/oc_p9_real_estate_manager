@@ -15,7 +15,7 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.ui.fragments.EstateDetailsFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.EstatesFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.FormAddEstateFragment;
-import com.openclassrooms.realestatemanager.ui.fragments.FormFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.FormUpdateEstateFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.SearchResultsFragment;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 

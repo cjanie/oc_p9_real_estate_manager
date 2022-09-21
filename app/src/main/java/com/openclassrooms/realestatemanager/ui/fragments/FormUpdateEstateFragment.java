@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui;
+package com.openclassrooms.realestatemanager.ui.fragments;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -36,11 +36,25 @@ public class FormUpdateEstateFragment extends FormFragment {
     @Override
     protected Long save() {
         Estate estate = new Estate();
+
+        // Id
         estate.setId(this.id);
-        estate.setType(EstateType.FLAT); // TODO
-        if(!TextUtils.isEmpty(this.location.getText())
+
+        if(!TextUtils.isEmpty(this.type.getText())
+                && !TextUtils.isEmpty(this.location.getText())
                 && !TextUtils.isEmpty(this.price.getText())) {
+
+            // Type
+
+            estate.setType(this.getEstateType());
+
+
+
+
+            // Location
             estate.setLocation(this.location.getText().toString());
+
+            // Price
             try {
                 estate.setPrice(Float.parseFloat(this.price.getText().toString()));
                 estate.setDevise(Devise.DOLLAR);

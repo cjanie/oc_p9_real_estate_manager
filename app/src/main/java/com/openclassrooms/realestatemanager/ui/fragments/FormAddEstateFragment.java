@@ -10,7 +10,7 @@ public class FormAddEstateFragment extends FormFragment {
     @Override
     protected Long save() {
         Estate estate = new Estate();
-        estate.setType(EstateType.FLAT); // TODO
+        estate.setType(this.getEstateType());
         if(!TextUtils.isEmpty(this.location.getText())
                 && !TextUtils.isEmpty(this.price.getText())) {
             estate.setLocation(this.location.getText().toString());

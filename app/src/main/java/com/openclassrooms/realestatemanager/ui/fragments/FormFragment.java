@@ -46,7 +46,7 @@ public abstract class FormFragment extends Fragment implements AdapterView.OnIte
 
     private Button save;
 
-    private EstateType estateType;
+    private String estateType;
 
     @Nullable
     @Override
@@ -62,10 +62,7 @@ public abstract class FormFragment extends Fragment implements AdapterView.OnIte
 
         this.save = root.findViewById(R.id.button_save);
 
-        List<String> types = new ArrayList<>();
-        for(EstateType type: EstateType.values()) {
-            types.add(type.toString());
-        }
+        List<String> types = Arrays.asList(EstateType.FLAT.toString(), EstateType.DUPLEX.toString(), EstateType.HOUSE.toString());
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, types
@@ -82,6 +79,19 @@ public abstract class FormFragment extends Fragment implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        this.estateType = (EstateType) this.type.getAdapter().getItem(i);
+        this.estateType = (String) this.type.getAdapter().getItem(i);
+    }
+
+    protected EstateType getEstateType() {
+        if(this.estateType.equals(EstateType.FLAT.toString())) {
+            return EstateType.FLAT;
+        }
+        if(this.estateType.equals(EstateType.DUPLEX.toString())) {
+            return EstateType.DUPLEX;
+        }
+        if(this.estateType.equals(EstateType.HOUSE.toString())) {
+            return EstateType.HOUSE;
+        }
+        return null;
     }
 }

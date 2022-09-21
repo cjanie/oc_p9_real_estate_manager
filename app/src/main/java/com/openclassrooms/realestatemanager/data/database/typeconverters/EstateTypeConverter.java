@@ -15,7 +15,7 @@ public class EstateTypeConverter {
     public EstateType stringToEstateType(String string) {
         if(string.equals(EstateType.DUPLEX.toString()))
             return EstateType.DUPLEX;
-        if(string.equals(EstateType.HOUSE))
+        if(string.equals(EstateType.HOUSE.toString()))
             return EstateType.HOUSE;
         else return EstateType.FLAT;
     }
