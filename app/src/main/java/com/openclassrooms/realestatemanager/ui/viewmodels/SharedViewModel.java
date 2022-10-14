@@ -5,27 +5,27 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
-import com.openclassrooms.realestatemanager.ui.MenuAction;
+import com.openclassrooms.realestatemanager.ui.Action;
 
 public class SharedViewModel extends ViewModel {
 
-    private MutableLiveData<MenuAction> menuAction;
+    private MutableLiveData<Action> menuAction;
 
     private MutableLiveData<Estate> estateSelection;
 
     public SharedViewModel() {
         this.menuAction = new MutableLiveData<>();
-        this.menuAction.setValue(MenuAction.HOME);
+        this.menuAction.setValue(Action.HOME);
 
         this.estateSelection = new MutableLiveData<>();
     }
 
-    public LiveData<MenuAction> getMenuAction() {
+    public LiveData<Action> getAction() {
         return this.menuAction;
     }
 
-    public void updateMenuAction(MenuAction menuAction) {
-        this.menuAction.setValue(menuAction);
+    public void updateAction(Action action) {
+        this.menuAction.setValue(action);
     }
 
     public LiveData<Estate> getEstateSelection() {

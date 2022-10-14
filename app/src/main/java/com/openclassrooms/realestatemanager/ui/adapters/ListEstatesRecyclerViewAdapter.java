@@ -1,9 +1,5 @@
 package com.openclassrooms.realestatemanager.ui.adapters;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +7,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.ui.Action;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
 import java.util.ArrayList;
@@ -74,10 +72,20 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                     .error(R.drawable.ic_baseline_error_outline_24)
                     .into(((ItemViewHolder) holder).photo);
 
-            holder.itemView.setOnClickListener(view ->
-                    // View Model Action
-                    sharedViewModel.updateEstateSelection(estate)
-            );
+            /* TODO if tablette
+            this.sharedViewModel.getAction().observe((LifecycleOwner) holder.itemView.getContext(), action -> {
+                if(action.equals(Action.DETAILS)) {
+                    holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.colorAccent));
+                }
+            });
+
+             */
+
+            holder.itemView.setOnClickListener(view -> {
+                // View Model Action
+                sharedViewModel.updateAction(Action.DETAILS);
+                sharedViewModel.updateEstateSelection(estate);
+            });
 
         }
 

@@ -106,4 +106,37 @@ public class SearchEstatesUseCaseTest {
                 .find(searchParamsMap);
         Assert.assertEquals(1, found.size());
     }
+
+    @Test
+    public void searchUnderMaxPrice() {
+        InMemoryEstateGateway estateGateway = new InMemoryEstateGateway();
+        Estate estate1 = new Estate();
+        estate1.setType(EstateType.DUPLEX);
+        estate1.setPrice(100000f);
+        estateGateway.setEstates(Arrays.asList(estate1));
+
+        Map<String, Object> searchParamsMap = new HashMap<>();
+        searchParamsMap.put(MapSearchEstatesParamsConfig.TYPE, EstateType.DUPLEX);
+        searchParamsMap.put(MapSearchEstatesParamsConfig.MAX_PRICE_IN_DOLLARS, 5000f);
+        List<Estate> found = new SearchEstatesUseCase(estateGateway)
+                .find(searchParamsMap);
+        Assert.assertEquals(0, found.size());
+    }
+
+    @Test
+    public void searchByLocationAndMaxPrice() {
+        InMemoryEstateGateway estateGateway = new InMemoryEstateGateway();
+        Estate estate1 = new Estate();
+        estate1.setType(EstateType.DUPLEX);
+        estate1.setLocation("Paris");
+        estate1.setPrice(100000f);
+
+        Map<String, Object> searchParamsMap = new HashMap<>();
+        searchParamsMap.put(MapSearchEstatesParamsConfig.LOCATION, "Paris");
+        searchParamsMap.put(MapSearchEstatesParamsConfig.MAX_PRICE_IN_DOLLARS, 200000f);
+
+        List<Estate> found = new SearchEstatesUseCase(estateGateway)
+                .find(searchParamsMap);
+        Assert.assertEquals(1, found.size());
+    }
 }

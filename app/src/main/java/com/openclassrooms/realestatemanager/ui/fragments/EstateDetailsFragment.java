@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
-public class EstateDetailsFragment extends Fragment {
+public class EstateDetailsFragment extends BaseFragment {
 
     private SharedViewModel sharedViewModel;
 

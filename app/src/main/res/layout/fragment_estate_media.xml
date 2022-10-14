@@ -7,7 +7,8 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    android:padding="@dimen/padding">
+    android:padding="@dimen/padding"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/estate_details_media_title"

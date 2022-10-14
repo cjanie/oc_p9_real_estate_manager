@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.openclassrooms.realestatemanager.R;
 
-public class MapsFragment extends Fragment {
+public class MapsFragment extends BaseFragment {
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 

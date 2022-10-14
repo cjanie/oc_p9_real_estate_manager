@@ -22,7 +22,7 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.SearchViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.SearchViewModelFactory;
 
-public class SearchResultsFragment extends Fragment {
+public class SearchResultsFragment extends BaseFragment {
 
     private SearchViewModel searchViewModel;
 

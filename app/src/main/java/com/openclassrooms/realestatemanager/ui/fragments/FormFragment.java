@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class FormFragment extends Fragment implements AdapterView.OnItemClickListener{
+public abstract class FormFragment extends BaseFragment implements AdapterView.OnItemClickListener{
 
     protected FormViewModel formViewModel;
 
@@ -53,8 +53,8 @@ public abstract class FormFragment extends Fragment implements AdapterView.OnIte
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_form, container, false);
 
-        FormViewModelFactory viewModelFactory = ((Launch)this.getActivity().getApplication()).formViewModelFactory();
-        this.formViewModel = new ViewModelProvider(this, viewModelFactory).get(FormViewModel.class);
+        FormViewModelFactory formViewModelFactory = ((Launch)this.getActivity().getApplication()).formViewModelFactory();
+        this.formViewModel = new ViewModelProvider(this, formViewModelFactory).get(FormViewModel.class);
 
         this.type = root.findViewById(R.id.spinner_type);
         this.location = root.findViewById(R.id.editText_location);

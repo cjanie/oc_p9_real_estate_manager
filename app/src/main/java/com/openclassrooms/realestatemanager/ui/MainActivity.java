@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Utils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private TextView textViewMain;
     private TextView textViewQuantity;

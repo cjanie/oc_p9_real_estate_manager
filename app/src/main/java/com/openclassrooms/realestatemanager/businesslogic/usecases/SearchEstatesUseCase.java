@@ -30,6 +30,7 @@ public class SearchEstatesUseCase {
 
         EstateType type = (EstateType) searchParameters.get(MapSearchEstatesParamsConfig.TYPE);
         String location = (String) searchParameters.get(MapSearchEstatesParamsConfig.LOCATION);
+        Float maxPriceInDollars = (Float) searchParameters.get(MapSearchEstatesParamsConfig.MAX_PRICE_IN_DOLLARS);
 
         if(type != null) {
             found.addAll(this.find(type));
@@ -42,12 +43,31 @@ public class SearchEstatesUseCase {
                     }
                 }
             }
+            if(maxPriceInDollars != null && !found.isEmpty()) {
+                for(int i=0; i<found.size(); i++) {
+                    if((found.get(i).getPrice() == null) || (found.get(i).getPrice() != null && found.get(i).getPrice() > maxPriceInDollars)) {
+                        found.remove(i);
+                    }
+                }
+            }
             return found;
         }
 
         if(location != null) {
             found.addAll(this.find(location));
+            if(maxPriceInDollars != null && !found.isEmpty()) {
+                for(int i=0; i<found.size(); i++) {
+                    if((found.get(i).getPrice() == null)
+                            || ((found.get(i).getPrice() != null && found.get(i).getPrice() > maxPriceInDollars))) {
+                        found.remove(i);
+                    }
+                }
+            }
             return found;
+        }
+
+        if(maxPriceInDollars != null) {
+
         }
 
         return found;

@@ -21,7 +21,7 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.EstatesViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
 
-public class EstatesFragment extends Fragment {
+public class EstatesFragment extends BaseFragment {
 
     private EstatesViewModel estatesViewModel;
 

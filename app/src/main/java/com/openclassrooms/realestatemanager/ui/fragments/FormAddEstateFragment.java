@@ -5,8 +5,15 @@ import android.text.TextUtils;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
+import com.openclassrooms.realestatemanager.ui.Action;
 
 public class FormAddEstateFragment extends FormFragment {
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     @Override
     protected Long save() {
         Estate estate = new Estate();

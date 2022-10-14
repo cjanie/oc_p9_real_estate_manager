@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.openclassrooms.realestatemanager.R;
 
-public class EstateMediaFragment extends Fragment {
+public class EstateMediaFragment extends BaseFragment {
 
     @Nullable
     @Override
