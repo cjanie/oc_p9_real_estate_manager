@@ -83,15 +83,18 @@ public abstract class FormFragment extends BaseFragment implements AdapterView.O
     }
 
     protected EstateType getEstateType() {
-        if(this.estateType.equals(EstateType.FLAT.toString())) {
-            return EstateType.FLAT;
+        if(this.estateType != null) {
+            if(this.estateType.equals(EstateType.FLAT.toString())) {
+                return EstateType.FLAT;
+            }
+            if(this.estateType.equals(EstateType.DUPLEX.toString())) {
+                return EstateType.DUPLEX;
+            }
+            if(this.estateType.equals(EstateType.HOUSE.toString())) {
+                return EstateType.HOUSE;
+            }
         }
-        if(this.estateType.equals(EstateType.DUPLEX.toString())) {
-            return EstateType.DUPLEX;
-        }
-        if(this.estateType.equals(EstateType.HOUSE.toString())) {
-            return EstateType.HOUSE;
-        }
+
         return null;
     }
 }

@@ -45,8 +45,7 @@ public class FormUpdateEstateFragment extends FormFragment {
                 && !TextUtils.isEmpty(this.price.getText())) {
 
             // Type
-
-            estate.setType(this.getEstateType());
+            estate.setType(this.getEstateType() != null ? this.getEstateType() : this.sharedViewModel.getEstateSelection().getValue().getType());
 
 
 
