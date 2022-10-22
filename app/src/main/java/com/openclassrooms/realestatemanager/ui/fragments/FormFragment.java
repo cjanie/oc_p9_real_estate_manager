@@ -44,6 +44,22 @@ public abstract class FormFragment extends BaseFragment implements AdapterView.O
 
     protected EditText price;
 
+    protected EditText streetNumberAndStreetName;
+
+    protected EditText addressComplements;
+
+    protected EditText zipCode;
+
+    protected EditText country;
+
+    protected EditText surface;
+
+    protected EditText numberOfRooms;
+
+    protected EditText numberOfBathrooms;
+
+    protected EditText numberOfBedrooms;
+
     private Button save;
 
     private String estateType;
@@ -59,6 +75,14 @@ public abstract class FormFragment extends BaseFragment implements AdapterView.O
         this.type = root.findViewById(R.id.spinner_type);
         this.location = root.findViewById(R.id.editText_location);
         this.price = root.findViewById(R.id.editText_price);
+        this.streetNumberAndStreetName = root.findViewById(R.id.editText_streetNumber_and_streetName);
+        this.addressComplements = root.findViewById(R.id.editText_addressComplements);
+        this.zipCode = root.findViewById(R.id.editText_zipCode);
+        this.country = root.findViewById(R.id.editText_country);
+        this.surface = root.findViewById(R.id.editText_surface);
+        this.numberOfRooms = root.findViewById(R.id.editText_numberOfRooms);
+        this.numberOfBathrooms = root.findViewById(R.id.editText_numberOfBathrooms);
+        this.numberOfBedrooms = root.findViewById(R.id.editText_numberOfBedrooms);
 
         this.save = root.findViewById(R.id.button_save);
 

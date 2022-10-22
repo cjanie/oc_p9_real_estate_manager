@@ -11,9 +11,9 @@ import java.util.List;
 
 public class EstatesViewModel extends ViewModel {
 
-    private MutableLiveData<List<Estate>> estates;
-
     private GetEstatesUseCase getEstatesUseCase;
+
+    private MutableLiveData<List<Estate>> estates;
 
     public EstatesViewModel(GetEstatesUseCase getEstatesUseCase) {
         this.getEstatesUseCase = getEstatesUseCase;

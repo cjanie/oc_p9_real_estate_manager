@@ -49,4 +49,17 @@ public class InMemoryEstateGateway implements EstateGateway {
         }
         return found;
     }
+
+    @Override
+    public Estate getEstateById(long id) {
+        if(!this.estates.isEmpty()) {
+            for(Estate e: this.estates) {
+                if(e.getId() == id) {
+                    return e;
+                }
+            }
+        }
+        return null;
+    }
+
 }

@@ -18,6 +18,14 @@ public class Estate {
 
     private Devise devise;
 
+    private String streetNumberAndStreetName;
+
+    private String addressComplements;
+
+    private String zipCode;
+
+    private String country;
+
     private String photoUrl;
 
     private Integer surface;
@@ -67,6 +75,38 @@ public class Estate {
 
     public void setDevise(Devise devise) {
         this.devise = devise;
+    }
+
+    public String getStreetNumberAndStreetName() {
+        return streetNumberAndStreetName;
+    }
+
+    public void setStreetNumberAndStreetName(String streetNumberAndStreetName) {
+        this.streetNumberAndStreetName = streetNumberAndStreetName;
+    }
+
+    public String getAddressComplements() {
+        return addressComplements;
+    }
+
+    public void setAddressComplements(String addressComplements) {
+        this.addressComplements = addressComplements;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getPhotoUrl() {

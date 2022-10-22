@@ -11,13 +11,13 @@ public class SharedViewModel extends ViewModel {
 
     private MutableLiveData<Action> menuAction;
 
-    private MutableLiveData<Estate> estateSelection;
+    private MutableLiveData<Integer> estateSelectionId;
 
     public SharedViewModel() {
         this.menuAction = new MutableLiveData<>();
         this.menuAction.setValue(Action.HOME);
 
-        this.estateSelection = new MutableLiveData<>();
+        this.estateSelectionId = new MutableLiveData<>();
     }
 
     public LiveData<Action> getAction() {
@@ -28,15 +28,15 @@ public class SharedViewModel extends ViewModel {
         this.menuAction.setValue(action);
     }
 
-    public LiveData<Estate> getEstateSelection() {
-        return this.estateSelection;
+    public LiveData<Integer> getEstateSelectionId() {
+        return this.estateSelectionId;
     }
 
-    public void updateEstateSelection(Estate estate) {
-        this.estateSelection.setValue(estate);
+    public void updateEstateSelection(Integer estateId) {
+        this.estateSelectionId.setValue(estateId);
     }
 
     public void initEstateSelection() {
-        this.estateSelection = new MutableLiveData<>();
+        this.estateSelectionId = new MutableLiveData<>();
     }
 }

@@ -13,5 +13,7 @@ public interface EstateGateway {
 
     List<Estate> searchByLocation(String location);
 
+    Estate getEstateById(long id);
+
 
 }

@@ -8,4 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Title">
+        <item name="android:textSize">@dimen/big_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Section_layout">
+        <item name="android:padding">@dimen/padding</item>
+    </style>
+
 </resources>

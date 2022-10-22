@@ -84,7 +84,7 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             holder.itemView.setOnClickListener(view -> {
                 // View Model Action
                 sharedViewModel.updateAction(Action.DETAILS);
-                sharedViewModel.updateEstateSelection(estate);
+                sharedViewModel.updateEstateSelection(estate.getId());
             });
 
         }

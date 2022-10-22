@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.openclassrooms.realestatemanager.businesslogic.gateways.EstateCommandGateway;
 import com.openclassrooms.realestatemanager.businesslogic.gateways.EstateGateway;
+import com.openclassrooms.realestatemanager.businesslogic.usecases.GetEstateByIdUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.GetEstatesUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SaveEstateUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SearchEstatesUseCase;
@@ -11,6 +12,7 @@ import com.openclassrooms.realestatemanager.data.database.AppDataBase;
 import com.openclassrooms.realestatemanager.data.database.dao.EstateDAO;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateCommandGatewayImpl;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateGatewayImpl;
+import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.SearchViewModelFactory;
@@ -30,11 +32,13 @@ public class Launch extends Application {
     private GetEstatesUseCase getEstatesUseCase;
     private SaveEstateUseCase saveEstateUseCase;
     private SearchEstatesUseCase searchEstatesUseCase;
+    private GetEstateByIdUseCase getEstateByIdUseCase;
 
     // View Model Factory
     private EstatesViewModelFactory estatesViewModelFactory;
     private FormViewModelFactory formViewModelFactory;
     private SearchViewModelFactory searchViewModelFactory;
+    private DetailsViewModelFactory detailsViewModelFactory;
 
 
     /////
@@ -89,6 +93,13 @@ public class Launch extends Application {
         return this.searchEstatesUseCase;
     }
 
+    private synchronized GetEstateByIdUseCase getEstateByIdUseCase() {
+        if(this.getEstateByIdUseCase == null) {
+            this.getEstateByIdUseCase = new GetEstateByIdUseCase(this.estateGateway());
+        }
+        return this.getEstateByIdUseCase;
+    }
+
     // View Model Factories
     public synchronized EstatesViewModelFactory estatesViewModelFactory() {
         if(this.estatesViewModelFactory == null) {
@@ -109,5 +120,12 @@ public class Launch extends Application {
             this.searchViewModelFactory = new SearchViewModelFactory(this.searchEstatesUseCase());
         }
         return this.searchViewModelFactory;
+    }
+
+    public synchronized DetailsViewModelFactory detailsViewModelFactory() {
+        if(this.detailsViewModelFactory == null) {
+            this.detailsViewModelFactory = new DetailsViewModelFactory(this.getEstateByIdUseCase());
+        }
+        return this.detailsViewModelFactory;
     }
 }

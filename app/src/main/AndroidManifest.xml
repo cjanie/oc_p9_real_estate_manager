@@ -38,9 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.SecondActivity" />
-        <activity android:name=".ui.EstateDetailsActivity" />
-        <activity android:name=".ui.fragments.FormFragment"/>
+        <activity android:name=".ui.NavigationActivity" />
     </application>
 
 </manifest>
