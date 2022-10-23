@@ -90,7 +90,7 @@ public class NavigationActivity extends BaseActivity {
     }
 
     private void createDynamicMenu(Menu menu) { // TODO menuItem
-        // MenuItem item = null;
+        //MenuItem item = null;
         // int id = -1
         // Récupérer un item ; si pas null > false
 
