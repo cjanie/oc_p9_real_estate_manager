@@ -24,15 +24,19 @@ public class NavigationActivity extends BaseActivity {
 
     protected SharedViewModel sharedViewModel;
 
+    private EstateDetailsFragment estateDetailsFragment;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(this.LAYOUT_ID);
 
         this.sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-
+        this.estateDetailsFragment = new EstateDetailsFragment();
         // Observe menu action state
         this.sharedViewModel.getAction().observe(this, action -> {
+
+            boolean isTablet = this.getResources().getBoolean(R.bool.is_tablet);
 
             if(action.equals(Action.SEARCH)) {
                 this.showFragment(new SearchResultsFragment());
@@ -45,6 +49,10 @@ public class NavigationActivity extends BaseActivity {
             }
             if(action.equals(Action.EDIT)) {
                 this.showFragment(new FormUpdateEstateFragment());
+                if(isTablet) {
+                    this.getSupportFragmentManager().beginTransaction().remove(this.estateDetailsFragment).commit();
+                }
+
             }
             if(action.equals(Action.DETAILS)) {
                 this.showDetails();
@@ -70,14 +78,13 @@ public class NavigationActivity extends BaseActivity {
 
     private void showDetails() {
         boolean isTablet = this.getResources().getBoolean(R.bool.is_tablet);
-        EstateDetailsFragment fragment = new EstateDetailsFragment();
         if (!isTablet) {
-            this.showFragment(fragment);
+            this.showFragment(this.estateDetailsFragment);
         } else {
             FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
             // replace() for blank when backPressed
             // add to backstack to stay on the same activity and remove the fragment
-            transaction.replace(R.id.frame_layout_details, fragment).addToBackStack(fragment.getClass().getName());
+            transaction.replace(R.id.frame_layout_details, this.estateDetailsFragment).addToBackStack(this.estateDetailsFragment.getClass().getName());
             transaction.commit();
         }
     }

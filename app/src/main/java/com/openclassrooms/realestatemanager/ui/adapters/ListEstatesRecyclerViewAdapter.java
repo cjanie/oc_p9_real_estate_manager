@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.ui.Action;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
@@ -62,8 +63,8 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             Estate estate = this.estates.get(position);
             ((ItemViewHolder) holder).type.setText(estate.getType().toString());
             ((ItemViewHolder) holder).location.setText(estate.getLocation());
-            String deviseAndPrice = estate.getDevise().toString() + estate.getPrice();
-            ((ItemViewHolder) holder).price.setText(deviseAndPrice);
+            String devise = estate.getDevise().equals(Devise.DOLLAR) ? "$" : "€";
+            ((ItemViewHolder) holder).price.setText(devise + estate.getPrice());
 
             Glide.with(((ItemViewHolder) holder).photo.getContext())
                     .load(estate.getPhotoUrl())
@@ -72,19 +73,23 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                     .error(R.drawable.ic_baseline_error_outline_24)
                     .into(((ItemViewHolder) holder).photo);
 
-            /* TODO if tablette
-            this.sharedViewModel.getAction().observe((LifecycleOwner) holder.itemView.getContext(), action -> {
-                if(action.equals(Action.DETAILS)) {
-                    holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.colorAccent));
-                }
-            });
+            boolean isTablet = holder.itemView.getContext().getResources().getBoolean(R.bool.is_tablet);
+            if(isTablet) {
+                sharedViewModel.getEstateSelectionId().observe((LifecycleOwner) holder.itemView.getContext(), estateSelectionId -> {
+                    if(estateSelectionId != estate.getId()) {
+                        holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.white));
+                    }
+                });
+            }
 
-             */
 
             holder.itemView.setOnClickListener(view -> {
                 // View Model Action
                 sharedViewModel.updateAction(Action.DETAILS);
                 sharedViewModel.updateEstateSelection(estate.getId());
+                if(isTablet) {
+                    view.setBackgroundColor(holder.itemView.getResources().getColor(R.color.colorAccent));
+                }
             });
 
         }
@@ -125,6 +130,7 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             this.price = itemView.findViewById(R.id.estate_list_item_price);
             this.photo = itemView.findViewById(R.id.estate_list_item_photo);
         }
+
     }
 
 }
