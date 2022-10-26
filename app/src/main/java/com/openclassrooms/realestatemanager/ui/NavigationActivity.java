@@ -3,10 +3,13 @@ package com.openclassrooms.realestatemanager.ui;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -24,7 +27,11 @@ public class NavigationActivity extends BaseActivity {
 
     protected SharedViewModel sharedViewModel;
 
+    private FragmentManager fragmentManager;
+
     private EstateDetailsFragment estateDetailsFragment;
+
+    private boolean isTablet;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,35 +39,60 @@ public class NavigationActivity extends BaseActivity {
         this.setContentView(this.LAYOUT_ID);
 
         this.sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        this.fragmentManager = this.getSupportFragmentManager();
         this.estateDetailsFragment = new EstateDetailsFragment();
+        this.isTablet = this.getResources().getBoolean(R.bool.is_tablet);
+
         // Observe menu action state
         this.sharedViewModel.getAction().observe(this, action -> {
-
-            boolean isTablet = this.getResources().getBoolean(R.bool.is_tablet);
-
-            if(action.equals(Action.SEARCH)) {
-                this.showFragment(new SearchResultsFragment());
-            }
-            if(action.equals(Action.HOME)) {
-                this.showFragment(new EstatesFragment());
-            }
-            if(action.equals(Action.ADD)) {
-                this.showFragment(new FormAddEstateFragment());
-            }
-            if(action.equals(Action.EDIT)) {
-                this.showFragment(new FormUpdateEstateFragment());
-                if(isTablet) {
-                    this.getSupportFragmentManager().beginTransaction().remove(this.estateDetailsFragment).commit();
-                }
-
-            }
-            if(action.equals(Action.DETAILS)) {
-                this.showDetails();
-            }
-
+            this.switchFragment(action);
             this.invalidateMenu(); // Launches creation of the menu
+
+            this.additionalSwitchForTablet(action);
         });
 
+    }
+
+    private void switchFragment(Action action) {
+        switch(action) {
+            case SEARCH:
+                this.showFragment(new SearchResultsFragment());
+                break;
+            case HOME:
+                this.showFragment(new EstatesFragment());
+                break;
+            case ADD:
+                this.showFragment(new FormAddEstateFragment());
+                break;
+            case EDIT:
+                this.showFragment(new FormUpdateEstateFragment());
+                break;
+            case DETAILS:
+                this.showDetails();
+                break;
+        }
+    }
+
+    private void additionalSwitchForTablet(Action action) {
+        if(this.isTablet) {
+               switch(action) {
+                case HOME:
+                    this.removeDetails(R.id.frame_layout_details);
+                    break;
+                case SEARCH:
+                    this.removeDetails(R.id.frame_layout_details);
+                    break;
+                case ADD:
+                    this.removeDetails(R.id.frame_layout_details);
+                    break;
+                case EDIT:
+                    this.removeDetails(R.id.frame_layout_details);
+                    break;
+                case DETAILS:
+                    this.showDetails(R.id.frame_layout_details);
+                    break;
+            }
+        }
     }
 
     private void showFragment(Fragment fragment) {
@@ -77,16 +109,27 @@ public class NavigationActivity extends BaseActivity {
     }
 
     private void showDetails() {
-        boolean isTablet = this.getResources().getBoolean(R.bool.is_tablet);
-        if (!isTablet) {
+        if (!this.isTablet) {
             this.showFragment(this.estateDetailsFragment);
-        } else {
-            FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
-            // replace() for blank when backPressed
-            // add to backstack to stay on the same activity and remove the fragment
-            transaction.replace(R.id.frame_layout_details, this.estateDetailsFragment).addToBackStack(this.estateDetailsFragment.getClass().getName());
-            transaction.commit();
         }
+    }
+
+    private void showDetails(int frameLayoutId) {
+        FragmentTransaction transaction = this.fragmentManager.beginTransaction();
+        // replace() for blank when backPressed
+        // add to backstack to stay on the same activity and remove the fragment
+        transaction.replace(frameLayoutId, this.estateDetailsFragment).addToBackStack(this.estateDetailsFragment.getClass().getName());
+        transaction.commit();
+        // Make the view visible
+        FrameLayout frameLayout = this.findViewById(frameLayoutId);
+        frameLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void removeDetails(int frameLayoutId) {
+        FrameLayout frameLayout = this.findViewById(frameLayoutId);
+
+        this.fragmentManager.beginTransaction().remove(this.estateDetailsFragment).commit();
+        frameLayout.setVisibility(View.GONE);
     }
 
     @Override
