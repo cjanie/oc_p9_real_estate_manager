@@ -1,52 +1,64 @@
 package com.openclassrooms.realestatemanager.ui.fragments;
 
 import android.text.TextUtils;
+import android.view.View;
 
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
-import com.openclassrooms.realestatemanager.ui.Action;
+import com.openclassrooms.realestatemanager.ui.exceptions.IncorrectEstateTypeException;
+import com.openclassrooms.realestatemanager.ui.exceptions.MandatoryException;
 
 public class FormAddEstateFragment extends FormFragment {
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     protected Long save() {
+
         Estate estate = new Estate();
-        estate.setType(this.getEstateType());
-        if(!TextUtils.isEmpty(this.location.getText())
-                && !TextUtils.isEmpty(this.price.getText())) {
+
+        String mandatoryFieldError = this.getString(R.string.required);
+
+        Long id = 0L;
+
+        // Type
+        try {
+            estate.setType(this.getEstateType());
+        } catch (MandatoryException e) {
+            this.type.setError(mandatoryFieldError);
+        }
+
+        // Location
+        if(!TextUtils.isEmpty(this.location.getText())) {
             estate.setLocation(this.location.getText().toString());
-            estate.setStreetNumberAndStreetName(this.streetNumberAndStreetName.toString());
-            estate.setAddressComplements(this.addressComplements.toString());
-            estate.setZipCode(this.zipCode.toString());
-            estate.setCountry(this.country.toString());
+        } else {
+            this.location.setError(mandatoryFieldError);
+        }
+
+        // Price
+        if(!TextUtils.isEmpty(this.price.getText())) {
             try {
                 estate.setPrice(Float.parseFloat(this.price.getText().toString()));
-                estate.setDevise(Devise.DOLLAR);
-                if(!TextUtils.isEmpty(this.surface.getText())) {
-                    estate.setSurface(Integer.parseInt(this.surface.getText().toString()));
-                }
-                if(!TextUtils.isEmpty(this.numberOfRooms.getText())) {
-                    estate.setNumberOfRooms(Integer.parseInt(this.numberOfRooms.getText().toString()));
-                }
-                if(!TextUtils.isEmpty(this.numberOfBathrooms.getText())) {
-                    estate.setNumberOfBathrooms(Integer.parseInt(this.numberOfBathrooms.getText().toString()));
-                }
-                if(!TextUtils.isEmpty(this.numberOfBedrooms.getText())) {
-                    estate.setNumberOfBedrooms(Integer.parseInt(this.numberOfBedrooms.getText().toString()));
-                }
-
-                return this.formViewModel.saveEstate(estate);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                String nanError = this.getString(R.string.nan);
+                this.price.setError(nanError);
             }
-            return 0L;
+        } else {
+            this.price.setError(mandatoryFieldError);
+        }
 
+        // Devise
+        estate.setDevise(Devise.DOLLAR); // TODO Autocomplete field
+
+        if(estate.getType() != null
+                && estate.getLocation() != null
+                && estate.getPrice() != null
+                && estate.getDevise() != null) {
+            id = this.formViewModel.saveEstate(estate);
+            if(id > 0) {
+                this.formMainLayout.setVisibility(View.GONE);
+            }
+            return id;
         } else {
             return 0L;
         }

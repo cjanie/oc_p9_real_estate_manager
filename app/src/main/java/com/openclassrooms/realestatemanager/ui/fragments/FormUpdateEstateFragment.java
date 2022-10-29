@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
+import com.openclassrooms.realestatemanager.ui.exceptions.IncorrectEstateTypeException;
+import com.openclassrooms.realestatemanager.ui.exceptions.MandatoryException;
 import com.openclassrooms.realestatemanager.ui.viewmodels.DetailsViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
@@ -53,12 +55,15 @@ public class FormUpdateEstateFragment extends FormFragment {
         // Id
         estate.setId(this.id);
 
+        try {
+            estate.setType(this.getEstateType());
+        } catch (MandatoryException e) {
+            e.printStackTrace();
+        }
+
         if(!TextUtils.isEmpty(this.type.getText())
                 && !TextUtils.isEmpty(this.location.getText())
                 && !TextUtils.isEmpty(this.price.getText())) {
-
-            // Type
-            estate.setType(this.getEstateType() != null ? this.getEstateType() : this.detailsViewModel.getEstate().getValue().getType());
 
             // Location
             estate.setLocation(this.location.getText().toString());

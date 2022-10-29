@@ -7,8 +7,13 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_navigation.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_second.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/component_form_address.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/component_form_details.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/component_form_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/form_main.xml" value="0.680921052631579" />
         <entry key="app/src/main/res/layout/fragment_estate_details.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_estate_list_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_form.xml" value="0.25" />
         <entry key="app/src/main/res/menu/toolbar_menu.xml" value="0.1" />
       </map>
     </option>

@@ -15,7 +15,11 @@
     <string name="home">Home</string>
     <string name="type">Type</string>
     <string name="price">Price</string>
+    <string name="required">Required</string>
+    <string name="incorrect_estate_type">Incorrect estate type</string>
+    <string name="nan">Not a number</string>
     <string name="save">Save</string>
+    <string name="skip">Skip</string>
 
     <string name="media">Media</string>
     <string name="description">Description</string>
