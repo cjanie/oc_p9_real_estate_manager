@@ -20,7 +20,9 @@ public class FormViewModel extends ViewModel {
         this.estateData = estate;
     }
 
-
+    public Estate getEstateData() {
+        return this.estateData;
+    }
 
     public Long saveEstate(Estate estate) {
         return this.saveEstateUseCase.handle(estate);

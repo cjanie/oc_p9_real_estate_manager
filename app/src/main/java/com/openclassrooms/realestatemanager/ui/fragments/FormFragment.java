@@ -25,16 +25,14 @@ public abstract class FormFragment extends BaseFragment implements
         FormAddressFragment.HandleAddressFields,
         FormDescriptionDetailsFragment.HandleDescriptionDetailsData,
         SaveEstateDataUpdate,
-        Next {
+        Next,
+        FormGetData {
 
     private final int LAYOUT_ID = R.layout.fragment_form;
 
-    protected FormViewModel formViewModel;
+    private FormViewModel formViewModel;
 
     private SharedViewModel sharedViewModel;
-
-
-
 
     @Nullable
     @Override
@@ -51,6 +49,11 @@ public abstract class FormFragment extends BaseFragment implements
         return root;
     }
 
+    private void showFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.frame_layout_form, fragment).commit();
+    }
+
     @Override
     public void save(Estate estate) {
         // Mandatory properties should not be null
@@ -63,21 +66,9 @@ public abstract class FormFragment extends BaseFragment implements
         };
     }
 
-
-    private void showFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getChildFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.frame_layout_form, fragment).commit();
-    }
-
-
     @Override
     public void setEstateAdressData(String streetNumberAndName, String addressComplements, String zipCode, String country) {
         this.formViewModel.setEstateDataAddress(streetNumberAndName, addressComplements, zipCode, country);
-    }
-
-    @Override
-    public void saveEstateDataUpdate() {
-        this.formViewModel.saveEstateDataUpdate();
     }
 
     @Override
@@ -86,17 +77,34 @@ public abstract class FormFragment extends BaseFragment implements
     }
 
     @Override
+    public void saveEstateDataUpdate() {
+        this.formViewModel.saveEstateDataUpdate();
+    }
+
+    @Override
     public void next(Fragment actualFragment) {
         if(actualFragment instanceof FormMandatoryFieldsFragment) {
-            FormAddressFragment addressFragment = new FormAddressFragment(this, this, this);
+            FormAddressFragment addressFragment = new FormAddressFragment(
+                    this, this, this
+            );
             this.showFragment(addressFragment);
 
         } else if(actualFragment instanceof FormAddressFragment) {
-            FormDescriptionDetailsFragment descriptionDetailsFragment = new FormDescriptionDetailsFragment(this, this, this);
+            FormDescriptionDetailsFragment descriptionDetailsFragment = new FormDescriptionDetailsFragment(
+                    this,
+                    this,
+                    this,
+                    this
+            );
             this.showFragment(descriptionDetailsFragment);
         } else if(actualFragment instanceof FormDescriptionDetailsFragment) {
             this.sharedViewModel.updateAction(Action.HOME);
         }
 
+    }
+
+    @Override
+    public Estate getData() {
+        return this.formViewModel.getEstateData();
     }
 }

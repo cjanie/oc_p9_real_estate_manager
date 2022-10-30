@@ -27,9 +27,9 @@ public class FormAddressFragment extends Fragment implements TextWatcher, View.O
 
     private Next next;
 
-    private ConstraintLayout formAddressLayout;
     private EditText streetNumberAndStreetName;
 
+    // Views
     private EditText addressComplements;
 
     protected EditText zipCode;
@@ -40,6 +40,7 @@ public class FormAddressFragment extends Fragment implements TextWatcher, View.O
 
     private Button skip;
 
+    // Constructor
     public FormAddressFragment(
             HandleAddressFields handleAddressFields,
             SaveEstateDataUpdate saveEstateDataUpdate,
@@ -54,7 +55,6 @@ public class FormAddressFragment extends Fragment implements TextWatcher, View.O
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(this.LAYOUT_ID, container, false);
-        this.formAddressLayout = root.findViewById(R.id.layout_form_address);
         this.streetNumberAndStreetName = root.findViewById(R.id.editText_streetNumber_and_streetName);
         this.addressComplements = root.findViewById(R.id.editText_addressComplements);
         this.zipCode = root.findViewById(R.id.editText_zipCode);
@@ -83,6 +83,7 @@ public class FormAddressFragment extends Fragment implements TextWatcher, View.O
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         if(charSequence.length() > 0) {
             save.setEnabled(true);
+            save.setAlpha(1);
         }
     }
 

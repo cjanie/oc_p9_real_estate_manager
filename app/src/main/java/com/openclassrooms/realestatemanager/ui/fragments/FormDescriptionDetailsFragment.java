@@ -16,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 
 public class FormDescriptionDetailsFragment extends Fragment implements TextWatcher, View.OnClickListener {
 
@@ -27,8 +28,9 @@ public class FormDescriptionDetailsFragment extends Fragment implements TextWatc
 
     private Next next;
 
-    private ConstraintLayout descriptionDetailsLayout;
+    private FormGetData formGetData;
 
+    // Views
     private EditText surface;
 
     private EditText numberOfRooms;
@@ -41,14 +43,17 @@ public class FormDescriptionDetailsFragment extends Fragment implements TextWatc
 
     private Button skip;
 
+    // Constructor
     public FormDescriptionDetailsFragment(
             HandleDescriptionDetailsData handleDescriptionDetailsData,
             SaveEstateDataUpdate saveEstateDataUpdate,
-            Next next
+            Next next,
+            FormGetData formGetData
     ) {
         this.handleDescriptionDetailsData = handleDescriptionDetailsData;
         this.saveEstateDataUpdate = saveEstateDataUpdate;
         this.next = next;
+        this.formGetData = formGetData;
     }
 
     @Nullable
@@ -56,8 +61,6 @@ public class FormDescriptionDetailsFragment extends Fragment implements TextWatc
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(this.LAYOUT_ID, container, false);
 
-
-        this.descriptionDetailsLayout = root.findViewById(R.id.layout_form_description_details);
         this.surface = root.findViewById(R.id.editText_surface);
         this.numberOfRooms = root.findViewById(R.id.editText_numberOfRooms);
         this.numberOfBathrooms = root.findViewById(R.id.editText_numberOfBathrooms);
@@ -73,6 +76,22 @@ public class FormDescriptionDetailsFragment extends Fragment implements TextWatc
         this.save.setOnClickListener(this);
         this.skip.setOnClickListener(this);
 
+        Estate currentEstate = this.formGetData.getData();
+        if(currentEstate != null) {
+            if(currentEstate.getSurface() != null) {
+                this.surface.setText(currentEstate.getSurface().toString());
+            }
+            if(currentEstate.getNumberOfRooms() != null) {
+                this.numberOfRooms.setText(currentEstate.getNumberOfRooms().toString());
+            }
+            if(currentEstate.getNumberOfBathrooms() != null) {
+                this.numberOfBathrooms.setText(currentEstate.getNumberOfBathrooms().toString());
+            }
+            if(currentEstate.getNumberOfBedrooms() != null) {
+                this.numberOfBedrooms.setText(currentEstate.getNumberOfBedrooms().toString());
+            }
+        }
+
         return root;
     }
 
@@ -85,6 +104,7 @@ public class FormDescriptionDetailsFragment extends Fragment implements TextWatc
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         if(charSequence.length() > 0) {
             save.setEnabled(true);
+            save.setAlpha(1);
         }
     }
 
