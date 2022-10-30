@@ -96,30 +96,36 @@ public class FormDescriptionDetailsFragment extends Fragment implements TextWatc
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.button_save_form_description_details) {
-            Integer surface = this.checkNumericField(this.surface);
-            Integer numberOfRooms = this.checkNumericField(this.numberOfRooms);
-            Integer numberOfBathrooms = this.checkNumericField(this.numberOfBathrooms);
-            Integer numberOfBedrooms = this.checkNumericField(this.numberOfBedrooms);
+            try {
+                Integer surface = this.checkNumericField(this.surface);
+                Integer numberOfRooms = this.checkNumericField(this.numberOfRooms);
+                Integer numberOfBathrooms = this.checkNumericField(this.numberOfBathrooms);
+                Integer numberOfBedrooms = this.checkNumericField(this.numberOfBedrooms);
 
-            this.handleDescriptionDetailsData.setDescriptionDetailsData(
-                    surface,
-                    numberOfRooms,
-                    numberOfBathrooms,
-                    numberOfBedrooms
-            );
-            this.saveEstateDataUpdate.saveEstateDataUpdate();
-            this.next.next(this);
+                this.handleDescriptionDetailsData.setDescriptionDetailsData(
+                        surface,
+                        numberOfRooms,
+                        numberOfBathrooms,
+                        numberOfBedrooms
+                );
+                this.saveEstateDataUpdate.saveEstateDataUpdate();
+                this.next.next(this);
+            } catch (NumberFormatException e) {
+
+            }
+
         } else if(view.getId() == R.id.button_skip_form_description_details) {
             this.next.next(this);
         }
     }
 
-    private Integer checkNumericField(EditText editText) {
+    private Integer checkNumericField(EditText editText) throws NumberFormatException {
         if(!TextUtils.isEmpty(editText.getText())) {
             try {
                 return Integer.parseInt(editText.getText().toString());
             } catch (NumberFormatException e) {
                 editText.setError(this.getString(R.string.nan));
+                throw e;
             }
         }
         return null;
