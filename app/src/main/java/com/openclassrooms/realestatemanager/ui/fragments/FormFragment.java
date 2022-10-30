@@ -4,12 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,37 +15,26 @@ import androidx.lifecycle.ViewModelProvider;
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.ui.Action;
 import com.openclassrooms.realestatemanager.ui.viewmodels.FormViewModel;
+import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
 
-public abstract class FormFragment extends BaseFragment implements FormMandatoryFieldsFragment.HandleFormMandatoryFields {
+public abstract class FormFragment extends BaseFragment implements
+        FormMandatoryFieldsFragment.HandleFormMandatoryFields,
+        FormAddressFragment.HandleAddressFields,
+        FormDescriptionDetailsFragment.HandleDescriptionDetailsData,
+        SaveEstateDataUpdate,
+        Next {
 
     private final int LAYOUT_ID = R.layout.fragment_form;
 
     protected FormViewModel formViewModel;
 
-    private LinearLayout formOptionalLayout;
-
-    private ConstraintLayout formAddressLayout;
-
-    protected EditText streetNumberAndStreetName;
-
-    protected EditText addressComplements;
-
-    protected EditText zipCode;
-
-    protected EditText country;
+    private SharedViewModel sharedViewModel;
 
 
-    private ConstraintLayout descriptionDetailsLayout;
 
-    protected EditText surface;
-
-    protected EditText numberOfRooms;
-
-    protected EditText numberOfBathrooms;
-
-    protected EditText numberOfBedrooms;
 
     @Nullable
     @Override
@@ -56,23 +43,10 @@ public abstract class FormFragment extends BaseFragment implements FormMandatory
 
         FormViewModelFactory formViewModelFactory = ((Launch)this.getActivity().getApplication()).formViewModelFactory();
         this.formViewModel = new ViewModelProvider(this, formViewModelFactory).get(FormViewModel.class);
+        this.sharedViewModel = new ViewModelProvider(this.requireActivity()).get(SharedViewModel.class);
 
-        FormMandatoryFieldsFragment formMandatoryFieldsFragment = new FormMandatoryFieldsFragment(this);
+        FormMandatoryFieldsFragment formMandatoryFieldsFragment = new FormMandatoryFieldsFragment(this, this);
         this.showFragment(formMandatoryFieldsFragment);
-
-        this.formOptionalLayout = root.findViewById(R.id.layout_not_mandatory_fields);
-
-        this.formAddressLayout = root.findViewById(R.id.layout_form_address);
-        this.streetNumberAndStreetName = root.findViewById(R.id.editText_streetNumber_and_streetName);
-        this.addressComplements = root.findViewById(R.id.editText_addressComplements);
-        this.zipCode = root.findViewById(R.id.editText_zipCode);
-        this.country = root.findViewById(R.id.editText_country);
-
-        this.descriptionDetailsLayout = root.findViewById(R.id.layout_form_description_details);
-        this.surface = root.findViewById(R.id.editText_surface);
-        this.numberOfRooms = root.findViewById(R.id.editText_numberOfRooms);
-        this.numberOfBathrooms = root.findViewById(R.id.editText_numberOfBathrooms);
-        this.numberOfBedrooms = root.findViewById(R.id.editText_numberOfBedrooms);
 
         return root;
     }
@@ -84,6 +58,7 @@ public abstract class FormFragment extends BaseFragment implements FormMandatory
                 && estate.getLocation() != null
                 && estate.getPrice() != null
                 && estate.getDevise() != null) {
+            this.formViewModel.setEstateData(estate);
             this.formViewModel.saveEstate(estate);
         };
     }
@@ -95,9 +70,33 @@ public abstract class FormFragment extends BaseFragment implements FormMandatory
     }
 
 
+    @Override
+    public void setEstateAdressData(String streetNumberAndName, String addressComplements, String zipCode, String country) {
+        this.formViewModel.setEstateDataAddress(streetNumberAndName, addressComplements, zipCode, country);
+    }
 
+    @Override
+    public void saveEstateDataUpdate() {
+        this.formViewModel.saveEstateDataUpdate();
+    }
 
+    @Override
+    public void setDescriptionDetailsData(Integer surface, Integer numberOfRooms, Integer numberOfBathrooms, Integer numberOfBedrooms) {
+        this.formViewModel.setEstateDataDescriptionDetails(surface, numberOfRooms, numberOfBathrooms, numberOfBedrooms);
+    }
 
+    @Override
+    public void next(Fragment actualFragment) {
+        if(actualFragment instanceof FormMandatoryFieldsFragment) {
+            FormAddressFragment addressFragment = new FormAddressFragment(this, this, this);
+            this.showFragment(addressFragment);
 
+        } else if(actualFragment instanceof FormAddressFragment) {
+            FormDescriptionDetailsFragment descriptionDetailsFragment = new FormDescriptionDetailsFragment(this, this, this);
+            this.showFragment(descriptionDetailsFragment);
+        } else if(actualFragment instanceof FormDescriptionDetailsFragment) {
+            this.sharedViewModel.updateAction(Action.HOME);
+        }
 
+    }
 }

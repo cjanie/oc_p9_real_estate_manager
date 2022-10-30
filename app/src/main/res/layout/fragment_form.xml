@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <include
-                layout="@layout/component_form_address"/>
+                layout="@layout/fragment_form_address"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Space
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <include
-                layout="@layout/component_form_description_details"
+                layout="@layout/fragment_form_description_details"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

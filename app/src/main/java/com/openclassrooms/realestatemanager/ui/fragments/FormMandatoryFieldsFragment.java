@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
@@ -31,6 +32,8 @@ public class FormMandatoryFieldsFragment extends Fragment implements AdapterView
 
     private HandleFormMandatoryFields handleFormMandatoryFields;
 
+    private Next next;
+
     protected ConstraintLayout formMainLayout;
 
     protected AutoCompleteTextView type;
@@ -44,8 +47,12 @@ public class FormMandatoryFieldsFragment extends Fragment implements AdapterView
     private String estateType;
 
 
-    public FormMandatoryFieldsFragment(HandleFormMandatoryFields handleFormMandatoryFields) {
+    public FormMandatoryFieldsFragment(
+            HandleFormMandatoryFields handleFormMandatoryFields,
+            Next next
+    ) {
         this.handleFormMandatoryFields = handleFormMandatoryFields;
+        this.next = next;
     }
 
     @Nullable
@@ -76,7 +83,10 @@ public class FormMandatoryFieldsFragment extends Fragment implements AdapterView
             this.price.setText(currentEstate.getPrice().toString());
         }
 
-        this.saveMain.setOnClickListener(view -> this.save());
+        this.saveMain.setOnClickListener(view -> {
+            this.save();
+            this.next.next(this);
+        });
 
         return root;
     }
@@ -133,6 +143,7 @@ public class FormMandatoryFieldsFragment extends Fragment implements AdapterView
 
         this.handleFormMandatoryFields.save(estate);
     }
+
 
     interface HandleFormMandatoryFields {
         Estate getInitializedEstate();
