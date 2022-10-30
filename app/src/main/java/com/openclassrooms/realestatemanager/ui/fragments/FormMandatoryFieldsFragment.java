@@ -68,7 +68,7 @@ public class FormMandatoryFieldsFragment extends Fragment implements AdapterView
         this.type.setOnItemClickListener(this);
 
 
-        Estate currentEstate = this.handleFormMandatoryFields.getEstate();
+        Estate currentEstate = this.handleFormMandatoryFields.getInitializedEstate();
         if(currentEstate != null && currentEstate.getId() != null && currentEstate.getId() > 0) {
             this.estateType = currentEstate.getType().toString();
             this.type.setText(this.estateType);
@@ -102,7 +102,7 @@ public class FormMandatoryFieldsFragment extends Fragment implements AdapterView
     }
 
     private void save() {
-        Estate estate = this.handleFormMandatoryFields.getEstate();
+        Estate estate = this.handleFormMandatoryFields.getInitializedEstate();
         String mandatoryFieldError = this.getString(R.string.required);
 
         // Type
@@ -135,7 +135,7 @@ public class FormMandatoryFieldsFragment extends Fragment implements AdapterView
     }
 
     interface HandleFormMandatoryFields {
-        Estate getEstate();
+        Estate getInitializedEstate();
         void save(Estate estate);
     }
 

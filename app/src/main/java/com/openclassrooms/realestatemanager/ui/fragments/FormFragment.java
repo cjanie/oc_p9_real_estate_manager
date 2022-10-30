@@ -77,16 +77,17 @@ public abstract class FormFragment extends BaseFragment implements FormMandatory
         return root;
     }
 
-    protected void saveEstateViaViewModel(Estate estate) {
-
+    @Override
+    public void save(Estate estate) {
         // Mandatory properties should not be null
         if(estate.getType() != null
                 && estate.getLocation() != null
                 && estate.getPrice() != null
                 && estate.getDevise() != null) {
             this.formViewModel.saveEstate(estate);
-        }
+        };
     }
+
 
     private void showFragment(Fragment fragment) {
         FragmentManager fragmentManager = getChildFragmentManager();

@@ -54,12 +54,8 @@ public class FormUpdateEstateFragment extends FormFragment {
     }
 
     @Override
-    public Estate getEstate() {
+    public Estate getInitializedEstate() {
         return this.estate;
     }
 
-    @Override
-    public void save(Estate estate) {
-        this.formViewModel.saveEstate(estate);
-    }
 }

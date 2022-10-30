@@ -5,13 +5,8 @@ import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 public class FormAddEstateFragment extends FormFragment {
 
     @Override
-    public Estate getEstate() {
+    public Estate getInitializedEstate() {
         return new Estate();
-    }
-
-    @Override
-    public void save(Estate estate) {
-        this.saveEstateViaViewModel(estate);
     }
 
 }
