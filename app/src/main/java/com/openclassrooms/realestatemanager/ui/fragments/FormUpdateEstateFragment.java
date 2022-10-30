@@ -49,7 +49,7 @@ public class FormUpdateEstateFragment extends FormFragment {
     }
 
     @Override
-    protected Long save() {
+    protected void save() {
         Estate estate = new Estate();
 
         // Id
@@ -88,14 +88,10 @@ public class FormUpdateEstateFragment extends FormFragment {
                 if(!TextUtils.isEmpty(this.numberOfBedrooms.getText())) {
                     estate.setNumberOfBedrooms(Integer.parseInt(this.numberOfBedrooms.getText().toString()));
                 }
-                return this.formViewModel.saveEstate(estate);
+                this.formViewModel.saveEstate(estate);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-            return 0L;
-
-        } else {
-            return 0L;
         }
     }
 }

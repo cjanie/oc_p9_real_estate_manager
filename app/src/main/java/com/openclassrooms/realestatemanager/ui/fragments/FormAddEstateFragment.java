@@ -13,54 +13,20 @@ import com.openclassrooms.realestatemanager.ui.exceptions.MandatoryException;
 public class FormAddEstateFragment extends FormFragment {
 
     @Override
-    protected Long save() {
+    protected void save() {
 
         Estate estate = new Estate();
-
-        String mandatoryFieldError = this.getString(R.string.required);
-
-        Long id = 0L;
-
-        // Type
-        try {
-            estate.setType(this.getEstateType());
-        } catch (MandatoryException e) {
-            this.type.setError(mandatoryFieldError);
-        }
-
-        // Location
-        if(!TextUtils.isEmpty(this.location.getText())) {
-            estate.setLocation(this.location.getText().toString());
-        } else {
-            this.location.setError(mandatoryFieldError);
-        }
-
-        // Price
-        if(!TextUtils.isEmpty(this.price.getText())) {
-            try {
-                estate.setPrice(Float.parseFloat(this.price.getText().toString()));
-            } catch (NumberFormatException e) {
-                String nanError = this.getString(R.string.nan);
-                this.price.setError(nanError);
-            }
-        } else {
-            this.price.setError(mandatoryFieldError);
-        }
-
-        // Devise
-        estate.setDevise(Devise.DOLLAR); // TODO Autocomplete field
+        this.setMandatoryProperties(estate);
 
         if(estate.getType() != null
                 && estate.getLocation() != null
                 && estate.getPrice() != null
                 && estate.getDevise() != null) {
-            id = this.formViewModel.saveEstate(estate);
+            Long id = this.formViewModel.saveEstate(estate);
             if(id > 0) {
                 this.formMainLayout.setVisibility(View.GONE);
+                this.enableAddressFieldsComponants();
             }
-            return id;
-        } else {
-            return 0L;
         }
     }
 }
