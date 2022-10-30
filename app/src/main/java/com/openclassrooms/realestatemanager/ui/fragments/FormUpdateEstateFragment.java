@@ -24,6 +24,12 @@ public class FormUpdateEstateFragment extends FormFragment {
     private SharedViewModel sharedViewModel;
     private DetailsViewModel detailsViewModel;
 
+    private Estate estate;
+
+    public FormUpdateEstateFragment() {
+        this.estate = new Estate();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,10 +41,9 @@ public class FormUpdateEstateFragment extends FormFragment {
         this.detailsViewModel = new ViewModelProvider(this.getActivity(), detailsViewModelFactory).get(DetailsViewModel.class);
 
         this.detailsViewModel.getEstate().observe(this.getActivity(), estate -> {
-            this.id = estate.getId();
-            this.type.setText(estate.getType().toString());
-            this.location.setText(estate.getLocation());
-            this.price.setText(estate.getPrice().toString());
+            if(estate != null) {
+                this.estate = estate;
+            }
         });
 
         this.sharedViewModel.getEstateSelectionId().observe(this.getViewLifecycleOwner(), estateSelectionId -> {
@@ -49,49 +54,12 @@ public class FormUpdateEstateFragment extends FormFragment {
     }
 
     @Override
-    protected void save() {
-        Estate estate = new Estate();
+    public Estate getEstate() {
+        return this.estate;
+    }
 
-        // Id
-        estate.setId(this.id);
-
-        try {
-            estate.setType(this.getEstateType());
-        } catch (MandatoryException e) {
-            e.printStackTrace();
-        }
-
-        if(!TextUtils.isEmpty(this.type.getText())
-                && !TextUtils.isEmpty(this.location.getText())
-                && !TextUtils.isEmpty(this.price.getText())) {
-
-            // Location
-            estate.setLocation(this.location.getText().toString());
-            estate.setStreetNumberAndStreetName(this.streetNumberAndStreetName.toString());
-            estate.setAddressComplements(this.addressComplements.toString());
-            estate.setZipCode(this.zipCode.toString());
-            estate.setCountry(this.country.toString());
-            // Price
-            try {
-                estate.setPrice(Float.parseFloat(this.price.getText().toString()));
-                estate.setDevise(Devise.DOLLAR);
-                // Extra
-                if(!TextUtils.isEmpty(this.surface.getText())) {
-                    estate.setSurface(Integer.parseInt(this.surface.getText().toString()));
-                }
-                if(!TextUtils.isEmpty(this.numberOfRooms.getText())) {
-                    estate.setNumberOfRooms(Integer.parseInt(this.numberOfRooms.getText().toString()));
-                }
-                if(!TextUtils.isEmpty(this.numberOfBathrooms.getText())) {
-                    estate.setNumberOfBathrooms(Integer.parseInt(this.numberOfBathrooms.getText().toString()));
-                }
-                if(!TextUtils.isEmpty(this.numberOfBedrooms.getText())) {
-                    estate.setNumberOfBedrooms(Integer.parseInt(this.numberOfBedrooms.getText().toString()));
-                }
-                this.formViewModel.saveEstate(estate);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
+    @Override
+    public void save(Estate estate) {
+        this.formViewModel.saveEstate(estate);
     }
 }
