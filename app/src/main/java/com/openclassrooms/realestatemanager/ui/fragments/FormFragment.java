@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +25,7 @@ public abstract class FormFragment extends BaseFragment implements
         FormDescriptionDetailsFragment.HandleDescriptionDetailsData,
         SaveEstateDataUpdate,
         Next,
-        FormGetData {
+        FormData {
 
     private final int LAYOUT_ID = R.layout.fragment_form;
 
@@ -85,7 +84,7 @@ public abstract class FormFragment extends BaseFragment implements
     public void next(Fragment actualFragment) {
         if(actualFragment instanceof FormMandatoryFieldsFragment) {
             FormAddressFragment addressFragment = new FormAddressFragment(
-                    this, this, this
+                    this, this, this, this
             );
             this.showFragment(addressFragment);
 

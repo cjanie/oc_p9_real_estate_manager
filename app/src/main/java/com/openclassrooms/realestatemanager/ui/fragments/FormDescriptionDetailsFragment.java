@@ -12,7 +12,6 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.openclassrooms.realestatemanager.R;
@@ -28,7 +27,7 @@ public class FormDescriptionDetailsFragment extends Fragment implements TextWatc
 
     private Next next;
 
-    private FormGetData formGetData;
+    private FormData formData;
 
     // Views
     private EditText surface;
@@ -48,12 +47,12 @@ public class FormDescriptionDetailsFragment extends Fragment implements TextWatc
             HandleDescriptionDetailsData handleDescriptionDetailsData,
             SaveEstateDataUpdate saveEstateDataUpdate,
             Next next,
-            FormGetData formGetData
+            FormData formData
     ) {
         this.handleDescriptionDetailsData = handleDescriptionDetailsData;
         this.saveEstateDataUpdate = saveEstateDataUpdate;
         this.next = next;
-        this.formGetData = formGetData;
+        this.formData = formData;
     }
 
     @Nullable
@@ -76,7 +75,7 @@ public class FormDescriptionDetailsFragment extends Fragment implements TextWatc
         this.save.setOnClickListener(this);
         this.skip.setOnClickListener(this);
 
-        Estate currentEstate = this.formGetData.getData();
+        Estate currentEstate = this.formData.getData();
         if(currentEstate != null) {
             if(currentEstate.getSurface() != null) {
                 this.surface.setText(currentEstate.getSurface().toString());

@@ -26,6 +26,12 @@ public class EstateDetailsFragment extends BaseFragment {
     private TextView numberOfBathrooms;
     private TextView numberOfBedrooms;
 
+    private TextView streetNumberAndName;
+    private TextView addressComplements;
+    private TextView city;
+    private TextView zipCode;
+    private TextView country;
+
 
     @Nullable
     @Override
@@ -40,6 +46,12 @@ public class EstateDetailsFragment extends BaseFragment {
         this.numberOfBathrooms = root.findViewById(R.id.bathrooms_value);
         this.numberOfBedrooms = root.findViewById(R.id.bedrooms_value);
 
+        this.streetNumberAndName = root.findViewById(R.id.location_number_street);
+        this.addressComplements = root.findViewById(R.id.address_complements);
+        this.city = root.findViewById(R.id.location_city);
+        this.zipCode = root.findViewById(R.id.location_zip_code);
+        this.country = root.findViewById(R.id.country);
+
         this.detailsViewModel.getEstate().observe(this.getActivity(), estate -> {
             if(estate.getSurface() != null) {
                 this.surface.setText(estate.getSurface().toString());
@@ -52,6 +64,21 @@ public class EstateDetailsFragment extends BaseFragment {
             }
             if(estate.getNumberOfBedrooms() != null) {
                 this.numberOfBedrooms.setText(estate.getNumberOfBedrooms().toString());
+            }
+            if(estate.getStreetNumberAndStreetName() != null) {
+                this.streetNumberAndName.setText(estate.getStreetNumberAndStreetName());
+            }
+            if(estate.getAddressComplements() != null) {
+                this.addressComplements.setText(estate.getAddressComplements());
+            }
+            if(estate.getLocation() != null) {
+                this.city.setText(estate.getLocation());
+            }
+            if(estate.getZipCode() != null) {
+                this.zipCode.setText(estate.getZipCode());
+            }
+            if(estate.getCountry() != null) {
+                this.country.setText(estate.getCountry());
             }
         });
 

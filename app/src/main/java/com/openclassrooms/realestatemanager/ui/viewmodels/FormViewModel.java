@@ -25,10 +25,17 @@ public class FormViewModel extends ViewModel {
     }
 
     public Long saveEstate(Estate estate) {
-        return this.saveEstateUseCase.handle(estate);
+        Long id = this.saveEstateUseCase.handle(estate);
+        this.estateData.setId(Integer.parseInt(id.toString()));
+        return id;
     }
 
-    public void setEstateDataAddress(String streetNumberAndNAme, String addressComplements, String zipCode, String country) {
+    public void setEstateDataAddress(
+            String streetNumberAndNAme,
+            String addressComplements,
+            String zipCode,
+            String country
+    ) {
         this.estateData.setStreetNumberAndStreetName(streetNumberAndNAme);
         this.estateData.setAddressComplements(addressComplements);
         this.estateData.setZipCode(zipCode);
