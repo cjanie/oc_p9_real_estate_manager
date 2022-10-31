@@ -5,61 +5,13 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_form_main"
+    <FrameLayout
+        android:id="@+id/frame_layout_form"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <include
-            layout="@layout/component_form_main" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <Space
-        android:id="@+id/space_1"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/padding_tablet"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_form_main" />
-
-    <LinearLayout
-        android:id="@+id/layout_not_mandatory_fields"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/space_1"
-        android:orientation="horizontal"
-        style="@style/Disabled">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_form_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-            <include
-                layout="@layout/component_form_address"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <Space
-            android:layout_width="@dimen/padding_tablet"
-            android:layout_height="wrap_content"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_form_description_details"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-            <include
-                layout="@layout/component_form_description_details"
-                />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </LinearLayout>
-
-
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
