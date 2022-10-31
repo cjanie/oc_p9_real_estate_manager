@@ -16,6 +16,7 @@
         <entry key="app/src/main/res/layout/fragment_form.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_form_address.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_form_description_details.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/layout_estate_details_address.xml" value="0.13072916666666667" />
         <entry key="app/src/main/res/menu/toolbar_menu.xml" value="0.1" />
       </map>
     </option>
