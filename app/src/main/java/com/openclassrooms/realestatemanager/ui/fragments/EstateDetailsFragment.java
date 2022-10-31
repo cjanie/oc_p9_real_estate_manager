@@ -40,7 +40,7 @@ public class EstateDetailsFragment extends BaseFragment {
 
         DetailsViewModelFactory detailsViewModelFactory = ((Launch)this.getActivity().getApplication()).detailsViewModelFactory();
         this.detailsViewModel = new ViewModelProvider(this.getActivity(), detailsViewModelFactory).get(DetailsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_estate_details, container, false);
+        View root = inflater.inflate(R.layout.fragment_details, container, false);
         this.surface = root.findViewById(R.id.surface_value);
         this.numberOfRooms = root.findViewById(R.id.rooms_value);
         this.numberOfBathrooms = root.findViewById(R.id.bathrooms_value);

@@ -13,6 +13,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="label">
+        <item name="android:textSize">@dimen/medium_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="Mandatory">
         <item name="android:drawableRight">@drawable/ic_baseline_error_outline_24</item>
     </style>
@@ -29,10 +34,6 @@
         <item name="backgroundTint">@color/orange</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:text">@string/skip</item>
-    </style>
-
-    <style name="Section_layout">
-        <item name="android:padding">@dimen/padding</item>
     </style>
 
 </resources>
