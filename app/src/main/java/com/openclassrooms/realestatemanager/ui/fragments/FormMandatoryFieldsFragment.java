@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
@@ -141,13 +140,13 @@ public class FormMandatoryFieldsFragment extends Fragment implements AdapterView
         // Devise
         estate.setDevise(Devise.DOLLAR); // TODO Autocomplete field
 
-        this.handleFormMandatoryFields.save(estate);
+        this.handleFormMandatoryFields.saveMandatory(estate);
     }
 
 
     interface HandleFormMandatoryFields {
         Estate getInitializedEstate();
-        void save(Estate estate);
+        void saveMandatory(Estate estate);
     }
 
 

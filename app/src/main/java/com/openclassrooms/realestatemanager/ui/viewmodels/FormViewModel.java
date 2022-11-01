@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
+import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SaveEstateUseCase;
 
 public class FormViewModel extends ViewModel {
@@ -14,6 +16,7 @@ public class FormViewModel extends ViewModel {
 
     public FormViewModel(SaveEstateUseCase saveEstateUseCase) {
         this.saveEstateUseCase = saveEstateUseCase;
+        this.estateData = new Estate();
     }
 
     public void setEstateData(Estate estate) {
@@ -24,10 +27,15 @@ public class FormViewModel extends ViewModel {
         return this.estateData;
     }
 
-    public Long saveEstate(Estate estate) {
-        Long id = this.saveEstateUseCase.handle(estate);
-        this.estateData.setId(Integer.parseInt(id.toString()));
-        return id;
+    public void setEstateDataMandatory(
+            EstateType type,
+            String location,
+            Float price,
+            Devise devise) {
+        this.estateData.setType(type);
+        this.estateData.setLocation(location);
+        this.estateData.setPrice(price);
+        this.estateData.setDevise(devise);
     }
 
     public void setEstateDataAddress(
@@ -54,6 +62,8 @@ public class FormViewModel extends ViewModel {
     }
 
     public Long saveEstateDataUpdate() {
-        return this.saveEstateUseCase.handle(this.estateData);
+        Long id = this.saveEstateUseCase.handle(this.estateData);
+        this.estateData.setId(Integer.parseInt(id.toString()));
+        return id;
     }
 }

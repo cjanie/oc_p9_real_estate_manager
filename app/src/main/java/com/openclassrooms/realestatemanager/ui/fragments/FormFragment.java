@@ -29,9 +29,9 @@ public abstract class FormFragment extends BaseFragment implements
 
     private final int LAYOUT_ID = R.layout.fragment_form;
 
-    private FormViewModel formViewModel;
+    protected FormViewModel formViewModel;
 
-    private SharedViewModel sharedViewModel;
+    protected SharedViewModel sharedViewModel;
 
     @Nullable
     @Override
@@ -54,14 +54,17 @@ public abstract class FormFragment extends BaseFragment implements
     }
 
     @Override
-    public void save(Estate estate) {
+    public void saveMandatory(Estate estate) {
         // Mandatory properties should not be null
         if(estate.getType() != null
                 && estate.getLocation() != null
                 && estate.getPrice() != null
                 && estate.getDevise() != null) {
-            this.formViewModel.setEstateData(estate);
-            this.formViewModel.saveEstate(estate);
+
+            this.formViewModel.setEstateDataMandatory(
+                    estate.getType(), estate.getLocation(), estate.getPrice(), estate.getDevise()
+            );
+            this.formViewModel.saveEstateDataUpdate();
         };
     }
 

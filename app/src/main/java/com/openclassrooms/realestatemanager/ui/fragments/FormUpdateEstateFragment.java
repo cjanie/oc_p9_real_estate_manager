@@ -21,14 +21,7 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewM
 
 public class FormUpdateEstateFragment extends FormFragment {
 
-    private SharedViewModel sharedViewModel;
     private DetailsViewModel detailsViewModel;
-
-    private Estate estate;
-
-    public FormUpdateEstateFragment() {
-        this.estate = new Estate();
-    }
 
     @Nullable
     @Override
@@ -42,7 +35,7 @@ public class FormUpdateEstateFragment extends FormFragment {
 
         this.detailsViewModel.getEstate().observe(this.getActivity(), estate -> {
             if(estate != null) {
-                this.estate = estate;
+                this.formViewModel.setEstateData(estate);
             }
         });
 
@@ -55,7 +48,7 @@ public class FormUpdateEstateFragment extends FormFragment {
 
     @Override
     public Estate getInitializedEstate() {
-        return this.estate;
+        return this.formViewModel.getEstateData();
     }
 
 }
