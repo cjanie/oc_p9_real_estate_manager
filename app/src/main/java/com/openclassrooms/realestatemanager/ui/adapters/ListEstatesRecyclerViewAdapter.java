@@ -21,7 +21,7 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_EMPTY_VIEW = 0;
 
