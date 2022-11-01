@@ -4,6 +4,7 @@ package com.openclassrooms.realestatemanager.businesslogic.entities;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Estate {
@@ -37,6 +38,12 @@ public class Estate {
     private Integer numberOfBedrooms;
 
     private String description;
+
+    private List<String> media;
+
+    public Estate() {
+        this.media = new ArrayList<>();
+    }
 
     public Integer getId() {
         return id;
@@ -156,5 +163,13 @@ public class Estate {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<String> getMedia() {
+        return media;
+    }
+
+    public void setMedia(List<String> media) {
+        this.media = media;
     }
 }

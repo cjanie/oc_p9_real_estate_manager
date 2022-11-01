@@ -39,6 +39,8 @@ public class EstateCommandGatewayImpl implements EstateCommandGateway {
 
         dto.setDescription(estate.getDescription());
 
+        // TODO MediaInDb
+
         return this.estateDAO.save(dto);
     }
 }

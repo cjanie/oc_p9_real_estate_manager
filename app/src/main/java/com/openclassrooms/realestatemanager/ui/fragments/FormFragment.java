@@ -19,11 +19,14 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.FormViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
 
+import java.util.List;
+
 public abstract class FormFragment extends BaseFragment implements
         FormMandatoryFieldsFragment.HandleFormMandatoryFields,
         FormAddressFragment.HandleAddressFields,
         FormDescriptionDetailsFragment.HandleDescriptionDetailsData,
         FormDescriptionFragment.HandleDescriptionData,
+        FormMediaFragment.HandleMediaData,
         SaveEstateDataUpdate,
         Next,
         FormData {
@@ -111,7 +114,9 @@ public abstract class FormFragment extends BaseFragment implements
             this.showFragment(descriptionFragment);
 
         } else if(actualFragment instanceof FormDescriptionFragment) {
-            FormMediaFragment mediaFragment = new FormMediaFragment();
+            FormMediaFragment mediaFragment = new FormMediaFragment(
+                    this,this, this, this
+            );
             this.showFragment(mediaFragment);
 
         } else if(actualFragment instanceof FormMediaFragment) {
@@ -128,5 +133,10 @@ public abstract class FormFragment extends BaseFragment implements
     @Override
     public void setEstateDescriptionData(String description) {
         this.formViewModel.setEstateDataDescription(description);
+    }
+
+    @Override
+    public void setEstateMediaData(List<String> media) {
+        this.formViewModel.setEstateDataMedia(media);
     }
 }

@@ -77,6 +77,8 @@ public class EstateGatewayImpl implements EstateGateway {
 
         estate.setDescription(dto.getDescription());
 
+        // TODO Media in db
+
         return estate;
     }
 }

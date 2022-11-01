@@ -8,6 +8,8 @@ import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SaveEstateUseCase;
 
+import java.util.List;
+
 public class FormViewModel extends ViewModel {
 
     private SaveEstateUseCase saveEstateUseCase;
@@ -63,6 +65,10 @@ public class FormViewModel extends ViewModel {
 
     public void setEstateDataDescription(String description) {
         this.estateData.setDescription(description);
+    }
+
+    public void setEstateDataMedia(List<String> media) {
+        this.estateData.setMedia(media);
     }
 
     public Long saveEstateDataUpdate() {
