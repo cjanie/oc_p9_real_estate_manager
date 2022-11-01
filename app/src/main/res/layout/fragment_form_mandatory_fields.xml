@@ -12,7 +12,8 @@
         android:text="@string/type"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/label"/>
 
     <AutoCompleteTextView
         android:id="@+id/spinner_type"
@@ -30,7 +31,8 @@
         android:text="@string/location"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_type" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_type"
+        style="@style/label"/>
 
     <EditText
         android:id="@+id/editText_location"
@@ -48,7 +50,8 @@
         android:text="@string/price"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_location" />
+        app:layout_constraintTop_toBottomOf="@+id/editText_location"
+        style="@style/label"/>
 
     <EditText
         android:id="@+id/editText_price"
@@ -69,6 +72,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText_price"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
