@@ -33,6 +33,8 @@ public class EstateDetailsFragment extends BaseFragment {
     private TextView zipCode;
     private TextView country;
 
+    private TextView description;
+
     private LinearLayout flexLayout;
 
 
@@ -45,6 +47,7 @@ public class EstateDetailsFragment extends BaseFragment {
         this.detailsViewModel = new ViewModelProvider(this.getActivity(), detailsViewModelFactory).get(DetailsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_details, container, false);
 
+        this.description = root.findViewById(R.id.estate_decription_content);
 
         this.surface = root.findViewById(R.id.surface_value);
         this.numberOfRooms = root.findViewById(R.id.rooms_value);
@@ -61,6 +64,10 @@ public class EstateDetailsFragment extends BaseFragment {
         this.handleTabletMode();
 
         this.detailsViewModel.getEstate().observe(this.getActivity(), estate -> {
+            if(estate.getDescription() != null) {
+                this.description.setText(estate.getDescription());
+            }
+
             if(estate.getSurface() != null) {
                 this.surface.setText(estate.getSurface().toString());
             }

@@ -61,6 +61,10 @@ public class FormViewModel extends ViewModel {
         this.estateData.setNumberOfBedrooms(numberOfBedrooms);
     }
 
+    public void setEstateDataDescription(String description) {
+        this.estateData.setDescription(description);
+    }
+
     public Long saveEstateDataUpdate() {
         Long id = this.saveEstateUseCase.handle(this.estateData);
         this.estateData.setId(Integer.parseInt(id.toString()));

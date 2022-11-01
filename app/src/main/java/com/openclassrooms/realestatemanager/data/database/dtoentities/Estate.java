@@ -37,6 +37,8 @@ public class Estate {
 
     private String country;
 
+    private String description;
+
 
     public Integer getId() {
         return id;
@@ -132,5 +134,13 @@ public class Estate {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

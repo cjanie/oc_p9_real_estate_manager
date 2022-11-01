@@ -75,6 +75,8 @@ public class EstateGatewayImpl implements EstateGateway {
         estate.setZipCode(dto.getZipcode());
         estate.setCountry(dto.getCountry());
 
+        estate.setDescription(dto.getDescription());
+
         return estate;
     }
 }

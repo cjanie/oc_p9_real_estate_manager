@@ -36,6 +36,7 @@ public class Estate {
 
     private Integer numberOfBedrooms;
 
+    private String description;
 
     public Integer getId() {
         return id;
@@ -147,5 +148,13 @@ public class Estate {
 
     public void setNumberOfBedrooms(Integer numberOfBedrooms) {
         this.numberOfBedrooms = numberOfBedrooms;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

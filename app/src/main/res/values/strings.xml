@@ -16,6 +16,7 @@
     <string name="type">Type</string>
     <string name="price">Price</string>
     <string name="required">Required</string>
+    <string name="camera">Camera</string>
     <string name="incorrect_estate_type">Incorrect estate type</string>
     <string name="nan">Not a number</string>
     <string name="save">Save</string>

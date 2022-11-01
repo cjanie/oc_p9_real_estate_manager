@@ -23,6 +23,7 @@ public abstract class FormFragment extends BaseFragment implements
         FormMandatoryFieldsFragment.HandleFormMandatoryFields,
         FormAddressFragment.HandleAddressFields,
         FormDescriptionDetailsFragment.HandleDescriptionDetailsData,
+        FormDescriptionFragment.HandleDescriptionData,
         SaveEstateDataUpdate,
         Next,
         FormData {
@@ -99,7 +100,21 @@ public abstract class FormFragment extends BaseFragment implements
                     this
             );
             this.showFragment(descriptionDetailsFragment);
+
         } else if(actualFragment instanceof FormDescriptionDetailsFragment) {
+            FormDescriptionFragment descriptionFragment = new FormDescriptionFragment(
+                    this,
+                    this,
+                    this,
+                    this
+            );
+            this.showFragment(descriptionFragment);
+
+        } else if(actualFragment instanceof FormDescriptionFragment) {
+            FormMediaFragment mediaFragment = new FormMediaFragment();
+            this.showFragment(mediaFragment);
+
+        } else if(actualFragment instanceof FormMediaFragment) {
             this.sharedViewModel.updateAction(Action.HOME);
         }
 
@@ -108,5 +123,10 @@ public abstract class FormFragment extends BaseFragment implements
     @Override
     public Estate getData() {
         return this.formViewModel.getEstateData();
+    }
+
+    @Override
+    public void setEstateDescriptionData(String description) {
+        this.formViewModel.setEstateDataDescription(description);
     }
 }

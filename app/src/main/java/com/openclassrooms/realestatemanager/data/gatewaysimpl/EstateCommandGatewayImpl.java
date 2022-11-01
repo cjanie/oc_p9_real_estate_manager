@@ -37,6 +37,8 @@ public class EstateCommandGatewayImpl implements EstateCommandGateway {
         dto.setZipcode(estate.getZipCode());
         dto.setCountry(estate.getCountry());
 
+        dto.setDescription(estate.getDescription());
+
         return this.estateDAO.save(dto);
     }
 }
