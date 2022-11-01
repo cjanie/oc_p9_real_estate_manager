@@ -31,17 +31,24 @@
             android:id="@+id/details_flex_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="2">
 
             <include
-                layout="@layout/layout_details_description_details"/>
+                layout="@layout/layout_details_description_details"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_weight="1"/>
 
             <Space
                 android:layout_width="@dimen/big_space"
                 android:layout_height="@dimen/big_space"/>
 
             <include
-                layout="@layout/layout_details_address"/>
+                layout="@layout/layout_details_address"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_weight="1"/>
 
         </LinearLayout>
 
