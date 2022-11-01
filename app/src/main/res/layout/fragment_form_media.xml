@@ -8,28 +8,37 @@
 
     <Button
         android:id="@+id/button_form_camera"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/camera"
         android:drawableLeft="@drawable/ic_baseline_photo_camera_24"
         android:drawablePadding="@dimen/padding"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/camera"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/button_form_photo_file"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:drawableLeft="@drawable/ic_baseline_drive_folder_upload_24"
+        android:drawablePadding="@dimen/padding"
+        android:text="@string/select"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_form_camera">
+        app:layout_constraintTop_toBottomOf="@+id/button_form_camera" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout_skip_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_form_photo_file">
 
         <include
-            layout="@layout/layout_buttons_skip_save"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            layout="@layout/layout_buttons_skip_save" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
