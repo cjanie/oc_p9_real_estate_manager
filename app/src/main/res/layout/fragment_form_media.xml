@@ -6,23 +6,14 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <ImageView
-        android:id="@+id/image_form_media"
-        android:layout_width="@dimen/photo_media_size"
-        android:layout_height="@dimen/photo_media_size"
-        android:src="@drawable/ic_baseline_insert_photo_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_form_media"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/image_form_media"
-        app:layout_constraintStart_toEndOf="@id/image_form_media"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/image_form_media" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"  />
 
     <Button
         android:id="@+id/button_form_camera"
@@ -33,7 +24,7 @@
         android:text="@string/camera"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_form_media" />
+        app:layout_constraintTop_toBottomOf="@id/recyclerView_form_media" />
 
     <Button
         android:id="@+id/button_form_photo_file"

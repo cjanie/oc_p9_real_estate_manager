@@ -39,7 +39,10 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
     public void updateList(List<Estate> estates) {
         this.estates.clear();
         this.estates.addAll(estates);
-        this.notifyDataSetChanged(); // Notifies the recycler view that data changed // Notify or DiffUtil object to handle list changes
+
+        // Notifies the recycler view that data changed
+        // Notify or DiffUtil object to handle list changes
+        this.notifyDataSetChanged();
     }
 
 
