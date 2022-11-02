@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -22,7 +21,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +29,7 @@ import com.openclassrooms.realestatemanager.ui.adapters.PhotosRecyclerViewAdapte
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -48,6 +47,11 @@ public class FormMediaFragment extends FormSectionFragment implements View.OnCli
     private Button skip;
 
     private HandleMediaData handleMediaData;
+
+    private final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
+
+    private final String PERMISSION_WRITE_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 
     private ActivityResultLauncher launcherRequestPermissionForCamera = this.registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
@@ -75,7 +79,12 @@ public class FormMediaFragment extends FormSectionFragment implements View.OnCli
             }
     );
 
-    private final String PERMISSION = Manifest.permission.CAMERA;
+    private ActivityResultLauncher launcherRequestPermissionToWriteStorage = this.registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            isPermissionGranted -> {
+                this.save();
+            }
+    );
 
     public FormMediaFragment(HandleMediaData handleMediaData, SaveEstateDataUpdate saveEstateDataUpdate, Next next, FormData formData) {
         super(saveEstateDataUpdate, next, formData);
@@ -116,10 +125,11 @@ public class FormMediaFragment extends FormSectionFragment implements View.OnCli
     public void onClick(View view) {
 
         if(view.getId() == R.id.button_form_camera) {
-            this.launcherRequestPermissionForCamera.launch(this.PERMISSION);
+            this.launcherRequestPermissionForCamera.launch(this.PERMISSION_CAMERA);
 
         } else if(view.getId() == R.id.button_save_form) {
-            this.save();
+
+            this.launcherRequestPermissionToWriteStorage.launch(this.PERMISSION_WRITE_STORAGE);
 
         } else if(view.getId() == R.id.button_skip_form) {
             this.next();
@@ -137,12 +147,15 @@ public class FormMediaFragment extends FormSectionFragment implements View.OnCli
         }
 
          */
-        for(Bitmap photo: this.photos) {
-            this.saveImage(photo);
+        if(!this.photos.isEmpty()) {
+            for(Bitmap photo: this.photos) {
+                this.saveImageInStorage(photo);
+            }
         }
+
     }
 
-    private void saveImage(Bitmap bitmap) {
+    private void saveImageInStorage(Bitmap bitmap) {
         // https://stackoverflow.com/questions/7887078/android-saving-file-to-external-storage
 
         String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
@@ -161,7 +174,7 @@ public class FormMediaFragment extends FormSectionFragment implements View.OnCli
             out.flush();
             out.close();
         }
-        catch (Exception e) {
+        catch (IOException e) {
             e.printStackTrace();
         }
 
