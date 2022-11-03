@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +35,10 @@ public abstract class FormFragment extends BaseFragment implements
 
     private final int LAYOUT_ID = R.layout.fragment_form;
 
+    private LinearLayout formStepsProgressBar;
+
+    private final int NUMBER_OF_STEPS = 5;
+
     protected FormViewModel formViewModel;
 
     protected SharedViewModel sharedViewModel;
@@ -41,6 +47,13 @@ public abstract class FormFragment extends BaseFragment implements
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(this.LAYOUT_ID, container, false);
+        this.formStepsProgressBar = root.findViewById(R.id.layout_form_steps_progress_bar);
+
+        for(int i=0; i<this.NUMBER_OF_STEPS; i++) {
+            View view = inflater.inflate(R.layout.layout_form_step_checked_icon, this.formStepsProgressBar, false);
+            this.formStepsProgressBar.addView(view);
+        }
+
 
         FormViewModelFactory formViewModelFactory = ((Launch)this.getActivity().getApplication()).formViewModelFactory();
         this.formViewModel = new ViewModelProvider(this, formViewModelFactory).get(FormViewModel.class);
