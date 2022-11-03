@@ -26,10 +26,20 @@ public class EstateCommandGatewayImpl implements EstateCommandGateway {
             float priceInDollar = Utils.convertEuroToDollar(Math.round(estate.getPrice()));
             dto.setPriceInDollars(priceInDollar);
         }
+
         dto.setSurfaceInMeterSquare(estate.getSurface());
         dto.setNumberOfRooms(estate.getNumberOfRooms());
         dto.setNumberOfBathrooms(estate.getNumberOfBathrooms());
         dto.setNumberOfBedrooms(estate.getNumberOfBedrooms());
+
+        dto.setStreetNumberAndName(estate.getStreetNumberAndStreetName());
+        dto.setAddressComplements(estate.getAddressComplements());
+        dto.setZipcode(estate.getZipCode());
+        dto.setCountry(estate.getCountry());
+
+        dto.setDescription(estate.getDescription());
+
+        // TODO MediaInDb
 
         return this.estateDAO.save(dto);
     }

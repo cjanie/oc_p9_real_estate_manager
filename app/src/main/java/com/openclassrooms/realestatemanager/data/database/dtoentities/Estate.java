@@ -29,6 +29,16 @@ public class Estate {
 
     private Integer numberOfBedrooms;
 
+    private String streetNumberAndName;
+
+    private String addressComplements;
+
+    private String zipcode;
+
+    private String country;
+
+    private String description;
+
 
     public Integer getId() {
         return id;
@@ -92,5 +102,45 @@ public class Estate {
 
     public void setNumberOfBedrooms(Integer numberOfBedrooms) {
         this.numberOfBedrooms = numberOfBedrooms;
+    }
+
+    public String getStreetNumberAndName() {
+        return streetNumberAndName;
+    }
+
+    public void setStreetNumberAndName(String streetNumberAndName) {
+        this.streetNumberAndName = streetNumberAndName;
+    }
+
+    public String getAddressComplements() {
+        return addressComplements;
+    }
+
+    public void setAddressComplements(String addressComplements) {
+        this.addressComplements = addressComplements;
+    }
+
+    public String getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

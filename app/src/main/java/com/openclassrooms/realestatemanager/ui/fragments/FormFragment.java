@@ -19,19 +19,23 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.FormViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
 
+import java.util.List;
+
 public abstract class FormFragment extends BaseFragment implements
         FormMandatoryFieldsFragment.HandleFormMandatoryFields,
         FormAddressFragment.HandleAddressFields,
         FormDescriptionDetailsFragment.HandleDescriptionDetailsData,
+        FormDescriptionFragment.HandleDescriptionData,
+        FormMediaFragment.HandleMediaData,
         SaveEstateDataUpdate,
         Next,
         FormData {
 
     private final int LAYOUT_ID = R.layout.fragment_form;
 
-    private FormViewModel formViewModel;
+    protected FormViewModel formViewModel;
 
-    private SharedViewModel sharedViewModel;
+    protected SharedViewModel sharedViewModel;
 
     @Nullable
     @Override
@@ -42,7 +46,12 @@ public abstract class FormFragment extends BaseFragment implements
         this.formViewModel = new ViewModelProvider(this, formViewModelFactory).get(FormViewModel.class);
         this.sharedViewModel = new ViewModelProvider(this.requireActivity()).get(SharedViewModel.class);
 
-        FormMandatoryFieldsFragment formMandatoryFieldsFragment = new FormMandatoryFieldsFragment(this, this);
+        FormMandatoryFieldsFragment formMandatoryFieldsFragment = new FormMandatoryFieldsFragment(
+                this,
+                this,
+                this,
+                this
+        );
         this.showFragment(formMandatoryFieldsFragment);
 
         return root;
@@ -54,14 +63,16 @@ public abstract class FormFragment extends BaseFragment implements
     }
 
     @Override
-    public void save(Estate estate) {
+    public void setMandatoryFields(Estate estate) {
         // Mandatory properties should not be null
         if(estate.getType() != null
                 && estate.getLocation() != null
                 && estate.getPrice() != null
                 && estate.getDevise() != null) {
-            this.formViewModel.setEstateData(estate);
-            this.formViewModel.saveEstate(estate);
+
+            this.formViewModel.setEstateDataMandatory(
+                    estate.getType(), estate.getLocation(), estate.getPrice(), estate.getDevise()
+            );
         };
     }
 
@@ -96,7 +107,23 @@ public abstract class FormFragment extends BaseFragment implements
                     this
             );
             this.showFragment(descriptionDetailsFragment);
+
         } else if(actualFragment instanceof FormDescriptionDetailsFragment) {
+            FormDescriptionFragment descriptionFragment = new FormDescriptionFragment(
+                    this,
+                    this,
+                    this,
+                    this
+            );
+            this.showFragment(descriptionFragment);
+
+        } else if(actualFragment instanceof FormDescriptionFragment) {
+            FormMediaFragment mediaFragment = new FormMediaFragment(
+                    this,this, this, this
+            );
+            this.showFragment(mediaFragment);
+
+        } else if(actualFragment instanceof FormMediaFragment) {
             this.sharedViewModel.updateAction(Action.HOME);
         }
 
@@ -105,5 +132,15 @@ public abstract class FormFragment extends BaseFragment implements
     @Override
     public Estate getData() {
         return this.formViewModel.getEstateData();
+    }
+
+    @Override
+    public void setEstateDescriptionData(String description) {
+        this.formViewModel.setEstateDataDescription(description);
+    }
+
+    @Override
+    public void setEstateMediaData(List<String> media) {
+        this.formViewModel.setEstateDataMedia(media);
     }
 }

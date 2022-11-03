@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,10 @@ public class EstateDetailsFragment extends BaseFragment {
     private TextView zipCode;
     private TextView country;
 
+    private TextView description;
+
+    private LinearLayout flexLayout;
+
 
     @Nullable
     @Override
@@ -40,7 +45,10 @@ public class EstateDetailsFragment extends BaseFragment {
 
         DetailsViewModelFactory detailsViewModelFactory = ((Launch)this.getActivity().getApplication()).detailsViewModelFactory();
         this.detailsViewModel = new ViewModelProvider(this.getActivity(), detailsViewModelFactory).get(DetailsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_estate_details, container, false);
+        View root = inflater.inflate(R.layout.fragment_details, container, false);
+
+        this.description = root.findViewById(R.id.estate_decription_content);
+
         this.surface = root.findViewById(R.id.surface_value);
         this.numberOfRooms = root.findViewById(R.id.rooms_value);
         this.numberOfBathrooms = root.findViewById(R.id.bathrooms_value);
@@ -52,7 +60,14 @@ public class EstateDetailsFragment extends BaseFragment {
         this.zipCode = root.findViewById(R.id.location_zip_code);
         this.country = root.findViewById(R.id.country);
 
+        this.flexLayout = root.findViewById(R.id.details_flex_layout);
+        this.handleTabletMode();
+
         this.detailsViewModel.getEstate().observe(this.getActivity(), estate -> {
+            if(estate.getDescription() != null) {
+                this.description.setText(estate.getDescription());
+            }
+
             if(estate.getSurface() != null) {
                 this.surface.setText(estate.getSurface().toString());
             }
@@ -87,5 +102,12 @@ public class EstateDetailsFragment extends BaseFragment {
         });
 
         return root;
+    }
+
+    private void handleTabletMode() {
+        boolean isTablet = this.getResources().getBoolean(R.bool.is_tablet);
+        if(isTablet) {
+            this.flexLayout.setOrientation(LinearLayout.HORIZONTAL);
+        }
     }
 }

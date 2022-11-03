@@ -14,8 +14,6 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
@@ -26,13 +24,11 @@ import com.openclassrooms.realestatemanager.ui.exceptions.MandatoryException;
 import java.util.Arrays;
 import java.util.List;
 
-public class FormMandatoryFieldsFragment extends Fragment implements AdapterView.OnItemClickListener  {
+public class FormMandatoryFieldsFragment extends FormSaveSkipFragment implements AdapterView.OnItemClickListener  {
 
     private final int LAYOUT_ID = R.layout.fragment_form_mandatory_fields;
 
     private HandleFormMandatoryFields handleFormMandatoryFields;
-
-    private Next next;
 
     protected ConstraintLayout formMainLayout;
 
@@ -42,17 +38,20 @@ public class FormMandatoryFieldsFragment extends Fragment implements AdapterView
 
     protected EditText price;
 
-    private Button saveMain;
+    private Button save;
+    private Button skip;
 
     private String estateType;
 
 
     public FormMandatoryFieldsFragment(
-            HandleFormMandatoryFields handleFormMandatoryFields,
-            Next next
+            SaveEstateDataUpdate saveEstateDataUpdate,
+            Next next,
+            FormData formData,
+            HandleFormMandatoryFields handleFormMandatoryFields
     ) {
+        super(saveEstateDataUpdate, next, formData);
         this.handleFormMandatoryFields = handleFormMandatoryFields;
-        this.next = next;
     }
 
     @Nullable
@@ -64,8 +63,8 @@ public class FormMandatoryFieldsFragment extends Fragment implements AdapterView
         this.type = root.findViewById(R.id.spinner_type);
         this.location = root.findViewById(R.id.editText_location);
         this.price = root.findViewById(R.id.editText_price);
-        this.saveMain = root.findViewById(R.id.button_save_form_main);
-
+        this.save = root.findViewById(R.id.button_save_form);
+        this.skip = root.findViewById(R.id.button_skip_form);
         List<String> types = Arrays.asList(EstateType.FLAT.toString(), EstateType.DUPLEX.toString(), EstateType.HOUSE.toString());
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),
@@ -74,18 +73,24 @@ public class FormMandatoryFieldsFragment extends Fragment implements AdapterView
         this.type.setAdapter(adapter);
         this.type.setOnItemClickListener(this);
 
-
+        this.hideButton(this.skip);
         Estate currentEstate = this.handleFormMandatoryFields.getInitializedEstate();
         if(currentEstate != null && currentEstate.getId() != null && currentEstate.getId() > 0) {
             this.estateType = currentEstate.getType().toString();
             this.type.setText(this.estateType);
             this.location.setText(currentEstate.getLocation());
             this.price.setText(currentEstate.getPrice().toString());
+            this.showButton(this.skip);
         }
 
-        this.saveMain.setOnClickListener(view -> {
+        this.enableButton(this.save);
+
+        this.save.setOnClickListener(view -> {
             this.save();
-            this.next.next(this);
+            this.next();
+        });
+        this.skip.setOnClickListener(view -> {
+            this.next();
         });
 
         return root;
@@ -111,7 +116,8 @@ public class FormMandatoryFieldsFragment extends Fragment implements AdapterView
         throw new MandatoryException();
     }
 
-    private void save() {
+    @Override
+    protected void save() {
         Estate estate = this.handleFormMandatoryFields.getInitializedEstate();
         String mandatoryFieldError = this.getString(R.string.required);
 
@@ -141,13 +147,14 @@ public class FormMandatoryFieldsFragment extends Fragment implements AdapterView
         // Devise
         estate.setDevise(Devise.DOLLAR); // TODO Autocomplete field
 
-        this.handleFormMandatoryFields.save(estate);
+        this.handleFormMandatoryFields.setMandatoryFields(estate);
+        this.saveEstateDataUpdate.saveEstateDataUpdate();
     }
 
 
     interface HandleFormMandatoryFields {
         Estate getInitializedEstate();
-        void save(Estate estate);
+        void setMandatoryFields(Estate estate);
     }
 
 

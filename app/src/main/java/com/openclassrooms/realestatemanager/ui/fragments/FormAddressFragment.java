@@ -17,17 +17,11 @@ import androidx.fragment.app.Fragment;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 
-public class FormAddressFragment extends Fragment implements TextWatcher, View.OnClickListener {
+public class FormAddressFragment extends FormSaveSkipFragment implements TextWatcher, View.OnClickListener {
 
     private final int LAYOUT_ID = R.layout.fragment_form_address;
 
     private HandleAddressFields handleAddressFields;
-
-    private SaveEstateDataUpdate saveEstateDataUpdate;
-
-    private Next next;
-
-    private FormData formData;
 
     private EditText streetNumberAndStreetName;
 
@@ -44,15 +38,13 @@ public class FormAddressFragment extends Fragment implements TextWatcher, View.O
 
     // Constructor
     public FormAddressFragment(
-            HandleAddressFields handleAddressFields,
             SaveEstateDataUpdate saveEstateDataUpdate,
             Next next,
-            FormData formData
+            FormData formData,
+            HandleAddressFields handleAddressFields
     ) {
+        super(saveEstateDataUpdate, next, formData);
         this.handleAddressFields = handleAddressFields;
-        this.saveEstateDataUpdate = saveEstateDataUpdate;
-        this.next = next;
-        this.formData = formData;
     }
 
     @Nullable
@@ -74,7 +66,7 @@ public class FormAddressFragment extends Fragment implements TextWatcher, View.O
         this.save.setOnClickListener(this);
         this.skip.setOnClickListener(this);
 
-        Estate currentEstate = this.formData.getData();
+        Estate currentEstate = this.getFormData();
         if(currentEstate != null) {
             if(currentEstate.getStreetNumberAndStreetName() != null) {
                 this.streetNumberAndStreetName.setText(currentEstate.getStreetNumberAndStreetName());
@@ -101,8 +93,7 @@ public class FormAddressFragment extends Fragment implements TextWatcher, View.O
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         if(charSequence.length() > 0) {
-            save.setEnabled(true);
-            save.setAlpha(1);
+            this.enableButton(this.save);
         }
     }
 
@@ -114,30 +105,35 @@ public class FormAddressFragment extends Fragment implements TextWatcher, View.O
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.button_save_form_address) {
-            String streetNumberAndName = null;
-            String addressCompl = null;
-            String zip = null;
-            String coutryName = null;
-            if(!TextUtils.isEmpty(streetNumberAndStreetName.getText())) {
-                streetNumberAndName = streetNumberAndStreetName.getText().toString();
-            }
-            if(!TextUtils.isEmpty(addressComplements.getText())) {
-                addressCompl = addressComplements.getText().toString();
-            }
-            if(!TextUtils.isEmpty(zipCode.getText())) {
-                zip = zipCode.getText().toString();
-            }
-            if(!TextUtils.isEmpty(country.getText())) {
-                coutryName = country.getText().toString();
-            }
+            this.save();
+            this.next();
 
-            this.handleAddressFields.setEstateAdressData(streetNumberAndName, addressCompl, zip, coutryName);
-            this.saveEstateDataUpdate.saveEstateDataUpdate();
-            this.next.next(this);
         } else if(view.getId() == R.id.button_skip_form_address) {
-            this.next.next(this);
+            this.next();
+        }
+    }
+
+    @Override
+    protected void save() {
+        String streetNumberAndName = null;
+        String addressCompl = null;
+        String zip = null;
+        String coutryName = null;
+        if(!TextUtils.isEmpty(streetNumberAndStreetName.getText())) {
+            streetNumberAndName = streetNumberAndStreetName.getText().toString();
+        }
+        if(!TextUtils.isEmpty(addressComplements.getText())) {
+            addressCompl = addressComplements.getText().toString();
+        }
+        if(!TextUtils.isEmpty(zipCode.getText())) {
+            zip = zipCode.getText().toString();
+        }
+        if(!TextUtils.isEmpty(country.getText())) {
+            coutryName = country.getText().toString();
         }
 
+        this.handleAddressFields.setEstateAdressData(streetNumberAndName, addressCompl, zip, coutryName);
+        this.saveEstateDataUpdate.saveEstateDataUpdate();
     }
 
 
