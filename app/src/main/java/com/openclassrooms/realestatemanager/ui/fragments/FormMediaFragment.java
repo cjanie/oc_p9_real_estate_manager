@@ -31,18 +31,26 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
-public class FormMediaFragment extends FormSectionFragment implements View.OnClickListener {
+public class FormMediaFragment extends FormSaveSkipFragment implements View.OnClickListener {
 
     private final int LAYOUT_ID = R.layout.fragment_form_media;
+
+    private final String STORAGE_ROOT_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+    private final String STORAGE_DIRECTORY_NAME = "rem_saved_images" ;
 
     private RecyclerView photosRecyclerView;
     private PhotosRecyclerViewAdapter photosAdapter;
     private List<Bitmap> photos;
 
+    private Map<String, Bitmap> photoMappingFileName;
+
     private Button camera;
+
     private Button save;
     private Button skip;
 
@@ -70,7 +78,7 @@ public class FormMediaFragment extends FormSectionFragment implements View.OnCli
                         if(intent.getExtras() != null) {
                             Bitmap photo = (Bitmap) intent.getExtras().get("data");
                             photos.add(photo);
-                            enableSaveButton();
+                            enableButton(save);
                             photosAdapter.updateList(photos);
                         }
                     }
@@ -86,10 +94,12 @@ public class FormMediaFragment extends FormSectionFragment implements View.OnCli
             }
     );
 
+    // Constructeur
     public FormMediaFragment(HandleMediaData handleMediaData, SaveEstateDataUpdate saveEstateDataUpdate, Next next, FormData formData) {
         super(saveEstateDataUpdate, next, formData);
         this.handleMediaData = handleMediaData;
         this.photos = new ArrayList<>();
+        this.photoMappingFileName = new HashMap();
 
     }
 
@@ -113,10 +123,18 @@ public class FormMediaFragment extends FormSectionFragment implements View.OnCli
         this.save.setOnClickListener(this);
         this.skip.setOnClickListener(this);
 
-        /*
-        * To see saved images in the gallery view
-        * sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-                         Uri.parse("file://" + Environment.getExternalStorageDirectory())));*/
+        List<String> media = this.getFormData().getMedia();
+        // TODO get the list of media when update mode
+        if(!media.isEmpty()) {
+            Intent getPhotoFromStorageIntent = new Intent(
+                    Intent.ACTION_MEDIA_MOUNTED,
+                    Uri.parse("file://" + this.STORAGE_ROOT_PATH)
+                    // run : photosAdapter.updateList(media);
+            );
+
+            // To see saved images in the gallery view
+            // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+        }
 
         return root;
     }
@@ -128,8 +146,8 @@ public class FormMediaFragment extends FormSectionFragment implements View.OnCli
             this.launcherRequestPermissionForCamera.launch(this.PERMISSION_CAMERA);
 
         } else if(view.getId() == R.id.button_save_form) {
-
             this.launcherRequestPermissionToWriteStorage.launch(this.PERMISSION_WRITE_STORAGE);
+            this.next();
 
         } else if(view.getId() == R.id.button_skip_form) {
             this.next();
@@ -138,34 +156,35 @@ public class FormMediaFragment extends FormSectionFragment implements View.OnCli
 
     @Override
     public void save() {
-        /*
-        List<String> media = this.getFormData().getMedia();
-        // TODO get the list of media
-        if(!media.isEmpty()) {
-            this.handleMediaData.setEstateMediaData(media);
-            this.saveEstateDataUpdate.saveEstateDataUpdate();
-        }
-
-         */
+        // save photo as file in storage
         if(!this.photos.isEmpty()) {
             for(Bitmap photo: this.photos) {
                 this.saveImageInStorage(photo);
             }
         }
-
+        // Save file name in db
+        if(!this.photoMappingFileName.isEmpty()) {
+            List<String> mediaFileNames = new ArrayList<>(this.photoMappingFileName.keySet());
+            this.handleMediaData.setEstateMediaData(mediaFileNames);
+            this.saveEstateDataUpdate.saveEstateDataUpdate();
+        }
     }
 
     private void saveImageInStorage(Bitmap bitmap) {
         // https://stackoverflow.com/questions/7887078/android-saving-file-to-external-storage
 
-        String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-        File myDir = new File(root + "/saved_images");
-        myDir.mkdirs();
+        // Create the file name for the photo
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
-        String fname = "Image-" + n + ".jpg";
-        File file = new File(myDir, fname);
+        String fileName = "rem_" + n + ".jpg";
+
+        // Create the path
+        File targetDirectory = new File(this.STORAGE_ROOT_PATH + "/" + this.STORAGE_DIRECTORY_NAME);
+        targetDirectory.mkdirs();
+
+        // Create the photo file in storage
+        File file = new File(targetDirectory, fileName);
         if (file.exists())
             file.delete();
         try {
@@ -173,11 +192,13 @@ public class FormMediaFragment extends FormSectionFragment implements View.OnCli
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
+
+            // Register Path in memory, so that it can be saved in db on click on the save button
+            this.photoMappingFileName.put(fileName, bitmap);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
-
 
         // Tell the media scanner about the new file so that it is
         // immediately available to the user.
@@ -188,11 +209,6 @@ public class FormMediaFragment extends FormSectionFragment implements View.OnCli
                         Log.i("ExternalStorage", "-> uri=" + uri);
                     }
                 });
-    }
-
-    private void enableSaveButton() {
-        this.save.setEnabled(true);
-        this.save.setAlpha(1);
     }
 
     interface HandleMediaData {

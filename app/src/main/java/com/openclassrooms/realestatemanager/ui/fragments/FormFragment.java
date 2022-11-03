@@ -46,7 +46,12 @@ public abstract class FormFragment extends BaseFragment implements
         this.formViewModel = new ViewModelProvider(this, formViewModelFactory).get(FormViewModel.class);
         this.sharedViewModel = new ViewModelProvider(this.requireActivity()).get(SharedViewModel.class);
 
-        FormMandatoryFieldsFragment formMandatoryFieldsFragment = new FormMandatoryFieldsFragment(this, this);
+        FormMandatoryFieldsFragment formMandatoryFieldsFragment = new FormMandatoryFieldsFragment(
+                this,
+                this,
+                this,
+                this
+        );
         this.showFragment(formMandatoryFieldsFragment);
 
         return root;
@@ -58,7 +63,7 @@ public abstract class FormFragment extends BaseFragment implements
     }
 
     @Override
-    public void saveMandatory(Estate estate) {
+    public void setMandatoryFields(Estate estate) {
         // Mandatory properties should not be null
         if(estate.getType() != null
                 && estate.getLocation() != null
@@ -68,7 +73,6 @@ public abstract class FormFragment extends BaseFragment implements
             this.formViewModel.setEstateDataMandatory(
                     estate.getType(), estate.getLocation(), estate.getPrice(), estate.getDevise()
             );
-            this.formViewModel.saveEstateDataUpdate();
         };
     }
 

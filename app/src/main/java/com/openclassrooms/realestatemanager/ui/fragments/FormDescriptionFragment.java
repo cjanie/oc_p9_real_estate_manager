@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 
-public class FormDescriptionFragment extends Fragment implements View.OnClickListener, TextWatcher {
+public class FormDescriptionFragment extends FormSaveSkipFragment implements View.OnClickListener, TextWatcher {
 
     private EditText description;
 
@@ -27,22 +27,14 @@ public class FormDescriptionFragment extends Fragment implements View.OnClickLis
 
     private HandleDescriptionData handleDescriptionData;
 
-    private SaveEstateDataUpdate saveEstateDataUpdate;
-
-    private Next next;
-
-    private FormData formData;
-
     public FormDescriptionFragment(
-            HandleDescriptionData handleDescriptionData,
             SaveEstateDataUpdate saveEstateDataUpdate,
             Next next,
-            FormData formData
+            FormData formData,
+            HandleDescriptionData handleDescriptionData
             ) {
+        super(saveEstateDataUpdate, next, formData);
         this.handleDescriptionData = handleDescriptionData;
-        this.saveEstateDataUpdate = saveEstateDataUpdate;
-        this.next = next;
-        this.formData = formData;
     }
 
     @Nullable
@@ -58,7 +50,7 @@ public class FormDescriptionFragment extends Fragment implements View.OnClickLis
         this.save.setOnClickListener(this);
         this.skip.setOnClickListener(this);
 
-        Estate currentEstate = this.formData.getData();
+        Estate currentEstate = this.getFormData();
         if(currentEstate != null) {
             if(currentEstate.getDescription() != null) {
                 this.description.setText(currentEstate.getDescription());
@@ -72,13 +64,12 @@ public class FormDescriptionFragment extends Fragment implements View.OnClickLis
     public void onClick(View view) {
         if(view.getId() == R.id.button_save_form) {
             if(!TextUtils.isEmpty(this.description.getText())) {
-                this.handleDescriptionData.setEstateDescriptionData(this.description.getText().toString());
-                this.saveEstateDataUpdate.saveEstateDataUpdate();
-                this.next.next(this);
+                this.save();
+                this.next();
             }
 
         } else if(view.getId() == R.id.button_skip_form) {
-            this.next.next(this);
+            this.next();
         }
     }
 
@@ -89,13 +80,18 @@ public class FormDescriptionFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        this.save.setEnabled(true);
-        this.save.setAlpha(1);
+        this.enableButton(this.save);
     }
 
     @Override
     public void afterTextChanged(Editable editable) {
 
+    }
+
+    @Override
+    protected void save() {
+        this.handleDescriptionData.setEstateDescriptionData(this.description.getText().toString());
+        this.saveEstateDataUpdate.saveEstateDataUpdate();
     }
 
     interface HandleDescriptionData {

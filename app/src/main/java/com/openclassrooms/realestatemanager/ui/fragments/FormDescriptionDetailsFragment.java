@@ -17,17 +17,11 @@ import androidx.fragment.app.Fragment;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 
-public class FormDescriptionDetailsFragment extends Fragment implements TextWatcher, View.OnClickListener {
+public class FormDescriptionDetailsFragment extends FormSaveSkipFragment implements TextWatcher, View.OnClickListener {
 
     private final int LAYOUT_ID = R.layout.fragment_form_description_details;
 
     private HandleDescriptionDetailsData handleDescriptionDetailsData;
-
-    private SaveEstateDataUpdate saveEstateDataUpdate;
-
-    private Next next;
-
-    private FormData formData;
 
     // Views
     private EditText surface;
@@ -44,15 +38,13 @@ public class FormDescriptionDetailsFragment extends Fragment implements TextWatc
 
     // Constructor
     public FormDescriptionDetailsFragment(
-            HandleDescriptionDetailsData handleDescriptionDetailsData,
             SaveEstateDataUpdate saveEstateDataUpdate,
             Next next,
-            FormData formData
+            FormData formData,
+            HandleDescriptionDetailsData handleDescriptionDetailsData
     ) {
+        super(saveEstateDataUpdate, next, formData);
         this.handleDescriptionDetailsData = handleDescriptionDetailsData;
-        this.saveEstateDataUpdate = saveEstateDataUpdate;
-        this.next = next;
-        this.formData = formData;
     }
 
     @Nullable
@@ -75,7 +67,7 @@ public class FormDescriptionDetailsFragment extends Fragment implements TextWatc
         this.save.setOnClickListener(this);
         this.skip.setOnClickListener(this);
 
-        Estate currentEstate = this.formData.getData();
+        Estate currentEstate = this.getFormData();
         if(currentEstate != null) {
             if(currentEstate.getSurface() != null) {
                 this.surface.setText(currentEstate.getSurface().toString());
@@ -102,8 +94,7 @@ public class FormDescriptionDetailsFragment extends Fragment implements TextWatc
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         if(charSequence.length() > 0) {
-            save.setEnabled(true);
-            save.setAlpha(1);
+            this.enableButton(this.save);
         }
     }
 
@@ -116,25 +107,14 @@ public class FormDescriptionDetailsFragment extends Fragment implements TextWatc
     public void onClick(View view) {
         if(view.getId() == R.id.button_save_form_description_details) {
             try {
-                Integer surface = this.checkNumericField(this.surface);
-                Integer numberOfRooms = this.checkNumericField(this.numberOfRooms);
-                Integer numberOfBathrooms = this.checkNumericField(this.numberOfBathrooms);
-                Integer numberOfBedrooms = this.checkNumericField(this.numberOfBedrooms);
-
-                this.handleDescriptionDetailsData.setDescriptionDetailsData(
-                        surface,
-                        numberOfRooms,
-                        numberOfBathrooms,
-                        numberOfBedrooms
-                );
-                this.saveEstateDataUpdate.saveEstateDataUpdate();
-                this.next.next(this);
+                this.save();
+                this.next();
             } catch (NumberFormatException e) {
 
             }
 
         } else if(view.getId() == R.id.button_skip_form_description_details) {
-            this.next.next(this);
+            this.next();
         }
     }
 
@@ -149,6 +129,22 @@ public class FormDescriptionDetailsFragment extends Fragment implements TextWatc
         }
         return null;
 
+    }
+
+    @Override
+    protected void save() {
+        Integer surface = this.checkNumericField(this.surface);
+        Integer numberOfRooms = this.checkNumericField(this.numberOfRooms);
+        Integer numberOfBathrooms = this.checkNumericField(this.numberOfBathrooms);
+        Integer numberOfBedrooms = this.checkNumericField(this.numberOfBedrooms);
+
+        this.handleDescriptionDetailsData.setDescriptionDetailsData(
+                surface,
+                numberOfRooms,
+                numberOfBathrooms,
+                numberOfBedrooms
+        );
+        this.saveEstateDataUpdate.saveEstateDataUpdate();
     }
 
 

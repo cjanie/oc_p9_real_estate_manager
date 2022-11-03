@@ -62,11 +62,10 @@
         app:layout_constraintTop_toBottomOf="@+id/label_price"
         style="@style/Mandatory" />
 
-    <Button
-        android:id="@+id/button_save_form_main"
+    <include
+        layout="@layout/layout_buttons_skip_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/ButtonSave"
         android:enabled="true"
         android:alpha="1"
         app:layout_constraintEnd_toEndOf="parent"
