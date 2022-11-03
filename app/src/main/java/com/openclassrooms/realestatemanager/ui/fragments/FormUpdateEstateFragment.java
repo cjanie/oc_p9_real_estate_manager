@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.Launch;
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.ui.exceptions.IncorrectEstateTypeException;
@@ -35,7 +37,23 @@ public class FormUpdateEstateFragment extends FormFragment {
 
         this.detailsViewModel.getEstate().observe(this.getActivity(), estate -> {
             if(estate != null) {
+
+
                 this.formViewModel.setEstateData(estate);
+
+                boolean isCompleteMandatory = estate.getType() != null
+                        && estate.getLocation() != null
+                        && estate.getPrice() != null
+                        && estate.getDevise() != null;
+                this.handleStepsProgressBar(0, isCompleteMandatory);
+
+                boolean isCompleteAddress = estate.getStreetNumberAndStreetName() != null
+                        && estate.getZipCode() != null
+                        && estate.getCountry() != null;
+                this.handleStepsProgressBar(1, isCompleteAddress);
+                this.handleStepsProgressBar(2, estate.getSurface() != null);
+                this.handleStepsProgressBar(3, estate.getDescription() != null);
+                this.handleStepsProgressBar(4, !estate.getMedia().isEmpty());
             }
         });
 
@@ -49,6 +67,16 @@ public class FormUpdateEstateFragment extends FormFragment {
     @Override
     public Estate getInitializedEstate() {
         return this.formViewModel.getEstateData();
+    }
+
+    private void handleStepsProgressBar(int stepIndex, boolean isComplete) {
+        int colorSuccess = this.getResources().getColor(R.color.green);
+        int colorUncomplete = this.getResources().getColor(R.color.orange);
+        if(isComplete) {
+            this.formStepsProgressBar.getChildAt(stepIndex).setBackgroundColor(colorSuccess);
+        } else {
+            this.formStepsProgressBar.getChildAt(stepIndex).setBackgroundColor(colorUncomplete);
+        }
     }
 
 }

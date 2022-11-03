@@ -35,7 +35,7 @@ public abstract class FormFragment extends BaseFragment implements
 
     private final int LAYOUT_ID = R.layout.fragment_form;
 
-    private LinearLayout formStepsProgressBar;
+    protected LinearLayout formStepsProgressBar;
 
     private final int NUMBER_OF_STEPS = 5;
 
