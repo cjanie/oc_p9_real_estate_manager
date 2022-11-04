@@ -156,4 +156,62 @@ public abstract class FormFragment extends BaseFragment implements
     public void setEstateMediaData(List<String> media) {
         this.formViewModel.setEstateDataMedia(media);
     }
+
+    protected boolean isCompleteMandatory(Estate estate) {
+        return estate.getType() != null
+                && estate.getLocation() != null
+                && estate.getPrice() != null
+                && estate.getDevise() != null;
+    }
+
+    protected boolean isCompleteAddress(Estate estate) {
+        return estate.getStreetNumberAndStreetName() != null
+                && estate.getZipCode() != null
+                && estate.getCountry() != null;
+    }
+
+    protected boolean isCompleteDescription(Estate estate) {
+        return estate.getDescription() != null;
+    }
+
+    protected boolean isCompleteDescriptionDetails(Estate estate) {
+        return estate.getSurface() != null;
+    }
+
+    protected boolean isCompleteMedia(Estate estate) {
+        return !estate.getMedia().isEmpty();
+    }
+
+    // to handle the progress bar
+    protected void handleProgressBarStepMandatory(boolean isComplete) {
+        this.handleStepsProgressBar(0, isComplete);
+    }
+
+    protected void handleProgressBarStepAddress(boolean isComplete) {
+        this.handleStepsProgressBar(1, isComplete);
+    }
+
+    protected void handleProgressBarStepDescription(boolean isComplete) {
+        this.handleStepsProgressBar(2, isComplete);
+    }
+
+    protected void handleProgressBarStepDescriptionDetails(boolean isComplete) {
+        this.handleStepsProgressBar(3, isComplete);
+    }
+
+    protected void handleProgressBarStepMedia(boolean isComplete) {
+        this.handleStepsProgressBar(4, isComplete);
+    }
+
+    private void handleStepsProgressBar(int stepIndex, boolean isComplete) {
+        int colorSuccess = this.getResources().getColor(R.color.green);
+        int colorUncomplete = this.getResources().getColor(R.color.orange);
+        if(isComplete) {
+            this.formStepsProgressBar.getChildAt(stepIndex).setBackgroundColor(colorSuccess);
+        } else {
+            this.formStepsProgressBar.getChildAt(stepIndex).setBackgroundColor(colorUncomplete);
+        }
+    }
+
+
 }

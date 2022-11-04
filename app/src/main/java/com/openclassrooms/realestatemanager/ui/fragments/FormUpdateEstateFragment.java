@@ -35,25 +35,26 @@ public class FormUpdateEstateFragment extends FormFragment {
         DetailsViewModelFactory detailsViewModelFactory = ((Launch)this.getActivity().getApplication()).detailsViewModelFactory();
         this.detailsViewModel = new ViewModelProvider(this.getActivity(), detailsViewModelFactory).get(DetailsViewModel.class);
 
+        // Observe, listening to details view model
         this.detailsViewModel.getEstate().observe(this.getActivity(), estate -> {
             if(estate != null) {
 
-
                 this.formViewModel.setEstateData(estate);
 
-                boolean isCompleteMandatory = estate.getType() != null
-                        && estate.getLocation() != null
-                        && estate.getPrice() != null
-                        && estate.getDevise() != null;
-                this.handleStepsProgressBar(0, isCompleteMandatory);
+                // is completeMandatory
+                this.handleProgressBarStepMandatory(this.isCompleteMandatory(estate));
 
-                boolean isCompleteAddress = estate.getStreetNumberAndStreetName() != null
-                        && estate.getZipCode() != null
-                        && estate.getCountry() != null;
-                this.handleStepsProgressBar(1, isCompleteAddress);
-                this.handleStepsProgressBar(2, estate.getSurface() != null);
-                this.handleStepsProgressBar(3, estate.getDescription() != null);
-                this.handleStepsProgressBar(4, !estate.getMedia().isEmpty());
+                // is completeAddress
+                this.handleProgressBarStepAddress(this.isCompleteAddress(estate));
+
+                // is complete description
+                this.handleProgressBarStepDescription(this.isCompleteDescription(estate));
+
+                // is completeDescriptionDetails
+                this.handleProgressBarStepDescriptionDetails(this.isCompleteDescriptionDetails(estate));
+
+                // is complete media
+                this.handleProgressBarStepMedia(this.isCompleteMedia(estate));
             }
         });
 
@@ -67,16 +68,6 @@ public class FormUpdateEstateFragment extends FormFragment {
     @Override
     public Estate getInitializedEstate() {
         return this.formViewModel.getEstateData();
-    }
-
-    private void handleStepsProgressBar(int stepIndex, boolean isComplete) {
-        int colorSuccess = this.getResources().getColor(R.color.green);
-        int colorUncomplete = this.getResources().getColor(R.color.orange);
-        if(isComplete) {
-            this.formStepsProgressBar.getChildAt(stepIndex).setBackgroundColor(colorSuccess);
-        } else {
-            this.formStepsProgressBar.getChildAt(stepIndex).setBackgroundColor(colorUncomplete);
-        }
     }
 
 }
