@@ -94,6 +94,11 @@ public class FormDescriptionFragment extends FormSaveSkipFragment implements Vie
         this.saveEstateDataUpdate.saveEstateDataUpdate();
     }
 
+    @Override
+    public FormStepEnum getCurrentStep() {
+        return FormStepEnum.DESCRIPTION;
+    }
+
     interface HandleDescriptionData {
         void setEstateDescriptionData(String description);
     }

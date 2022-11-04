@@ -211,6 +211,11 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
                 });
     }
 
+    @Override
+    public FormStepEnum getCurrentStep() {
+        return FormStepEnum.MEDIA;
+    }
+
     interface HandleMediaData {
         void setEstateMediaData(List<String> media);
     }

@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,9 +22,10 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
 
 import java.util.List;
+import java.util.Map;
 
 public abstract class FormFragment extends BaseFragment implements
-        FormMandatoryFieldsFragment.HandleFormMandatoryFields,
+        FormMandatoryFragment.HandleFormMandatoryFields,
         FormAddressFragment.HandleAddressFields,
         FormDescriptionDetailsFragment.HandleDescriptionDetailsData,
         FormDescriptionFragment.HandleDescriptionData,
@@ -37,7 +38,7 @@ public abstract class FormFragment extends BaseFragment implements
 
     protected LinearLayout formStepsProgressBar;
 
-    private final int NUMBER_OF_STEPS = 5;
+    private Map<FormStepEnum, Integer> steps;
 
     protected FormViewModel formViewModel;
 
@@ -47,27 +48,28 @@ public abstract class FormFragment extends BaseFragment implements
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(this.LAYOUT_ID, container, false);
+
         this.formStepsProgressBar = root.findViewById(R.id.layout_form_steps_progress_bar);
-
-        for(int i=0; i<this.NUMBER_OF_STEPS; i++) {
-            View view = inflater.inflate(R.layout.layout_form_step_checked_icon, this.formStepsProgressBar, false);
-            this.formStepsProgressBar.addView(view);
-        }
-
+        this.configureProgressBar(inflater);
 
         FormViewModelFactory formViewModelFactory = ((Launch)this.getActivity().getApplication()).formViewModelFactory();
         this.formViewModel = new ViewModelProvider(this, formViewModelFactory).get(FormViewModel.class);
         this.sharedViewModel = new ViewModelProvider(this.requireActivity()).get(SharedViewModel.class);
 
-        FormMandatoryFieldsFragment formMandatoryFieldsFragment = new FormMandatoryFieldsFragment(
-                this,
-                this,
-                this,
-                this
-        );
-        this.showFragment(formMandatoryFieldsFragment);
+        this.showFragment(this.getFragmentForStep(FormStepEnum.MANDATORY));
 
         return root;
+    }
+
+    private void configureProgressBar(LayoutInflater inflater) {
+        this.formStepsProgressBar.setWeightSum(FormStepEnum.values().length);
+
+        for(int i = 0; i<FormStepEnum.values().length; i++) {
+            View view = inflater.inflate(R.layout.layout_form_step_checked_icon, this.formStepsProgressBar, false);
+            ((TextView)view.findViewById(R.id.form_step_check)).setText(FormStepEnum.values()[i].toString());
+            this.formStepsProgressBar.addView(view);
+        }
+
     }
 
     private void showFragment(Fragment fragment) {
@@ -96,9 +98,21 @@ public abstract class FormFragment extends BaseFragment implements
     }
 
     @Override
+    public void setEstateDescriptionData(String description) {
+        this.formViewModel.setEstateDataDescription(description);
+        this.handleProgressBarStepDescriptionDetails(this.isCompleteDescription(description));
+    }
+
+    @Override
     public void setDescriptionDetailsData(Integer surface, Integer numberOfRooms, Integer numberOfBathrooms, Integer numberOfBedrooms) {
         this.formViewModel.setEstateDataDescriptionDetails(surface, numberOfRooms, numberOfBathrooms, numberOfBedrooms);
         this.handleProgressBarStepDescriptionDetails(this.isCompleteDescriptionDetails(surface));
+    }
+
+    @Override
+    public void setEstateMediaData(List<String> media) {
+        this.formViewModel.setEstateDataMedia(media);
+        this.handleProgressBarStepMedia(this.isCompleteMedia(media));
     }
 
     @Override
@@ -107,58 +121,8 @@ public abstract class FormFragment extends BaseFragment implements
     }
 
     @Override
-    public void next(Fragment actualFragment) {
-        if(actualFragment instanceof FormMandatoryFieldsFragment) {
-            FormAddressFragment addressFragment = new FormAddressFragment(
-                    this, this, this, this
-            );
-            this.showFragment(addressFragment);
-
-        } else if(actualFragment instanceof FormAddressFragment) {
-            FormDescriptionDetailsFragment descriptionDetailsFragment = new FormDescriptionDetailsFragment(
-                    this,
-                    this,
-                    this,
-                    this
-            );
-            this.showFragment(descriptionDetailsFragment);
-
-        } else if(actualFragment instanceof FormDescriptionDetailsFragment) {
-            FormDescriptionFragment descriptionFragment = new FormDescriptionFragment(
-                    this,
-                    this,
-                    this,
-                    this
-            );
-            this.showFragment(descriptionFragment);
-
-        } else if(actualFragment instanceof FormDescriptionFragment) {
-            FormMediaFragment mediaFragment = new FormMediaFragment(
-                    this,this, this, this
-            );
-            this.showFragment(mediaFragment);
-
-        } else if(actualFragment instanceof FormMediaFragment) {
-            this.sharedViewModel.updateAction(Action.HOME);
-        }
-
-    }
-
-    @Override
     public Estate getData() {
         return this.formViewModel.getEstateData();
-    }
-
-    @Override
-    public void setEstateDescriptionData(String description) {
-        this.formViewModel.setEstateDataDescription(description);
-        this.handleProgressBarStepDescriptionDetails(this.isCompleteDescription(description));
-    }
-
-    @Override
-    public void setEstateMediaData(List<String> media) {
-        this.formViewModel.setEstateDataMedia(media);
-        this.handleProgressBarStepMedia(this.isCompleteMedia(media));
     }
 
     // To handle the progress bar
@@ -206,28 +170,28 @@ public abstract class FormFragment extends BaseFragment implements
 
    // Progress bar steps
     protected void handleProgressBarStepMandatory(boolean isComplete) {
-        this.handleStepsProgressBar(0, isComplete);
+        this.handleStepsProgressBar(FormStepEnum.MANDATORY.ordinal(), isComplete);
     }
 
     protected void handleProgressBarStepAddress(boolean isComplete) {
-        this.handleStepsProgressBar(1, isComplete);
+        this.handleStepsProgressBar(FormStepEnum.ADDRESS.ordinal(), isComplete);
     }
 
     protected void handleProgressBarStepDescription(boolean isComplete) {
-        this.handleStepsProgressBar(2, isComplete);
+        this.handleStepsProgressBar(FormStepEnum.DESCRIPTION.ordinal(), isComplete);
     }
 
     protected void handleProgressBarStepDescriptionDetails(boolean isComplete) {
-        this.handleStepsProgressBar(3, isComplete);
+        this.handleStepsProgressBar(FormStepEnum.DESCRIPTION_DETAILS.ordinal(), isComplete);
     }
 
     protected void handleProgressBarStepMedia(boolean isComplete) {
-        this.handleStepsProgressBar(4, isComplete);
+        this.handleStepsProgressBar(FormStepEnum.MEDIA.ordinal(), isComplete);
     }
 
     private void handleStepsProgressBar(int stepIndex, boolean isComplete) {
         int colorSuccess = this.getResources().getColor(R.color.green);
-        int colorUncomplete = this.getResources().getColor(R.color.orange);
+        int colorUncomplete = this.getResources().getColor(R.color.white);
         if(isComplete) {
             this.formStepsProgressBar.getChildAt(stepIndex).setBackgroundColor(colorSuccess);
         } else {
@@ -235,5 +199,72 @@ public abstract class FormFragment extends BaseFragment implements
         }
     }
 
+    @Override
+    public void next(FormStep actualFragment) {
+        FormStepEnum step = actualFragment.getCurrentStep();
+        int stepIndex = step.ordinal();
+        int nextStepIndex = stepIndex + 1;
+        if(stepIndex < FormStepEnum.values().length - 1) {
+            FormStep nextStepFragment = this.getFragmentForStep(FormStepEnum.values()[nextStepIndex]);
+            this.showFragment((Fragment) nextStepFragment);
+        } else {
+            this.sharedViewModel.updateAction(Action.HOME);
+        }
+    }
+
+    private FormSaveSkipFragment getFragmentForStep(FormStepEnum step) {
+        return step.accept(new FormStepVisitor<FormSaveSkipFragment>() {
+
+            @Override
+            public FormSaveSkipFragment visitMandatory() {
+                return new FormMandatoryFragment(
+                        FormFragment.this,
+                        FormFragment.this,
+                        FormFragment.this,
+                        FormFragment.this
+                );
+            }
+
+            @Override
+            public FormSaveSkipFragment visitMedia() {
+                return new FormMediaFragment(
+                        FormFragment.this,
+                        FormFragment.this,
+                        FormFragment.this,
+                        FormFragment.this
+                );
+            }
+
+            @Override
+            public FormSaveSkipFragment visitDescription() {
+                return new FormDescriptionFragment(
+                        FormFragment.this,
+                        FormFragment.this,
+                        FormFragment.this,
+                        FormFragment.this
+                );
+            }
+
+            @Override
+            public FormSaveSkipFragment visitDescriptionDetails() {
+                return new FormDescriptionDetailsFragment(
+                        FormFragment.this,
+                        FormFragment.this,
+                        FormFragment.this,
+                        FormFragment.this
+                );
+            }
+
+            @Override
+            public FormSaveSkipFragment visitAddress() {
+                return new FormAddressFragment(
+                        FormFragment.this,
+                        FormFragment.this,
+                        FormFragment.this,
+                        FormFragment.this
+                );
+            }
+        });
+    }
 
 }

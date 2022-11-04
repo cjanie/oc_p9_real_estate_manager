@@ -15,7 +15,7 @@ import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 
 import java.util.List;
 
-public abstract class FormSaveSkipFragment extends Fragment {
+public abstract class FormSaveSkipFragment extends Fragment implements FormStep {
 
     private Next next;
 

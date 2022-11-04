@@ -147,6 +147,11 @@ public class FormDescriptionDetailsFragment extends FormSaveSkipFragment impleme
         this.saveEstateDataUpdate.saveEstateDataUpdate();
     }
 
+    @Override
+    public FormStepEnum getCurrentStep() {
+        return FormStepEnum.DESCRIPTION_DETAILS;
+    }
+
 
     interface HandleDescriptionDetailsData {
         void setDescriptionDetailsData(

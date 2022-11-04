@@ -136,6 +136,11 @@ public class FormAddressFragment extends FormSaveSkipFragment implements TextWat
         this.saveEstateDataUpdate.saveEstateDataUpdate();
     }
 
+    @Override
+    public FormStepEnum getCurrentStep() {
+        return FormStepEnum.ADDRESS;
+    }
+
 
     interface HandleAddressFields {
         void setEstateAdressData(String streetNumberAndName, String addressComplements, String zipCode, String country);

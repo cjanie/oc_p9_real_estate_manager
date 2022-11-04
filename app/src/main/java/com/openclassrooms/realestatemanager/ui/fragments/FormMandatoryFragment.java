@@ -24,7 +24,7 @@ import com.openclassrooms.realestatemanager.ui.exceptions.MandatoryException;
 import java.util.Arrays;
 import java.util.List;
 
-public class FormMandatoryFieldsFragment extends FormSaveSkipFragment implements AdapterView.OnItemClickListener  {
+public class FormMandatoryFragment extends FormSaveSkipFragment implements AdapterView.OnItemClickListener  {
 
     private final int LAYOUT_ID = R.layout.fragment_form_mandatory_fields;
 
@@ -44,7 +44,7 @@ public class FormMandatoryFieldsFragment extends FormSaveSkipFragment implements
     private String estateType;
 
 
-    public FormMandatoryFieldsFragment(
+    public FormMandatoryFragment(
             SaveEstateDataUpdate saveEstateDataUpdate,
             Next next,
             FormData formData,
@@ -149,6 +149,11 @@ public class FormMandatoryFieldsFragment extends FormSaveSkipFragment implements
 
         this.handleFormMandatoryFields.setMandatoryFields(estate);
         this.saveEstateDataUpdate.saveEstateDataUpdate();
+    }
+
+    @Override
+    public FormStepEnum getCurrentStep() {
+        return FormStepEnum.MANDATORY;
     }
 
 
