@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -190,12 +191,10 @@ public abstract class FormFragment extends BaseFragment implements
     }
 
     private void handleStepsProgressBar(int stepIndex, boolean isComplete) {
-        int colorSuccess = this.getResources().getColor(R.color.green);
-        int colorUncomplete = this.getResources().getColor(R.color.white);
+        TextView stepName = this.formStepsProgressBar.getChildAt(stepIndex).findViewById(R.id.form_step_check);
         if(isComplete) {
-            this.formStepsProgressBar.getChildAt(stepIndex).setBackgroundColor(colorSuccess);
-        } else {
-            this.formStepsProgressBar.getChildAt(stepIndex).setBackgroundColor(colorUncomplete);
+            int colorSuccess = this.getResources().getColor(R.color.green);
+            stepName.setTextColor(colorSuccess);
         }
     }
 
@@ -205,8 +204,16 @@ public abstract class FormFragment extends BaseFragment implements
         int stepIndex = step.ordinal();
         int nextStepIndex = stepIndex + 1;
         if(stepIndex < FormStepEnum.values().length - 1) {
+            // Show the fragment
             FormStep nextStepFragment = this.getFragmentForStep(FormStepEnum.values()[nextStepIndex]);
             this.showFragment((Fragment) nextStepFragment);
+
+
+            // Show the progress bar new state
+
+            TextView stepName = this.formStepsProgressBar.getChildAt(stepIndex).findViewById(R.id.form_step_check);
+            stepName.setAlpha(0.5f);
+
         } else {
             this.sharedViewModel.updateAction(Action.HOME);
         }
