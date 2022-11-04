@@ -77,26 +77,28 @@ public abstract class FormFragment extends BaseFragment implements
 
     @Override
     public void setMandatoryFields(Estate estate) {
+        // To view model
         // Mandatory properties should not be null
-        if(estate.getType() != null
-                && estate.getLocation() != null
-                && estate.getPrice() != null
-                && estate.getDevise() != null) {
-
+        if(this.isCompleteMandatory(estate)) {
             this.formViewModel.setEstateDataMandatory(
                     estate.getType(), estate.getLocation(), estate.getPrice(), estate.getDevise()
             );
         };
+
+        // To progress bar
+        this.handleProgressBarStepMandatory(this.isCompleteMandatory(estate));
     }
 
     @Override
     public void setEstateAdressData(String streetNumberAndName, String addressComplements, String zipCode, String country) {
         this.formViewModel.setEstateDataAddress(streetNumberAndName, addressComplements, zipCode, country);
+        this.handleProgressBarStepAddress(this.isCompleteAddress(streetNumberAndName, addressComplements, zipCode, country));
     }
 
     @Override
     public void setDescriptionDetailsData(Integer surface, Integer numberOfRooms, Integer numberOfBathrooms, Integer numberOfBedrooms) {
         this.formViewModel.setEstateDataDescriptionDetails(surface, numberOfRooms, numberOfBathrooms, numberOfBedrooms);
+        this.handleProgressBarStepDescriptionDetails(this.isCompleteDescriptionDetails(surface));
     }
 
     @Override
@@ -150,13 +152,16 @@ public abstract class FormFragment extends BaseFragment implements
     @Override
     public void setEstateDescriptionData(String description) {
         this.formViewModel.setEstateDataDescription(description);
+        this.handleProgressBarStepDescriptionDetails(this.isCompleteDescription(description));
     }
 
     @Override
     public void setEstateMediaData(List<String> media) {
         this.formViewModel.setEstateDataMedia(media);
+        this.handleProgressBarStepMedia(this.isCompleteMedia(media));
     }
 
+    // To handle the progress bar
     protected boolean isCompleteMandatory(Estate estate) {
         return estate.getType() != null
                 && estate.getLocation() != null
@@ -170,19 +175,36 @@ public abstract class FormFragment extends BaseFragment implements
                 && estate.getCountry() != null;
     }
 
+    protected boolean isCompleteAddress(String streetNumberAndName, String addressComplements, String zipCode, String country) {
+        return streetNumberAndName != null && zipCode != null && country != null;
+    }
+
     protected boolean isCompleteDescription(Estate estate) {
         return estate.getDescription() != null;
+    }
+
+    protected boolean isCompleteDescription(String description) {
+        return description != null;
     }
 
     protected boolean isCompleteDescriptionDetails(Estate estate) {
         return estate.getSurface() != null;
     }
 
+    protected boolean isCompleteDescriptionDetails(Integer surface) {
+        return surface != null;
+    }
+
+
     protected boolean isCompleteMedia(Estate estate) {
         return !estate.getMedia().isEmpty();
     }
 
-    // to handle the progress bar
+    protected boolean isCompleteMedia(List<String> media) {
+        return !media.isEmpty();
+    }
+
+   // Progress bar steps
     protected void handleProgressBarStepMandatory(boolean isComplete) {
         this.handleStepsProgressBar(0, isComplete);
     }
