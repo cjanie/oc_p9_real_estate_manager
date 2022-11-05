@@ -43,14 +43,7 @@ public class EstateCommandGatewayImpl implements EstateCommandGateway {
 
         dto.setDescription(estate.getDescription());
 
-        // Media In Db
-        List<Media> media = new ArrayList<>();
-        if(!estate.getMedia().isEmpty()) {
-            for(String m: estate.getMedia()) {
-                media.add(new Media(m));
-            }
-        }
-
+        dto.setMediaPaths(estate.getMedia());
 
         return this.estateDAO.save(dto);
     }

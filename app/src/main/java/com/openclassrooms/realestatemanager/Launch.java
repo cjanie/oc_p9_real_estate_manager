@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.openclassrooms.realestatemanager.businesslogic.gateways.EstateCommandGateway;
 import com.openclassrooms.realestatemanager.businesslogic.gateways.EstateGateway;
+import com.openclassrooms.realestatemanager.businesslogic.gateways.MediaGateway;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.GetEstateByIdUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.GetEstatesUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SaveEstateUseCase;
@@ -13,6 +14,7 @@ import com.openclassrooms.realestatemanager.data.database.dao.EstateDAO;
 import com.openclassrooms.realestatemanager.data.database.dao.EstateWithMediaDAO;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateCommandGatewayImpl;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateGatewayImpl;
+import com.openclassrooms.realestatemanager.data.gatewaysimpl.MediaGatewayImpl;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
@@ -30,6 +32,7 @@ public class Launch extends Application {
     // Gateways
     private EstateGateway estateGateway;
     private EstateCommandGateway estateCommandGateway;
+    private MediaGateway mediaGateway;
 
     // Use Cases
     private GetEstatesUseCase getEstatesUseCase;
@@ -81,6 +84,13 @@ public class Launch extends Application {
         return this.estateCommandGateway;
     }
 
+    private synchronized MediaGateway mediaGateway() {
+        if(this.mediaGateway == null) {
+            this.mediaGateway = new MediaGatewayImpl(this.estateWithMediaDAO());
+        }
+        return this.mediaGateway;
+    }
+
     // Use Cases
     private synchronized GetEstatesUseCase getEstatesUseCase() {
         if(this.getEstatesUseCase == null) {
@@ -105,7 +115,9 @@ public class Launch extends Application {
 
     private synchronized GetEstateByIdUseCase getEstateByIdUseCase() {
         if(this.getEstateByIdUseCase == null) {
-            this.getEstateByIdUseCase = new GetEstateByIdUseCase(this.estateGateway());
+            this.getEstateByIdUseCase = new GetEstateByIdUseCase(
+                    this.estateGateway()
+            );
         }
         return this.getEstateByIdUseCase;
     }

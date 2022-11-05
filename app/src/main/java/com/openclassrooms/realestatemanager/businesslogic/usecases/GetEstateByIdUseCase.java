@@ -2,6 +2,9 @@ package com.openclassrooms.realestatemanager.businesslogic.usecases;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.gateways.EstateGateway;
+import com.openclassrooms.realestatemanager.businesslogic.gateways.MediaGateway;
+
+import java.util.List;
 
 public class GetEstateByIdUseCase {
 
@@ -12,7 +15,9 @@ public class GetEstateByIdUseCase {
     }
 
     public Estate handle(int id) {
-        return this.estateGateway.getEstateById(id);
+        Estate estate = this.estateGateway.getEstateById(id);
+
+        return estate;
     }
 }
 

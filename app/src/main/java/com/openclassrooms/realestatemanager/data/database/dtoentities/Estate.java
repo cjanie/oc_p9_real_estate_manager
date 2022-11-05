@@ -7,6 +7,7 @@ import androidx.room.TypeConverters;
 
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.data.database.typeconverters.EstateTypeConverter;
+import com.openclassrooms.realestatemanager.data.database.typeconverters.MediaConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,9 @@ public class Estate {
     private String country;
 
     private String description;
+
+    @TypeConverters({MediaConverter.class})
+    private List<String> mediaPaths;
 
     public Integer getId() {
         return id;
@@ -146,4 +150,11 @@ public class Estate {
         this.description = description;
     }
 
+    public List<String> getMediaPaths() {
+        return mediaPaths;
+    }
+
+    public void setMediaPaths(List<String> mediaPaths) {
+        this.mediaPaths = mediaPaths;
+    }
 }

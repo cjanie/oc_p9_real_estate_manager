@@ -2,8 +2,11 @@ package com.openclassrooms.realestatemanager.ui.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,12 +45,12 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
 
     private final String STORAGE_ROOT_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
     private final String STORAGE_DIRECTORY_NAME = "rem_saved_images" ;
+    private final String FILE_NAME_PREFIX = "rem_";
+    private final String FILE_EXTENTION = ".jpg";
 
     private RecyclerView photosRecyclerView;
     private PhotosRecyclerViewAdapter photosAdapter;
     private List<Bitmap> photos;
-
-    private Map<String, Bitmap> photoMappingFileName;
 
     private Button camera;
 
@@ -59,6 +62,8 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
     private final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
 
     private final String PERMISSION_WRITE_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
+    private final String PERMISSION_READ_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE;
 
 
     private ActivityResultLauncher launcherRequestPermissionForCamera = this.registerForActivityResult(
@@ -98,10 +103,51 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
     public FormMediaFragment(HandleMediaData handleMediaData, SaveEstateDataUpdate saveEstateDataUpdate, Next next, FormData formData) {
         super(saveEstateDataUpdate, next, formData);
         this.handleMediaData = handleMediaData;
+
         this.photos = new ArrayList<>();
-        this.photoMappingFileName = new HashMap();
 
     }
+
+    private ActivityResultLauncher launcherRequestPermissionToReadInStorage = this.registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            isPermissionGranted -> {
+                // TODO read Photo
+                List<String> media = this.getFormData().getMedia();
+                // TODO get the list of media when update mode
+                List<Bitmap> bitmaps = new ArrayList<>();
+                if(!media.isEmpty()) {
+                    for(String m: media) {
+                        File file = new File(m + this.FILE_EXTENTION);
+                        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                        bitmaps.add(bitmap);
+                    }
+                    this.photosAdapter.updateList(bitmaps);
+                }
+
+
+                // To see saved images in the gallery view
+                // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+
+
+            }
+    );
+
+    private ActivityResultLauncher launcherReadInStorage = this.registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if(result.getResultCode() == Activity.RESULT_OK) {
+                        Intent intent = result.getData();
+                        if (intent.getExtras() != null) {
+                            Bitmap photo = (Bitmap) intent.getExtras().get("data");
+                            photos.add(photo);
+                            photosAdapter.updateList(photos);
+                        }
+                    }
+                }
+            }
+    );
 
     @Nullable
     @Override
@@ -123,19 +169,24 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
         this.save.setOnClickListener(this);
         this.skip.setOnClickListener(this);
 
+        //this.launcherRequestPermissionToReadInStorage.launch(this.PERMISSION_READ_STORAGE);
+
+        // TODO read Photo
         List<String> media = this.getFormData().getMedia();
         // TODO get the list of media when update mode
+        List<Bitmap> bitmaps = new ArrayList<>();
         if(!media.isEmpty()) {
-            Intent getPhotoFromStorageIntent = new Intent(
-                    Intent.ACTION_MEDIA_MOUNTED,
-                    Uri.parse("file://" + this.STORAGE_ROOT_PATH)
-                    // run : photosAdapter.updateList(media);
-            );
-
-            // To see saved images in the gallery view
-            // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+            for (String m : media) {
+                String directoryName = m.split("/")[0];
+                String fileName = m.split("/")[1];
+                ContextWrapper contextWrapper = new ContextWrapper(this.getActivity().getApplicationContext());
+                File directory = contextWrapper.getDir(directoryName, Context.MODE_PRIVATE);
+                File file = new File(directory, fileName + this.FILE_EXTENTION);
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                bitmaps.add(bitmap);
+            }
+            this.photosAdapter.updateList(bitmaps);
         }
-
         return root;
     }
 
@@ -156,28 +207,26 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
 
     @Override
     public void save() {
-        // save photo as file in storage
+
         if(!this.photos.isEmpty()) {
+            List<String> paths = new ArrayList<>();
+            // save photos in storage and get the path
             for(Bitmap photo: this.photos) {
-                this.saveImageInStorage(photo);
+                String path = this.saveImageInStorage(photo);
+                paths.add(path);
             }
-        }
-        // Save file name in db
-        if(!this.photoMappingFileName.isEmpty()) {
-            List<String> mediaFileNames = new ArrayList<>(this.photoMappingFileName.keySet());
-            this.handleMediaData.setEstateMediaData(mediaFileNames);
+            // Save file paths in db
+            this.handleMediaData.setEstateMediaData(paths);
             this.saveEstateDataUpdate.saveEstateDataUpdate();
         }
     }
 
-    private void saveImageInStorage(Bitmap bitmap) {
-        // https://stackoverflow.com/questions/7887078/android-saving-file-to-external-storage
-
+    private File createFileWithRandomName() {
         // Create the file name for the photo
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
-        String fileName = "rem_" + n + ".jpg";
+        String fileName = this.FILE_NAME_PREFIX + n + this.FILE_EXTENTION;
 
         // Create the path
         File targetDirectory = new File(this.STORAGE_ROOT_PATH + "/" + this.STORAGE_DIRECTORY_NAME);
@@ -185,6 +234,12 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
 
         // Create the photo file in storage
         File file = new File(targetDirectory, fileName);
+        return file;
+    }
+
+    private String saveImageInStorage(Bitmap bitmap) {
+        // https://stackoverflow.com/questions/7887078/android-saving-file-to-external-storage
+        File file = this.createFileWithRandomName();
         if (file.exists())
             file.delete();
         try {
@@ -193,8 +248,6 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
             out.flush();
             out.close();
 
-            // Register Path in memory, so that it can be saved in db on click on the save button
-            this.photoMappingFileName.put(this.STORAGE_DIRECTORY_NAME + "/" + fileName, bitmap);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -202,13 +255,18 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
 
         // Tell the media scanner about the new file so that it is
         // immediately available to the user.
+        //D/MediaScannerConnection: Scanned /storage/emulated/0/Pictures/rem_saved_images/rem_9359.jpg to content://media/external_primary/images/media/75
         MediaScannerConnection.scanFile(this.getContext(), new String[] { file.toString() }, null,
                 new MediaScannerConnection.OnScanCompletedListener() {
                     public void onScanCompleted(String path, Uri uri) {
                         Log.i("ExternalStorage", "Scanned " + path + ":");
                         Log.i("ExternalStorage", "-> uri=" + uri);
+                        //I/ExternalStorage: Scanned /storage/emulated/0/Pictures/rem_saved_images/rem_9359.jpg:
+                        //I/ExternalStorage: -> uri=content://media/external_primary/images/media/75
                     }
                 });
+
+        return file.getAbsolutePath();
     }
 
     @Override

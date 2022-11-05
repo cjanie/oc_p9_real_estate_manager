@@ -78,10 +78,7 @@ public class EstateGatewayImpl implements EstateGateway {
 
         estate.setDescription(dto.getDescription());
 
-        // Media in db
-        List<String> mediaPaths = new ArrayList<>();
-        // TODO fill media list
-        estate.setMedia(mediaPaths);
+        estate.setMedia(dto.getMediaPaths());
 
         return estate;
     }

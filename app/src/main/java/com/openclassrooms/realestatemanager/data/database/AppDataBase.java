@@ -6,14 +6,17 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import com.openclassrooms.realestatemanager.data.database.dao.EstateDAO;
 import com.openclassrooms.realestatemanager.data.database.dao.EstateWithMediaDAO;
 import com.openclassrooms.realestatemanager.data.database.dtoentities.Estate;
 import com.openclassrooms.realestatemanager.data.database.dtoentities.EstateWithMedia;
 import com.openclassrooms.realestatemanager.data.database.dtoentities.Media;
+import com.openclassrooms.realestatemanager.data.database.typeconverters.MediaConverter;
 
 @Database(entities = {Media.class, Estate.class}, version = 1)
+@TypeConverters({MediaConverter.class})
 public abstract class AppDataBase extends RoomDatabase {
 
     // Singleton
