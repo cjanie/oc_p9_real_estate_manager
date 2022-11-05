@@ -1,6 +1,9 @@
 package com.openclassrooms.realestatemanager.ui.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +13,28 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.ui.adapters.PhotosRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.ui.viewmodels.DetailsViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EstateDetailsFragment extends BaseFragment {
+
+    private final int LAYOUT_ID = R.layout.fragment_details;
 
     private SharedViewModel sharedViewModel;
     private DetailsViewModel detailsViewModel;
+
+    private RecyclerView photosRecyclerView;
+    private PhotosRecyclerViewAdapter photosRecyclerViewAdapter;
 
     private TextView surface;
     private TextView numberOfRooms;
@@ -45,7 +59,10 @@ public class EstateDetailsFragment extends BaseFragment {
 
         DetailsViewModelFactory detailsViewModelFactory = ((Launch)this.getActivity().getApplication()).detailsViewModelFactory();
         this.detailsViewModel = new ViewModelProvider(this.getActivity(), detailsViewModelFactory).get(DetailsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_details, container, false);
+
+        View root = inflater.inflate(this.LAYOUT_ID, container, false);
+
+        this.photosRecyclerView = root.findViewById(R.id.recyclerView_media);
 
         this.description = root.findViewById(R.id.estate_decription_content);
 
@@ -61,13 +78,29 @@ public class EstateDetailsFragment extends BaseFragment {
         this.country = root.findViewById(R.id.country);
 
         this.flexLayout = root.findViewById(R.id.details_flex_layout);
+
         this.handleTabletMode();
 
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        this.photosRecyclerView.setLayoutManager(horizontalLayoutManager);
+
+        this.photosRecyclerViewAdapter = new PhotosRecyclerViewAdapter();
+        this.photosRecyclerView.setAdapter(this.photosRecyclerViewAdapter);
+
         this.detailsViewModel.getEstate().observe(this.getActivity(), estate -> {
+            List<Bitmap> photos = new ArrayList<>();
+            if(!estate.getMedia().isEmpty()) {
+                for(String path: estate.getMedia()) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(path);
+                    photos.add(bitmap);
+                }
+            }
+            this.photosRecyclerViewAdapter.updateList(photos);
+            Log.d(this.getClass().getName(), "photos size ***" + photos.size());
+
             if(estate.getDescription() != null) {
                 this.description.setText(estate.getDescription());
             }
-
             if(estate.getSurface() != null) {
                 this.surface.setText(estate.getSurface().toString());
             }

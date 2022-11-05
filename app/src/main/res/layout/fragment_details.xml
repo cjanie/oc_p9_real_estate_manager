@@ -10,9 +10,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/estate_media_fragment"
-            android:name="com.openclassrooms.realestatemanager.ui.fragments.EstateMediaFragment"
+        <include
+            layout="@layout/layout_media_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

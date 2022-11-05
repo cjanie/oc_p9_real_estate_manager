@@ -34,9 +34,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class FormMediaFragment extends FormSaveSkipFragment implements View.OnClickListener {
@@ -62,8 +60,6 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
     private final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
 
     private final String PERMISSION_WRITE_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
-    private final String PERMISSION_READ_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE;
 
 
     private ActivityResultLauncher launcherRequestPermissionForCamera = this.registerForActivityResult(
@@ -99,61 +95,19 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
             }
     );
 
-    // Constructeur
+    // Constructor
     public FormMediaFragment(HandleMediaData handleMediaData, SaveEstateDataUpdate saveEstateDataUpdate, Next next, FormData formData) {
         super(saveEstateDataUpdate, next, formData);
         this.handleMediaData = handleMediaData;
 
         this.photos = new ArrayList<>();
-
     }
-
-    private ActivityResultLauncher launcherRequestPermissionToReadInStorage = this.registerForActivityResult(
-            new ActivityResultContracts.RequestPermission(),
-            isPermissionGranted -> {
-                // TODO read Photo
-                List<String> media = this.getFormData().getMedia();
-                // TODO get the list of media when update mode
-                List<Bitmap> bitmaps = new ArrayList<>();
-                if(!media.isEmpty()) {
-                    for(String m: media) {
-                        File file = new File(m + this.FILE_EXTENTION);
-                        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                        bitmaps.add(bitmap);
-                    }
-                    this.photosAdapter.updateList(bitmaps);
-                }
-
-
-                // To see saved images in the gallery view
-                // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
-
-
-            }
-    );
-
-    private ActivityResultLauncher launcherReadInStorage = this.registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if(result.getResultCode() == Activity.RESULT_OK) {
-                        Intent intent = result.getData();
-                        if (intent.getExtras() != null) {
-                            Bitmap photo = (Bitmap) intent.getExtras().get("data");
-                            photos.add(photo);
-                            photosAdapter.updateList(photos);
-                        }
-                    }
-                }
-            }
-    );
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(this.LAYOUT_ID, container, false);
-        this.photosRecyclerView = root.findViewById(R.id.recyclerView_form_media);
+        this.photosRecyclerView = root.findViewById(R.id.recyclerView_media);
         this.camera = root.findViewById(R.id.button_form_camera);
         this.save = root.findViewById(R.id.button_save_form);
         this.skip = root.findViewById(R.id.button_skip_form);
@@ -169,20 +123,13 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
         this.save.setOnClickListener(this);
         this.skip.setOnClickListener(this);
 
-        //this.launcherRequestPermissionToReadInStorage.launch(this.PERMISSION_READ_STORAGE);
-
-        // TODO read Photo
+        // Read media when update mode
         List<String> media = this.getFormData().getMedia();
-        // TODO get the list of media when update mode
-        List<Bitmap> bitmaps = new ArrayList<>();
+
         if(!media.isEmpty()) {
-            for (String m : media) {
-                String directoryName = m.split("/")[0];
-                String fileName = m.split("/")[1];
-                ContextWrapper contextWrapper = new ContextWrapper(this.getActivity().getApplicationContext());
-                File directory = contextWrapper.getDir(directoryName, Context.MODE_PRIVATE);
-                File file = new File(directory, fileName + this.FILE_EXTENTION);
-                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+            List<Bitmap> bitmaps = new ArrayList<>();
+            for (String path : media) {
+                Bitmap bitmap = BitmapFactory.decodeFile(path);
                 bitmaps.add(bitmap);
             }
             this.photosAdapter.updateList(bitmaps);
@@ -216,7 +163,9 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
                 paths.add(path);
             }
             // Save file paths in db
-            this.handleMediaData.setEstateMediaData(paths);
+            List<String> pathsExisting = this.getFormData().getMedia();
+            pathsExisting.addAll(paths);
+            this.handleMediaData.setEstateMediaData(pathsExisting);
             this.saveEstateDataUpdate.saveEstateDataUpdate();
         }
     }
