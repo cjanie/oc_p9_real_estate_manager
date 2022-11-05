@@ -8,6 +8,9 @@ import androidx.room.TypeConverters;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.data.database.typeconverters.EstateTypeConverter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Estate {
 
@@ -38,7 +41,6 @@ public class Estate {
     private String country;
 
     private String description;
-
 
     public Integer getId() {
         return id;
@@ -143,4 +145,5 @@ public class Estate {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

@@ -194,7 +194,7 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
             out.close();
 
             // Register Path in memory, so that it can be saved in db on click on the save button
-            this.photoMappingFileName.put(fileName, bitmap);
+            this.photoMappingFileName.put(this.STORAGE_DIRECTORY_NAME + "/" + fileName, bitmap);
         }
         catch (IOException e) {
             e.printStackTrace();

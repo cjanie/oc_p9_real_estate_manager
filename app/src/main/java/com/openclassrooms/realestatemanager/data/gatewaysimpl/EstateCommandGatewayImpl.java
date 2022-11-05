@@ -5,10 +5,14 @@ import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.gateways.EstateCommandGateway;
 import com.openclassrooms.realestatemanager.data.database.dao.EstateDAO;
+import com.openclassrooms.realestatemanager.data.database.dtoentities.Media;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EstateCommandGatewayImpl implements EstateCommandGateway {
 
-    private EstateDAO estateDAO;
+    private final EstateDAO estateDAO;
 
     public EstateCommandGatewayImpl(EstateDAO estateDAO) {
         this.estateDAO = estateDAO;
@@ -39,7 +43,14 @@ public class EstateCommandGatewayImpl implements EstateCommandGateway {
 
         dto.setDescription(estate.getDescription());
 
-        // TODO MediaInDb
+        // Media In Db
+        List<Media> media = new ArrayList<>();
+        if(!estate.getMedia().isEmpty()) {
+            for(String m: estate.getMedia()) {
+                media.add(new Media(m));
+            }
+        }
+
 
         return this.estateDAO.save(dto);
     }

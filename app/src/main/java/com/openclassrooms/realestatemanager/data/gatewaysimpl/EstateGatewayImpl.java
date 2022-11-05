@@ -5,6 +5,7 @@ import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.businesslogic.gateways.EstateGateway;
 import com.openclassrooms.realestatemanager.data.database.dao.EstateDAO;
+import com.openclassrooms.realestatemanager.data.database.dtoentities.Media;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +78,10 @@ public class EstateGatewayImpl implements EstateGateway {
 
         estate.setDescription(dto.getDescription());
 
-        // TODO Media in db
+        // Media in db
+        List<String> mediaPaths = new ArrayList<>();
+        // TODO fill media list
+        estate.setMedia(mediaPaths);
 
         return estate;
     }

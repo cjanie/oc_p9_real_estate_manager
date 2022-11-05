@@ -10,6 +10,7 @@ import com.openclassrooms.realestatemanager.businesslogic.usecases.SaveEstateUse
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SearchEstatesUseCase;
 import com.openclassrooms.realestatemanager.data.database.AppDataBase;
 import com.openclassrooms.realestatemanager.data.database.dao.EstateDAO;
+import com.openclassrooms.realestatemanager.data.database.dao.EstateWithMediaDAO;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateCommandGatewayImpl;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateGatewayImpl;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
@@ -23,6 +24,8 @@ public class Launch extends Application {
     private AppDataBase appDataBase;
 
     private EstateDAO estateDAO;
+
+    private EstateWithMediaDAO estateWithMediaDAO;
 
     // Gateways
     private EstateGateway estateGateway;
@@ -54,6 +57,13 @@ public class Launch extends Application {
             this.estateDAO = this.appDataBase().estateDAO();
         }
         return this.estateDAO;
+    }
+
+    private synchronized EstateWithMediaDAO estateWithMediaDAO() {
+        if(this.estateWithMediaDAO == null) {
+            this.estateWithMediaDAO = this.appDataBase().estateWithMediaDAO();
+        }
+        return this.estateWithMediaDAO;
     }
 
     // Gateways

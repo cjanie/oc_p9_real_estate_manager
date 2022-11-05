@@ -66,8 +66,15 @@ public abstract class FormFragment extends BaseFragment implements
         this.formStepsProgressBar.setWeightSum(FormStepEnum.values().length);
 
         for(int i = 0; i<FormStepEnum.values().length; i++) {
+            final int stepIndex = i;
             View view = inflater.inflate(R.layout.layout_form_step_checked_icon, this.formStepsProgressBar, false);
             ((TextView)view.findViewById(R.id.form_step_check)).setText(FormStepEnum.values()[i].toString());
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showFragment(getFragmentForStep(FormStepEnum.values()[stepIndex]));
+                }
+            });
             this.formStepsProgressBar.addView(view);
         }
 
