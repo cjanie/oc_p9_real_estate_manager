@@ -96,7 +96,6 @@ public class EstateDetailsFragment extends BaseFragment {
                 }
             }
             this.photosRecyclerViewAdapter.updateList(photos);
-            Log.d(this.getClass().getName(), "photos size ***" + photos.size());
 
             if(estate.getDescription() != null) {
                 this.description.setText(estate.getDescription());
@@ -129,6 +128,8 @@ public class EstateDetailsFragment extends BaseFragment {
                 this.country.setText(estate.getCountry());
             }
         });
+
+        this.getChildFragmentManager().beginTransaction().replace(R.id.frame_layout_google_map, new MapsFragment()).commit();
 
         this.sharedViewModel.getEstateSelectionId().observe(this.getViewLifecycleOwner(), estateSelectionId -> {
             this.detailsViewModel.fetchEstateToUpdateLiveData(estateSelectionId);
