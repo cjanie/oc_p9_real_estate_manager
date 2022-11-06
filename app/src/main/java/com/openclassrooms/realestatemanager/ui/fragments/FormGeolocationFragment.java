@@ -100,8 +100,8 @@ public class FormGeolocationFragment extends FormSaveSkipFragment implements Vie
             @Override
             public void onLocationAvailability(@NonNull LocationAvailability locationAvailability) {
                 if (locationAvailability.isLocationAvailable()) {
-                    fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location ->
-                            saveLocation(location)
+                    fusedLocationProviderClient.getLastLocation().addOnSuccessListener(geolocation ->
+                            location = geolocation
                     );
                 } else {
                     requestLocationUpdates(fusedLocationProviderClient, this);
@@ -132,12 +132,10 @@ public class FormGeolocationFragment extends FormSaveSkipFragment implements Vie
 
     @Override
     protected void save() {
-        saveLocation(this.location);
-    }
-
-    private void saveLocation(Location location) {
-        this.handleGeolocation.setGeolocation(location.getLatitude(), location.getLongitude());
-        this.saveEstateDataUpdate.saveEstateDataUpdate();
+        if(this.location != null) {
+            this.handleGeolocation.setGeolocation(this.location.getLatitude(), this.location.getLongitude());
+            this.saveEstateDataUpdate.saveEstateDataUpdate();
+        }
     }
 
     @Override

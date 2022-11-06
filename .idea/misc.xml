@@ -25,6 +25,7 @@
         <entry key="app/src/main/res/layout/fragment_form_mandatory_fields.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_form_media.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_geolocation.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_buttons_skip_save.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_details_address.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_details_description.xml" value="0.165" />
