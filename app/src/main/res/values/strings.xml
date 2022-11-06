@@ -5,6 +5,7 @@
     <string name="number_of_bathrooms">Bathrooms</string>
     <string name="number_of_bedrooms">Bedrooms</string>
     <string name="location">Location</string>
+    <string name="geolocalize">Geolocalize</string>
     <string name="street_number_and_street_name">Street</string>
     <string name="address_complements">Address complements</string>
     <string name="zip_code">Zip code</string>

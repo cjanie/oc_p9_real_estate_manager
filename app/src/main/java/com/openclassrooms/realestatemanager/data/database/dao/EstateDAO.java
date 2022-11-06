@@ -15,13 +15,13 @@ import java.util.List;
 @Dao
 public interface EstateDAO {
 
-    @Query("SELECT id, type, location, priceInDollars FROM Estate")
+    @Query("SELECT id, type, location, priceInDollars, mediaPaths FROM Estate")
     List<Estate> findAll();
 
-    @Query("SELECT id, type, location, priceInDollars FROM Estate WHERE type= :type")
+    @Query("SELECT id, type, location, priceInDollars, mediaPaths FROM Estate WHERE type= :type")
     List<Estate> searchByType(String type);
 
-    @Query("SELECT id, type, location, priceInDollars FROM Estate WHERE location= :location")
+    @Query("SELECT id, type, location, priceInDollars, mediaPaths FROM Estate WHERE location= :location")
     List<Estate> searchByLocation(String location);
 
     @Query("SELECT * FROM Estate WHERE id= :id")
