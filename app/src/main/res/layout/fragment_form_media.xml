@@ -27,24 +27,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/scroll_view_media" />
 
-    <Button
-        android:id="@+id/button_form_photo_file"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_baseline_drive_folder_upload_24"
-        android:drawablePadding="@dimen/padding"
-        android:text="@string/select"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_form_camera" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_skip_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_form_photo_file">
+        app:layout_constraintTop_toBottomOf="@+id/button_form_camera">
 
         <include
             layout="@layout/layout_buttons_skip_save" />
