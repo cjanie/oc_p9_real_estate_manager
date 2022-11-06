@@ -41,6 +41,10 @@ public class Estate {
 
     private List<String> media;
 
+    private Double latitude;
+
+    private Double longitude;
+
     public Estate() {
         this.media = new ArrayList<>();
     }
@@ -171,5 +175,21 @@ public class Estate {
 
     public void setMedia(List<String> media) {
         this.media = media;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

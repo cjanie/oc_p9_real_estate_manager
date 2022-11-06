@@ -127,9 +127,20 @@ public class EstateDetailsFragment extends BaseFragment {
             if(estate.getCountry() != null) {
                 this.country.setText(estate.getCountry());
             }
+            // TODO remove this data
+            estate.setLatitude(43.610769);
+            estate.setLongitude(3.876716);
+            if(estate.getLatitude() != null && estate.getLongitude() != null) {
+                String titleForMarker = estate.getStreetNumberAndStreetName() != null ? estate.getStreetNumberAndStreetName(): estate.getLocation();
+                MapsFragment mapsFragment = new MapsFragment(estate.getLatitude(), estate.getLongitude(), titleForMarker);
+                this.getChildFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout_google_map, mapsFragment)
+                        .commit();
+            }
+
+
         });
 
-        this.getChildFragmentManager().beginTransaction().replace(R.id.frame_layout_google_map, new MapsFragment()).commit();
 
         this.sharedViewModel.getEstateSelectionId().observe(this.getViewLifecycleOwner(), estateSelectionId -> {
             this.detailsViewModel.fetchEstateToUpdateLiveData(estateSelectionId);
