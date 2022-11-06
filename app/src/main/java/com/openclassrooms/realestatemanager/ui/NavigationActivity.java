@@ -31,7 +31,7 @@ public class NavigationActivity extends BaseActivity {
 
     private boolean isTablet;
 
-    private final int DETAILS_FRAMELAYOUT_FOR_TABLET = R.id.frame_layout_details;
+    private final int SECOND_FRAMELAYOUT_FOR_TABLET = R.id.frame_layout_details;
 
     private EstateDetailsFragment estateDetailsFragment = null;
 
@@ -61,22 +61,34 @@ public class NavigationActivity extends BaseActivity {
         switch(action) {
             case SEARCH:
                 this.showFragment(new SearchResultsFragment());
-                this.removeDetails();
+                if(isTablet) {
+                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
+                }
                 break;
             case HOME:
                 this.showFragment(new EstatesFragment());
-                this.removeDetails();
+                if(isTablet) {
+                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
+                }
                 break;
             case ADD:
                 this.showFragment(new FormAddEstateFragment());
-                this.removeDetails();
+                if(isTablet) {
+                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
+                }
                 break;
             case EDIT:
                 this.showFragment(new FormUpdateEstateFragment());
-                this.removeDetails();
+                if(isTablet) {
+                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
+                }
                 break;
             case DETAILS:
-                this.showDetails();
+                if(!isTablet) {
+                    this.showFragment(new EstateDetailsFragment());
+                } else {
+                    this.showFragmentForTablet(new EstateDetailsFragment());
+                }
                 break;
         }
     }
@@ -119,36 +131,25 @@ public class NavigationActivity extends BaseActivity {
         transaction.commit();
     }
 
-    private void showDetails() {
-        this.estateDetailsFragment = new EstateDetailsFragment();
-        if (!this.isTablet) {
-            this.showFragment(this.estateDetailsFragment);
-        } else {
-            this.showDetailsForTablet();
-        }
-    }
-
-    private void showDetailsForTablet() {
-
+    private void showFragmentForTablet(Fragment fragment) {
         FragmentTransaction transaction = this.fragmentManager.beginTransaction();
         // replace() for blank when backPressed
         // add to backstack to stay on the same activity and remove the fragment
-        transaction.replace(this.DETAILS_FRAMELAYOUT_FOR_TABLET, estateDetailsFragment).addToBackStack(estateDetailsFragment.getClass().getName());
+        if(this.fragmentManager.getFragments().isEmpty()) {
+            transaction.replace(this.SECOND_FRAMELAYOUT_FOR_TABLET, fragment).addToBackStack(fragment.getClass().getName());
+        } else {
+            transaction.add(this.SECOND_FRAMELAYOUT_FOR_TABLET, fragment).addToBackStack(fragment.getClass().getName());
+        }
         transaction.commit();
 
         // Make the view visible
-        FrameLayout frameLayout = this.findViewById(this.DETAILS_FRAMELAYOUT_FOR_TABLET);
+        FrameLayout frameLayout = this.findViewById(this.SECOND_FRAMELAYOUT_FOR_TABLET);
         frameLayout.setVisibility(View.VISIBLE);
-
     }
 
-    private void removeDetails() {
-        if(this.isTablet) {
-            if(this.estateDetailsFragment != null) {
-                FragmentTransaction transaction = this.fragmentManager.beginTransaction();
-                transaction.remove(this.estateDetailsFragment).commit();
-            }
-        }
+    private void hideFrameLayout(int frameLayoutId) {
+        FrameLayout frameLayout = this.findViewById(frameLayoutId);
+        frameLayout.setVisibility(View.GONE);
     }
 
     @Override
