@@ -4,17 +4,14 @@ import android.app.Application;
 
 import com.openclassrooms.realestatemanager.businesslogic.gateways.EstateCommandGateway;
 import com.openclassrooms.realestatemanager.businesslogic.gateways.EstateGateway;
-import com.openclassrooms.realestatemanager.businesslogic.gateways.MediaGateway;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.GetEstateByIdUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.GetEstatesUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SaveEstateUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SearchEstatesUseCase;
 import com.openclassrooms.realestatemanager.data.database.AppDataBase;
 import com.openclassrooms.realestatemanager.data.database.dao.EstateDAO;
-import com.openclassrooms.realestatemanager.data.database.dao.EstateWithMediaDAO;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateCommandGatewayImpl;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateGatewayImpl;
-import com.openclassrooms.realestatemanager.data.gatewaysimpl.MediaGatewayImpl;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
@@ -27,12 +24,9 @@ public class Launch extends Application {
 
     private EstateDAO estateDAO;
 
-    private EstateWithMediaDAO estateWithMediaDAO;
-
     // Gateways
     private EstateGateway estateGateway;
     private EstateCommandGateway estateCommandGateway;
-    private MediaGateway mediaGateway;
 
     // Use Cases
     private GetEstatesUseCase getEstatesUseCase;
@@ -62,13 +56,6 @@ public class Launch extends Application {
         return this.estateDAO;
     }
 
-    private synchronized EstateWithMediaDAO estateWithMediaDAO() {
-        if(this.estateWithMediaDAO == null) {
-            this.estateWithMediaDAO = this.appDataBase().estateWithMediaDAO();
-        }
-        return this.estateWithMediaDAO;
-    }
-
     // Gateways
     private synchronized EstateGateway estateGateway() {
         if(this.estateGateway == null) {
@@ -82,13 +69,6 @@ public class Launch extends Application {
             this.estateCommandGateway = new EstateCommandGatewayImpl(this.estateDAO());
         }
         return this.estateCommandGateway;
-    }
-
-    private synchronized MediaGateway mediaGateway() {
-        if(this.mediaGateway == null) {
-            this.mediaGateway = new MediaGatewayImpl(this.estateWithMediaDAO());
-        }
-        return this.mediaGateway;
     }
 
     // Use Cases
