@@ -80,6 +80,9 @@ public class EstateGatewayImpl implements EstateGateway {
 
         estate.setMedia(dto.getMediaPaths());
 
+        estate.setLatitude(dto.getLatitude());
+        estate.setLongitude(dto.getLongitude());
+
         return estate;
     }
 }

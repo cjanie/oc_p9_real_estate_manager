@@ -29,9 +29,13 @@ public class NavigationActivity extends BaseActivity {
 
     private FragmentManager fragmentManager;
 
-    private EstateDetailsFragment estateDetailsFragment;
-
     private boolean isTablet;
+
+    private final int SECOND_FRAMELAYOUT_FOR_TABLET = R.id.frame_layout_details;
+
+    private EstateDetailsFragment estateDetailsFragment = null;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +44,7 @@ public class NavigationActivity extends BaseActivity {
 
         this.sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         this.fragmentManager = this.getSupportFragmentManager();
-        this.estateDetailsFragment = new EstateDetailsFragment();
+        //this.estateDetailsFragment = new EstateDetailsFragment();
         this.isTablet = this.getResources().getBoolean(R.bool.is_tablet);
 
         // Observe menu action state
@@ -48,7 +52,7 @@ public class NavigationActivity extends BaseActivity {
             this.switchFragment(action);
             this.invalidateMenu(); // Launches creation of the menu
 
-            this.additionalSwitchForTablet(action);
+            //this.additionalSwitchForTablet(action);
         });
 
     }
@@ -57,22 +61,39 @@ public class NavigationActivity extends BaseActivity {
         switch(action) {
             case SEARCH:
                 this.showFragment(new SearchResultsFragment());
+                if(isTablet) {
+                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
+                }
                 break;
             case HOME:
                 this.showFragment(new EstatesFragment());
+                if(isTablet) {
+                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
+                }
                 break;
             case ADD:
                 this.showFragment(new FormAddEstateFragment());
+                if(isTablet) {
+                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
+                }
                 break;
             case EDIT:
                 this.showFragment(new FormUpdateEstateFragment());
+                if(isTablet) {
+                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
+                }
                 break;
             case DETAILS:
-                this.showDetails();
+                if(!isTablet) {
+                    this.showFragment(new EstateDetailsFragment());
+                } else {
+                    this.showFragmentForTablet(new EstateDetailsFragment());
+                }
                 break;
         }
     }
 
+    /*
     private void additionalSwitchForTablet(Action action) {
         if(this.isTablet) {
                switch(action) {
@@ -95,12 +116,14 @@ public class NavigationActivity extends BaseActivity {
         }
     }
 
+     */
+
     private void showFragment(Fragment fragment) {
-        FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = this.fragmentManager.beginTransaction();
         // if transaction.replace is used: onBackPressed considers the activity;
         // if transaction.add is uses: onBackPressed considers the fragments
         // First fragment should not be added to back stack
-        if(this.getSupportFragmentManager().getFragments().isEmpty()) {
+        if(this.fragmentManager.getFragments().isEmpty()) {
             transaction.add(R.id.frame_layout, fragment);
         } else {
             transaction.add(R.id.frame_layout, fragment).addToBackStack(fragment.getClass().getName());
@@ -108,27 +131,24 @@ public class NavigationActivity extends BaseActivity {
         transaction.commit();
     }
 
-    private void showDetails() {
-        if (!this.isTablet) {
-            this.showFragment(this.estateDetailsFragment);
-        }
-    }
-
-    private void showDetails(int frameLayoutId) {
+    private void showFragmentForTablet(Fragment fragment) {
         FragmentTransaction transaction = this.fragmentManager.beginTransaction();
         // replace() for blank when backPressed
         // add to backstack to stay on the same activity and remove the fragment
-        transaction.replace(frameLayoutId, this.estateDetailsFragment).addToBackStack(this.estateDetailsFragment.getClass().getName());
+        if(this.fragmentManager.getFragments().isEmpty()) {
+            transaction.replace(this.SECOND_FRAMELAYOUT_FOR_TABLET, fragment).addToBackStack(fragment.getClass().getName());
+        } else {
+            transaction.add(this.SECOND_FRAMELAYOUT_FOR_TABLET, fragment).addToBackStack(fragment.getClass().getName());
+        }
         transaction.commit();
+
         // Make the view visible
-        FrameLayout frameLayout = this.findViewById(frameLayoutId);
+        FrameLayout frameLayout = this.findViewById(this.SECOND_FRAMELAYOUT_FOR_TABLET);
         frameLayout.setVisibility(View.VISIBLE);
     }
 
-    private void removeDetails(int frameLayoutId) {
+    private void hideFrameLayout(int frameLayoutId) {
         FrameLayout frameLayout = this.findViewById(frameLayoutId);
-
-        this.fragmentManager.beginTransaction().remove(this.estateDetailsFragment).commit();
         frameLayout.setVisibility(View.GONE);
     }
 

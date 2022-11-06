@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.adapters;
 
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,12 +71,9 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             String devise = estate.getDevise().equals(Devise.DOLLAR) ? "$" : "€";
             ((ItemViewHolder) holder).price.setText(devise + estate.getPrice());
 
-            Glide.with(((ItemViewHolder) holder).photo.getContext())
-                    .load(estate.getPhotoUrl())
-                    .apply(RequestOptions.centerCropTransform())
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .error(R.drawable.ic_baseline_error_outline_24)
-                    .into(((ItemViewHolder) holder).photo);
+            if(estate.getMedia() != null && !estate.getMedia().isEmpty()) {
+                ((ItemViewHolder) holder).photo.setImageBitmap(BitmapFactory.decodeFile(estate.getMedia().get(0)));
+            }
 
             boolean isTablet = holder.itemView.getContext().getResources().getBoolean(R.bool.is_tablet);
             if(isTablet) {
@@ -91,7 +90,7 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                 sharedViewModel.updateAction(Action.DETAILS);
                 sharedViewModel.updateEstateSelection(estate.getId());
                 if(isTablet) {
-                    view.setBackgroundColor(holder.itemView.getResources().getColor(R.color.colorAccent));
+                    view.setBackgroundColor(holder.itemView.getResources().getColor(R.color.selection_item));
                 }
             });
 

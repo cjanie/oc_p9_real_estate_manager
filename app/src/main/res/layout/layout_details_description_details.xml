@@ -8,7 +8,7 @@
         android:id="@+id/icon_surface"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/ic_baseline_crop_square_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,7 +43,7 @@
         android:id="@+id/icon_rooms"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/ic_baseline_living_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/space_1" />
 
@@ -78,7 +78,7 @@
         android:id="@+id/icon_bathrooms"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/ic_baseline_bathtub_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/space_2" />
 
@@ -114,7 +114,7 @@
         android:id="@+id/icon_bedrooms"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/ic_baseline_bedroom_child_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/space_3" />
 

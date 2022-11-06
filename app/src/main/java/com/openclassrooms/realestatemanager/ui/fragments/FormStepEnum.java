@@ -13,6 +13,12 @@ public enum FormStepEnum {
             return visitor.visitMedia();
         }
     },
+    GEOLOCATION {
+        @Override
+        public <E> E accept(FormStepVisitor<E> visitor) {
+            return visitor.visitGeolocation();
+        }
+    },
     DESCRIPTION {
         @Override
         public <E> E accept(FormStepVisitor<E> visitor) {

@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
     <string name="surface">Surface</string>
-    <string name="number_of_rooms">Number of rooms</string>
-    <string name="number_of_bathrooms">Number of bathrooms</string>
-    <string name="number_of_bedrooms">Number of bedrooms</string>
+    <string name="number_of_rooms">Rooms</string>
+    <string name="number_of_bathrooms">Bathrooms</string>
+    <string name="number_of_bedrooms">Bedrooms</string>
     <string name="location">Location</string>
-    <string name="street_number_and_street_name">Street number and street name</string>
+    <string name="geolocalize">Geolocalize</string>
+    <string name="street_number_and_street_name">Street</string>
     <string name="address_complements">Address complements</string>
     <string name="zip_code">Zip code</string>
     <string name="country">Country</string>

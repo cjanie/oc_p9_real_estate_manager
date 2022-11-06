@@ -71,6 +71,11 @@ public class FormViewModel extends ViewModel {
         this.estateData.setMedia(media);
     }
 
+    public void setEstateDataGeolocation(Double latitude, Double longitude) {
+        this.estateData.setLatitude(latitude);
+        this.estateData.setLongitude(longitude);
+    }
+
     public Long saveEstateDataUpdate() {
         Long id = this.saveEstateUseCase.handle(this.estateData);
         this.estateData.setId(Integer.parseInt(id.toString()));

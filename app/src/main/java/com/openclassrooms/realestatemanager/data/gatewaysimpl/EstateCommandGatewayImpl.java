@@ -45,6 +45,9 @@ public class EstateCommandGatewayImpl implements EstateCommandGateway {
 
         dto.setMediaPaths(estate.getMedia());
 
+        dto.setLatitude(estate.getLatitude());
+        dto.setLongitude(estate.getLongitude());
+
         return this.estateDAO.save(dto);
     }
 }

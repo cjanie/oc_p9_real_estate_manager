@@ -31,6 +31,7 @@ public abstract class FormFragment extends BaseFragment implements
         FormDescriptionDetailsFragment.HandleDescriptionDetailsData,
         FormDescriptionFragment.HandleDescriptionData,
         FormMediaFragment.HandleMediaData,
+        FormGeolocationFragment.HandleGeolocation,
         SaveEstateDataUpdate,
         Next,
         FormData {
@@ -250,6 +251,15 @@ public abstract class FormFragment extends BaseFragment implements
             }
 
             @Override
+            public FormSaveSkipFragment visitGeolocation() {
+                return new FormGeolocationFragment(
+                        FormFragment.this,
+                        FormFragment.this,
+                        FormFragment.this,
+                        FormFragment.this);
+            }
+
+            @Override
             public FormSaveSkipFragment visitDescription() {
                 return new FormDescriptionFragment(
                         FormFragment.this,
@@ -281,4 +291,8 @@ public abstract class FormFragment extends BaseFragment implements
         });
     }
 
+    @Override
+    public void setGeolocation(Double latitude, Double longitude) {
+        this.formViewModel.setEstateDataGeolocation(latitude, longitude);
+    }
 }

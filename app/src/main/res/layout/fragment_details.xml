@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:weightSum="2">
+            android:weightSum="3">
 
             <include
                 layout="@layout/layout_details_description_details"
@@ -60,12 +60,17 @@
                 android:layout_width="match_parent"
                 android:layout_weight="1"/>
 
-        </LinearLayout>
+            <Space
+                android:layout_width="@dimen/big_space"
+                android:layout_height="@dimen/big_space"/>
 
-        <FrameLayout
-            android:id="@+id/frame_layout_google_map"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <FrameLayout
+                android:id="@+id/frame_layout_google_map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
