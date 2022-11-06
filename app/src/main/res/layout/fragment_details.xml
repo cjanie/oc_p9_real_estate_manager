@@ -42,7 +42,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:weightSum="3">
+            android:weightSum="2"
+            >
 
             <include
                 layout="@layout/layout_details_description_details"
@@ -60,17 +61,13 @@
                 android:layout_width="match_parent"
                 android:layout_weight="1"/>
 
-            <Space
-                android:layout_width="@dimen/big_space"
-                android:layout_height="@dimen/big_space"/>
-
-            <FrameLayout
-                android:id="@+id/frame_layout_google_map"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-
         </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/frame_layout_google_map"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/map_min_height"
+            android:layout_marginVertical="@dimen/big_space"/>
 
     </LinearLayout>
 
