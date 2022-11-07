@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/form_step_check"
+    <ImageView
+        android:id="@+id/form_step_icon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
