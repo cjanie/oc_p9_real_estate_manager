@@ -13,6 +13,7 @@
     <string name="add">Add</string>
     <string name="edit">Edit</string>
     <string name="search">Search</string>
+    <string name="search_by_type">Search by type</string>
     <string name="home">Home</string>
     <string name="type">Type</string>
     <string name="price">Price</string>

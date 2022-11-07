@@ -10,6 +10,7 @@
 
     <dimen name="photo_size">100dp</dimen>
     <dimen name="photo_media_size">200dp</dimen>
+    <dimen name="label_min_width">120dp</dimen>
     <dimen name="map_min_height">300dp</dimen>
     <dimen name="legend_media_height">50dp</dimen>
     <dimen name="icon_size">40dp</dimen>
