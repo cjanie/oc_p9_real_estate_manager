@@ -55,6 +55,9 @@ public class FormUpdateEstateFragment extends FormFragment {
 
                 // is complete media
                 this.handleProgressBarStepMedia(this.isCompleteMedia(estate));
+
+                // is complete geolocation
+                this.handleProgressBarStepGeolocation(this.isCompleteGeolocation(estate));
             }
         });
 

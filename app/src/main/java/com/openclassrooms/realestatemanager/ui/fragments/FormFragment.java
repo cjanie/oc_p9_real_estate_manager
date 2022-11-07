@@ -1,10 +1,10 @@
 package com.openclassrooms.realestatemanager.ui.fragments;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -69,7 +69,9 @@ public abstract class FormFragment extends BaseFragment implements
         for(int i = 0; i<FormStepEnum.values().length; i++) {
             final int stepIndex = i;
             View view = inflater.inflate(R.layout.layout_form_step_checked_icon, this.formStepsProgressBar, false);
-            ((TextView)view.findViewById(R.id.form_step_check)).setText(FormStepEnum.values()[i].toString());
+            ImageView imageView = view.findViewById(R.id.form_step_icon);
+            imageView.setImageDrawable(this.getResources().getDrawable(this.getIconForStep(FormStepEnum.values()[i])));
+            imageView.setColorFilter(this.getResources().getColor(R.color.black));
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -125,6 +127,12 @@ public abstract class FormFragment extends BaseFragment implements
     }
 
     @Override
+    public void setGeolocation(Double latitude, Double longitude) {
+        this.formViewModel.setEstateDataGeolocation(latitude, longitude);
+        this.handleProgressBarStepGeolocation(this.isCompleteGeolocation(latitude, longitude));
+    }
+
+    @Override
     public void saveEstateDataUpdate() {
         this.formViewModel.saveEstateDataUpdate();
     }
@@ -177,6 +185,14 @@ public abstract class FormFragment extends BaseFragment implements
         return !media.isEmpty();
     }
 
+    protected boolean isCompleteGeolocation(Estate estate) {
+        return estate.getLatitude() != null && estate.getLongitude() != null;
+    }
+
+    protected boolean isCompleteGeolocation(Double latitude, Double longitude) {
+        return latitude != null && longitude != null;
+    }
+
    // Progress bar steps
     protected void handleProgressBarStepMandatory(boolean isComplete) {
         this.handleStepsProgressBar(FormStepEnum.MANDATORY.ordinal(), isComplete);
@@ -198,11 +214,18 @@ public abstract class FormFragment extends BaseFragment implements
         this.handleStepsProgressBar(FormStepEnum.MEDIA.ordinal(), isComplete);
     }
 
+    protected void handleProgressBarStepGeolocation(boolean isComplete) {
+        this.handleStepsProgressBar(FormStepEnum.GEOLOCATION.ordinal(), isComplete);
+    }
+
     private void handleStepsProgressBar(int stepIndex, boolean isComplete) {
-        TextView stepName = this.formStepsProgressBar.getChildAt(stepIndex).findViewById(R.id.form_step_check);
+        ImageView stepIcon = this.formStepsProgressBar.getChildAt(stepIndex).findViewById(R.id.form_step_icon);
         if(isComplete) {
             int colorSuccess = this.getResources().getColor(R.color.green);
-            stepName.setTextColor(colorSuccess);
+            stepIcon.setColorFilter(colorSuccess);
+        } else {
+            int colorDefault = this.getResources().getColor(R.color.black);
+            stepIcon.setColorFilter(colorDefault);
         }
     }
 
@@ -219,8 +242,8 @@ public abstract class FormFragment extends BaseFragment implements
 
             // Show the progress bar new state
 
-            TextView stepName = this.formStepsProgressBar.getChildAt(stepIndex).findViewById(R.id.form_step_check);
-            stepName.setAlpha(0.5f);
+            ImageView stepIcon = this.formStepsProgressBar.getChildAt(stepIndex).findViewById(R.id.form_step_icon);
+            stepIcon.setAlpha(0.5f);
 
         } else {
             this.sharedViewModel.updateAction(Action.HOME);
@@ -291,8 +314,38 @@ public abstract class FormFragment extends BaseFragment implements
         });
     }
 
-    @Override
-    public void setGeolocation(Double latitude, Double longitude) {
-        this.formViewModel.setEstateDataGeolocation(latitude, longitude);
+    private int getIconForStep(FormStepEnum step) {
+        return step.accept(new FormStepVisitor<Integer>() {
+            @Override
+            public Integer visitMandatory() {
+                return R.drawable.ic_baseline_lightbulb_24;
+            }
+
+            @Override
+            public Integer visitMedia() {
+                return R.drawable.ic_baseline_add_a_photo_24;
+            }
+
+            @Override
+            public Integer visitGeolocation() {
+                return R.drawable.ic_baseline_my_location_24;
+            }
+
+            @Override
+            public Integer visitDescription() {
+                return R.drawable.ic_baseline_description_24;
+            }
+
+            @Override
+            public Integer visitDescriptionDetails() {
+                return R.drawable.ic_baseline_square_foot_24;
+            }
+
+            @Override
+            public Integer visitAddress() {
+                return R.drawable.ic_baseline_location_city_24;
+            }
+        });
     }
+
 }

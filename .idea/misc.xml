@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/ic_baseline_bathtub_24.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_bedroom_child_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_check_circle_outline_24.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_location_on_24.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_place_24.xml" value="0.1" />
         <entry key="app/src/main/res/layout-sw600dp/activity_navigation.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_estate_details.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
