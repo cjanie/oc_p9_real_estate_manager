@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager;
 
 import com.openclassrooms.realestatemanager.dateprovider.DeterministicDateProvider;
+import com.openclassrooms.realestatemanager.ui.utils.Utils;
 
 import org.junit.Assert;
 import org.junit.Test;

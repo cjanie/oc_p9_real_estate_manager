@@ -10,6 +10,7 @@ import com.openclassrooms.realestatemanager.businesslogic.usecases.SearchEstates
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SearchViewModel extends ViewModel {
 
@@ -26,7 +27,7 @@ public class SearchViewModel extends ViewModel {
         return this.searchResults;
     }
 
-    public void fetchSearchResultsToUpdateLiveData(EstateType type) {
-        this.searchResults.postValue(this.searchEstatesUseCase.find(type));
+    public void fetchSearchResultsToUpdateLiveData(Map<String, Object> params) {
+        this.searchResults.postValue(this.searchEstatesUseCase.find(params));
     }
 }

@@ -12,7 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
-public class StorageManager {
+public class StorageManagerUtil {
 
     private final String STORAGE_ROOT_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
     private final String STORAGE_DIRECTORY_NAME = "rem_saved_images" ;

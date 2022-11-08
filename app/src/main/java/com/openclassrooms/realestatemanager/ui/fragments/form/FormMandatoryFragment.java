@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.fragments;
+package com.openclassrooms.realestatemanager.ui.fragments.form;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -20,6 +20,7 @@ import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.ui.exceptions.MandatoryException;
+import com.openclassrooms.realestatemanager.ui.fragments.Next;
 
 import java.util.Arrays;
 import java.util.List;

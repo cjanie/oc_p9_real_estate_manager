@@ -13,12 +13,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.businesslogic.MapSearchEstatesParamsConfig;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.ui.adapters.ListEstatesRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.ui.utils.ShowFragmentUtil;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SearchViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.SearchViewModelFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SearchFragment extends BaseFragment implements SearchParametersFragment.HandleSearchParameters, SearchParametersFragment.HandleSearchRequest {
 
@@ -79,7 +83,9 @@ public class SearchFragment extends BaseFragment implements SearchParametersFrag
 
     @Override
     public void search() {
-        this.searchViewModel.fetchSearchResultsToUpdateLiveData(typeParam);
-        // TODO location param
+        Map<String, Object> params = new HashMap<>();
+        params.put(MapSearchEstatesParamsConfig.TYPE, this.typeParam);
+        params.put(MapSearchEstatesParamsConfig.LOCATION, this.locationParam);
+        this.searchViewModel.fetchSearchResultsToUpdateLiveData(params);
     }
 }

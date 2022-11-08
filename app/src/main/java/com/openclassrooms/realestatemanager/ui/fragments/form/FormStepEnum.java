@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.fragments;
+package com.openclassrooms.realestatemanager.ui.fragments.form;
 
 public enum FormStepEnum {
     MANDATORY {

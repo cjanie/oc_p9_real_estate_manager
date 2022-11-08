@@ -16,10 +16,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.ui.fragments.EstateDetailsFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.EstatesFragment;
-import com.openclassrooms.realestatemanager.ui.fragments.FormAddEstateFragment;
-import com.openclassrooms.realestatemanager.ui.fragments.FormUpdateEstateFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.form.FormAddEstateFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.form.FormUpdateEstateFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.SearchFragment;
-import com.openclassrooms.realestatemanager.ui.fragments.SearchResultsFragment;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
 public class NavigationActivity extends BaseActivity {

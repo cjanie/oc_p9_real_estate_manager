@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.fragments;
+package com.openclassrooms.realestatemanager.ui.fragments.form;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +17,8 @@ import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.ui.Action;
+import com.openclassrooms.realestatemanager.ui.fragments.BaseFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.Next;
 import com.openclassrooms.realestatemanager.ui.viewmodels.FormViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;

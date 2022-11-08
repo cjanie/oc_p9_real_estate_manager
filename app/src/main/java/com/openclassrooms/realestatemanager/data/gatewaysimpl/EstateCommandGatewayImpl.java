@@ -1,14 +1,10 @@
 package com.openclassrooms.realestatemanager.data.gatewaysimpl;
 
-import com.openclassrooms.realestatemanager.Utils;
+import com.openclassrooms.realestatemanager.ui.utils.Utils;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.gateways.EstateCommandGateway;
 import com.openclassrooms.realestatemanager.data.database.dao.EstateDAO;
-import com.openclassrooms.realestatemanager.data.database.dtoentities.Media;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EstateCommandGatewayImpl implements EstateCommandGateway {
 

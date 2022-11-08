@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.fragments;
+package com.openclassrooms.realestatemanager.ui.fragments.form;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,10 +12,10 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.ui.fragments.Next;
 
 public class FormAddressFragment extends FormSaveSkipFragment implements TextWatcher, View.OnClickListener {
 

@@ -1,8 +1,6 @@
-package com.openclassrooms.realestatemanager.ui.fragments;
+package com.openclassrooms.realestatemanager.ui.fragments.form;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.Launch;
-import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
-import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
-import com.openclassrooms.realestatemanager.ui.exceptions.IncorrectEstateTypeException;
-import com.openclassrooms.realestatemanager.ui.exceptions.MandatoryException;
 import com.openclassrooms.realestatemanager.ui.viewmodels.DetailsViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
