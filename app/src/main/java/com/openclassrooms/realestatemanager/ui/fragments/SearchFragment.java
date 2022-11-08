@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,7 @@ public class SearchFragment extends BaseFragment implements SearchParametersFrag
 
         this.searchViewModel.getSearchResults().observe(this.getViewLifecycleOwner(), estates -> {
             this.adapter.updateList(estates);
+            Log.d(this.getClass().getName(), "found estate list size : " + estates.size());
         });
 
         return root;

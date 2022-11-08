@@ -40,7 +40,6 @@ public class SearchResultsFragment extends BaseFragment {
         this.recyclerView = (RecyclerView) root;
         this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         this.recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
-
         this.recyclerView.setAdapter(this.adapter);
 
         return root;
