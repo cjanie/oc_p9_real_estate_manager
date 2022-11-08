@@ -29,7 +29,13 @@ public class SearchFragment extends BaseFragment implements SearchParametersFrag
 
     private String locationParam;
 
+    ShowFragmentUtil fragmentUtil;
+
     private ListEstatesRecyclerViewAdapter adapter;
+
+    public SearchFragment() {
+        this.fragmentUtil = new ShowFragmentUtil();
+    }
 
     @Nullable
     @Override
@@ -43,13 +49,12 @@ public class SearchFragment extends BaseFragment implements SearchParametersFrag
         View root = inflater.inflate(R.layout.fragment_search, container, false);
 
         FragmentManager fragmentManager = this.getChildFragmentManager();
-        ShowFragmentUtil fragmentUtil = new ShowFragmentUtil();
-        fragmentUtil.showFragment(fragmentManager, R.id.frame_layout_search_parameters,
+
+        this.fragmentUtil.showFragment(fragmentManager, R.id.frame_layout_search_parameters,
                 new SearchParametersFragment(this, this));
 
         this.adapter = new ListEstatesRecyclerViewAdapter(sharedViewModel);
-
-        fragmentUtil.showFragment(fragmentManager, R.id.frame_layout_search_results,
+        this.fragmentUtil.showFragment(fragmentManager, R.id.frame_layout_search_results,
                 new SearchResultsFragment(this.adapter));
 
         this.searchViewModel.getSearchResults().observe(this.getViewLifecycleOwner(), estates -> {
