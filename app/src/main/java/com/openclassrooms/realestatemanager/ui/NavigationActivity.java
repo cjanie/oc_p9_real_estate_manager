@@ -18,6 +18,7 @@ import com.openclassrooms.realestatemanager.ui.fragments.EstateDetailsFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.EstatesFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.FormAddEstateFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.FormUpdateEstateFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.SearchFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.SearchResultsFragment;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
@@ -60,7 +61,7 @@ public class NavigationActivity extends BaseActivity {
     private void switchFragment(Action action) {
         switch(action) {
             case SEARCH:
-                this.showFragment(new SearchResultsFragment());
+                this.showFragment(new SearchFragment());
                 if(isTablet) {
                     this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
                 }

@@ -24,13 +24,13 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.factories.SearchViewMo
 
 public class SearchResultsFragment extends BaseFragment {
 
-    private SearchViewModel searchViewModel;
-
-    private SharedViewModel sharedViewModel;
-
     private RecyclerView recyclerView;
 
     private ListEstatesRecyclerViewAdapter adapter;
+
+    public SearchResultsFragment(ListEstatesRecyclerViewAdapter adapter) {
+        this.adapter = adapter;
+    }
 
     @Nullable
     @Override
@@ -41,16 +41,8 @@ public class SearchResultsFragment extends BaseFragment {
         this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         this.recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
-        this.sharedViewModel = new ViewModelProvider(this.requireActivity()).get(SharedViewModel.class);
-        this.adapter = new ListEstatesRecyclerViewAdapter(sharedViewModel);
-        this.recyclerView.setAdapter(adapter);
+        this.recyclerView.setAdapter(this.adapter);
 
-        SearchViewModelFactory viewModelFactory = ((Launch)this.getActivity().getApplication()).searchViewModelFactory();
-        this.searchViewModel = new ViewModelProvider(this, viewModelFactory).get(SearchViewModel.class);
-        this.searchViewModel.getSearchResults().observe(this.getViewLifecycleOwner(),
-                estates -> this.adapter.updateList(estates)
-        );
-        this.searchViewModel.fetchSearchResultsToUpdateLiveData(EstateType.DUPLEX); // TODO
         return root;
     }
 }
