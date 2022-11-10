@@ -24,7 +24,7 @@ public interface EstateDAO {
     @Query("SELECT id, type, location, priceInDollars, mediaPaths FROM Estate WHERE location= :location")
     List<Estate> searchByLocation(String location);
 
-    @Query("SELECT id, type, location, priceInDollars, mediaPaths FROM Estate WHERE priceInDollars= :maxPriceInDollars")
+    @Query("SELECT id, type, location, priceInDollars, mediaPaths FROM Estate WHERE priceInDollars<= :maxPriceInDollars")
     List<Estate> searchUnderMaxPrice(Float maxPriceInDollars);
 
     @Query("SELECT * FROM Estate WHERE id= :id")

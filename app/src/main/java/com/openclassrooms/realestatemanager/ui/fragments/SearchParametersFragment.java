@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.ui.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,12 +31,16 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
 
     private AutoCompleteTextView selectLocation;
 
+    private EditText editMaxPrice;
+
     private Button search;
 
     // Selected values as parameters
     private EstateType typeValue;
 
     private String locationValue;
+
+    private Float maxPriceValue;
 
     // Interfaces
 
@@ -57,6 +64,7 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
         View root = inflater.inflate(R.layout.fragment_search_parameters, container, false);
         this.selectType = root.findViewById(R.id.auto_complete_estate_type);
         this.selectLocation = root.findViewById(R.id.auto_complete_estate_location);
+        this.editMaxPrice = root.findViewById(R.id.edit_text_estate_max_price);
         this.search = root.findViewById(R.id.button_search);
 
         // set types in view
@@ -101,6 +109,27 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
             }
         });
 
+        this.editMaxPrice.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+                    maxPriceValue = Float.parseFloat(charSequence.toString());
+                } catch (NumberFormatException e) {
+                    editMaxPrice.setError(getString(R.string.nan));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         this.search.setOnClickListener(this);
 
         return root;
@@ -114,6 +143,10 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
         if(this.locationValue != null) {
             this.handleSearchParameters.setParamLocation(this.locationValue);
         }
+        if(this.maxPriceValue != null) {
+            this.handleSearchParameters.setParamMaxPrice(this.maxPriceValue);
+        }
+
         this.handleSearchRequest.search();
     }
 
