@@ -1,6 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.fragments;
 
-import androidx.fragment.app.Fragment;
+import com.openclassrooms.realestatemanager.ui.fragments.form.FormStep;
 
 public interface Next {
     void next(FormStep actualFragment);

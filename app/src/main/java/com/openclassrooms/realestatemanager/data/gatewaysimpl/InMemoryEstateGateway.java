@@ -51,6 +51,17 @@ public class InMemoryEstateGateway implements EstateGateway {
     }
 
     @Override
+    public List<Estate> searchUnderMaxPrice(Float maxPrice) {
+        List<Estate> found = new ArrayList<>();
+        for(Estate estate: this.estates) {
+            if(estate.getPrice() <= maxPrice) {
+                found.add(estate);
+            }
+        }
+        return found;
+    }
+
+    @Override
     public Estate getEstateById(long id) {
         if(!this.estates.isEmpty()) {
             for(Estate e: this.estates) {

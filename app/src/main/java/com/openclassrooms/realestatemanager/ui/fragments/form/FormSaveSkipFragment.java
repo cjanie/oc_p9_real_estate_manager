@@ -1,19 +1,15 @@
-package com.openclassrooms.realestatemanager.ui.fragments;
+package com.openclassrooms.realestatemanager.ui.fragments.form;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
-
-import java.util.List;
+import com.openclassrooms.realestatemanager.ui.fragments.Next;
+import com.openclassrooms.realestatemanager.ui.fragments.form.FormData;
+import com.openclassrooms.realestatemanager.ui.fragments.form.FormStep;
+import com.openclassrooms.realestatemanager.ui.fragments.form.SaveEstateDataUpdate;
 
 public abstract class FormSaveSkipFragment extends Fragment implements FormStep {
 

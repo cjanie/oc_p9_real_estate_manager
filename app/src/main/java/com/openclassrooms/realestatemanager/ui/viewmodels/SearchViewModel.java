@@ -5,11 +5,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
-import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
+import com.openclassrooms.realestatemanager.businesslogic.enums.SearchParameter;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SearchEstatesUseCase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SearchViewModel extends ViewModel {
 
@@ -26,7 +27,7 @@ public class SearchViewModel extends ViewModel {
         return this.searchResults;
     }
 
-    public void fetchSearchResultsToUpdateLiveData(EstateType type) {
-        this.searchResults.postValue(this.searchEstatesUseCase.find(type));
+    public void fetchSearchResultsToUpdateLiveData(Map<SearchParameter, Object> params) {
+        this.searchResults.postValue(this.searchEstatesUseCase.handle(params));
     }
 }

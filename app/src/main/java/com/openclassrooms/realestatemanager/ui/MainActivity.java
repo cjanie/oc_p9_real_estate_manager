@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.Utils;
+import com.openclassrooms.realestatemanager.ui.utils.Utils;
 
 public class MainActivity extends BaseActivity {
 

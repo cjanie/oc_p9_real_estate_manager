@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.fragments;
+package com.openclassrooms.realestatemanager.ui.fragments.form;
 
 import android.Manifest;
 import android.app.Activity;
@@ -23,7 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.ui.adapters.PhotosRecyclerViewAdapter;
-import com.openclassrooms.realestatemanager.ui.utils.StorageManager;
+import com.openclassrooms.realestatemanager.ui.fragments.Next;
+import com.openclassrooms.realestatemanager.ui.utils.StorageManagerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
 
     private HandleMediaData handleMediaData;
 
-    private StorageManager storageManager;
+    private StorageManagerUtil storageManagerUtil;
 
     private final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
 
@@ -87,7 +88,7 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
     public FormMediaFragment(HandleMediaData handleMediaData, SaveEstateDataUpdate saveEstateDataUpdate, Next next, FormData formData) {
         super(saveEstateDataUpdate, next, formData);
         this.handleMediaData = handleMediaData;
-        this.storageManager = new StorageManager();
+        this.storageManagerUtil = new StorageManagerUtil();
 
         this.photos = new ArrayList<>();
     }
@@ -157,7 +158,7 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
     }
 
     private String saveImageInStorage(Bitmap bitmap) {
-        String path = this.storageManager.saveImageInStorage(bitmap, this.getContext());
+        String path = this.storageManagerUtil.saveImageInStorage(bitmap, this.getContext());
         return path;
     }
 
