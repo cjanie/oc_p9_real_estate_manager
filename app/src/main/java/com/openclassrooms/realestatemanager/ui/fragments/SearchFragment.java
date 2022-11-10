@@ -15,6 +15,7 @@ import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.MapSearchEstatesParamsConfig;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
+import com.openclassrooms.realestatemanager.businesslogic.enums.SearchParameter;
 import com.openclassrooms.realestatemanager.ui.adapters.ListEstatesRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.ui.utils.ShowFragmentUtil;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SearchViewModel;
@@ -33,6 +34,8 @@ public class SearchFragment extends BaseFragment implements SearchParametersFrag
     private EstateType typeParam;
 
     private String locationParam;
+
+    private Float maxPriceParam;
 
     ShowFragmentUtil fragmentUtil;
 
@@ -80,12 +83,26 @@ public class SearchFragment extends BaseFragment implements SearchParametersFrag
         this.locationParam = location;
     }
 
+    @Override
+    public void setParamMaxPrice(Float maxPrice) {
+        this.maxPriceParam = maxPrice;
+    }
+
 
     @Override
     public void search() {
-        Map<String, Object> params = new HashMap<>();
-        params.put(MapSearchEstatesParamsConfig.TYPE, this.typeParam);
-        params.put(MapSearchEstatesParamsConfig.LOCATION, this.locationParam);
+        Map<SearchParameter, Object> params = new HashMap<>();
+
+        if(this.typeParam != null) {
+            params.put(SearchParameter.TYPE, this.typeParam);
+        }
+        if(this.locationParam != null) {
+            params.put(SearchParameter.LOCATION, this.locationParam);
+        }
+        if(this.maxPriceParam != null) {
+            params.put(SearchParameter.MAX_PRICE_IN_DOLLARS, this.maxPriceParam);
+        }
+
         this.searchViewModel.fetchSearchResultsToUpdateLiveData(params);
     }
 }

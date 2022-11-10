@@ -13,6 +13,8 @@ public interface EstateGateway {
 
     List<Estate> searchByLocation(String location);
 
+    List<Estate> searchUnderMaxPrice(Float maxPrice);
+
     Estate getEstateById(long id);
 
 

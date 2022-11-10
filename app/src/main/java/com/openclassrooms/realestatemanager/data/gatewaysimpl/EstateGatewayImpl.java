@@ -41,6 +41,13 @@ public class EstateGatewayImpl implements EstateGateway {
     }
 
     @Override
+    public List<Estate> searchUnderMaxPrice(Float maxPrice) {
+        List<com.openclassrooms.realestatemanager.data.database.dtoentities.Estate> estatesDto
+                = this.estateDAO.searchUnderMaxPrice(maxPrice);
+        return this.convertListDtoToEstate(estatesDto);
+    }
+
+    @Override
     public Estate getEstateById(long id) {
         com.openclassrooms.realestatemanager.data.database.dtoentities.Estate estateDto
                 = this.estateDAO.findEstateById(id);

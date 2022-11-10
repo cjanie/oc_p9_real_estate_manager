@@ -24,20 +24,24 @@ import java.util.Map;
 
 public class SearchParametersFragment extends Fragment implements View.OnClickListener {
 
-    private AutoCompleteTextView type;
+    private AutoCompleteTextView selectType;
 
-    private AutoCompleteTextView location;
+    private AutoCompleteTextView selectLocation;
 
     private Button search;
 
+    // Selected values as parameters
+    private EstateType typeValue;
 
-    private EstateType estateType;
+    private String locationValue;
 
-    private String estateLocation;
+    // Interfaces
 
     private HandleSearchParameters handleSearchParameters;
 
     private HandleSearchRequest handleSearchRequest;
+
+    // Constructor
 
     public SearchParametersFragment(
             HandleSearchParameters handleSearchParameters,
@@ -51,8 +55,8 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_search_parameters, container, false);
-        this.type = root.findViewById(R.id.auto_complete_estate_type);
-        this.location = root.findViewById(R.id.auto_complete_estate_location);
+        this.selectType = root.findViewById(R.id.auto_complete_estate_type);
+        this.selectLocation = root.findViewById(R.id.auto_complete_estate_location);
         this.search = root.findViewById(R.id.button_search);
 
         // set types in view
@@ -64,19 +68,19 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
         ArrayAdapter<String> typesAdapter = new ArrayAdapter(this.getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, types
         );
-        this.type.setAdapter(typesAdapter);
+        this.selectType.setAdapter(typesAdapter);
 
         // set locations in view
         List<String> locations = Arrays.asList(
-                "PARIS", "MANCHESTER", "MONTPELLIER", "SETE", "ORANGE"
+                "Paris", "Montpellier", "Orange"
         );
         ArrayAdapter<String> locationsAdapter = new ArrayAdapter(this.getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, locations
         );
-        this.location.setAdapter(locationsAdapter);
+        this.selectLocation.setAdapter(locationsAdapter);
 
         // set listeners
-        this.type.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.selectType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String type = (String) adapterView.getAdapter().getItem(i);
@@ -85,15 +89,15 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
                     mapTypeByString.put(estateType.toString(), estateType);
                 }
                 if(mapTypeByString.keySet().contains(type)) {
-                    estateType = mapTypeByString.get(type);
+                    typeValue = mapTypeByString.get(type);
                 }
             }
         });
 
-        this.location.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.selectLocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                estateLocation = (String) adapterView.getAdapter().getItem(i);
+                locationValue = (String) adapterView.getAdapter().getItem(i);
             }
         });
 
@@ -104,11 +108,11 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        if(this.estateType != null) {
-            this.handleSearchParameters.setParamType(this.estateType);
+        if(this.typeValue != null) {
+            this.handleSearchParameters.setParamType(this.typeValue);
         }
-        if(this.estateLocation != null) {
-            this.handleSearchParameters.setParamLocation(this.estateLocation);
+        if(this.locationValue != null) {
+            this.handleSearchParameters.setParamLocation(this.locationValue);
         }
         this.handleSearchRequest.search();
     }
@@ -116,6 +120,7 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
     interface HandleSearchParameters {
         void setParamType(EstateType type);
         void setParamLocation(String location);
+        void setParamMaxPrice(Float maxPrice);
     }
 
     interface HandleSearchRequest {
