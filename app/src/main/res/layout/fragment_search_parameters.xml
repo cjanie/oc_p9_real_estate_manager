@@ -23,8 +23,8 @@
 
     <Space
         android:id="@+id/space_1"
-        android:layout_width="@dimen/big_space"
-        android:layout_height="@dimen/big_space"
+        android:layout_width="@dimen/padding"
+        android:layout_height="@dimen/padding"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/auto_complete_estate_type"/>
@@ -49,8 +49,8 @@
 
     <Space
         android:id="@+id/space_2"
-        android:layout_width="@dimen/big_space"
-        android:layout_height="@dimen/big_space"
+        android:layout_width="@dimen/padding"
+        android:layout_height="@dimen/padding"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/auto_complete_estate_location" />
@@ -80,13 +80,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edit_text_estate_max_price" />
 
-    <Button
-        android:id="@+id/button_search"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/search"
+        android:weightSum="2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/space_3"/>
+        app:layout_constraintTop_toBottomOf="@id/space_3">
+        <Button
+            android:id="@+id/button_reset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/ButtonReset"/>
+        <Button
+            android:id="@+id/button_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/ButtonSearch"
+            />
+    </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

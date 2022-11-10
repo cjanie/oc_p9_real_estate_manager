@@ -25,7 +25,10 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.factories.SearchViewMo
 import java.util.HashMap;
 import java.util.Map;
 
-public class SearchFragment extends BaseFragment implements SearchParametersFragment.HandleSearchParameters, SearchParametersFragment.HandleSearchRequest {
+public class SearchFragment extends BaseFragment implements
+        SearchParametersFragment.HandleSearchParameters,
+        SearchParametersFragment.HandleResetParameters,
+        SearchParametersFragment.HandleSearchRequest {
 
     private SearchViewModel searchViewModel;
 
@@ -59,7 +62,7 @@ public class SearchFragment extends BaseFragment implements SearchParametersFrag
         FragmentManager fragmentManager = this.getChildFragmentManager();
 
         this.fragmentUtil.showFragment(fragmentManager, R.id.frame_layout_search_parameters,
-                new SearchParametersFragment(this, this));
+                new SearchParametersFragment(this, this, this));
 
         this.adapter = new ListEstatesRecyclerViewAdapter(sharedViewModel);
         this.fragmentUtil.showFragment(fragmentManager, R.id.frame_layout_search_results,
@@ -104,5 +107,12 @@ public class SearchFragment extends BaseFragment implements SearchParametersFrag
         }
 
         this.searchViewModel.fetchSearchResultsToUpdateLiveData(params);
+    }
+
+    @Override
+    public void reset() {
+        this.typeParam = null;
+        this.locationParam = null;
+        this.maxPriceParam = null;
     }
 }

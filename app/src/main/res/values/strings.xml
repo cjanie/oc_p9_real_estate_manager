@@ -12,6 +12,7 @@
     <string name="country">Country</string>
     <string name="add">Add</string>
     <string name="edit">Edit</string>
+    <string name="reset">Reset</string>
     <string name="search">Search</string>
     <string name="search_by_type">Search by type</string>
     <string name="max_price">Max price</string>

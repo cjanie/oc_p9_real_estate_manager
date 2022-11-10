@@ -35,16 +35,13 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
 
     private Button search;
 
-    // Selected values as parameters
-    private EstateType typeValue;
-
-    private String locationValue;
-
-    private Float maxPriceValue;
+    private Button reset;
 
     // Interfaces
 
     private HandleSearchParameters handleSearchParameters;
+
+    private HandleResetParameters handleResetParameters;
 
     private HandleSearchRequest handleSearchRequest;
 
@@ -52,9 +49,11 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
 
     public SearchParametersFragment(
             HandleSearchParameters handleSearchParameters,
+            HandleResetParameters handleResetParameters,
             HandleSearchRequest handleSearchRequest) {
         this.handleSearchParameters = handleSearchParameters;
         this.handleSearchRequest = handleSearchRequest;
+        this.handleResetParameters = handleResetParameters;
     }
 
     @Nullable
@@ -66,6 +65,7 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
         this.selectLocation = root.findViewById(R.id.auto_complete_estate_location);
         this.editMaxPrice = root.findViewById(R.id.edit_text_estate_max_price);
         this.search = root.findViewById(R.id.button_search);
+        this.reset = root.findViewById(R.id.button_reset);
 
         // set types in view
         List<String> types = new ArrayList<>();
@@ -97,7 +97,8 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
                     mapTypeByString.put(estateType.toString(), estateType);
                 }
                 if(mapTypeByString.keySet().contains(type)) {
-                    typeValue = mapTypeByString.get(type);
+                    EstateType typeValue = mapTypeByString.get(type);
+                    handleSearchParameters.setParamType(typeValue);
                 }
             }
         });
@@ -105,7 +106,8 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
         this.selectLocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                locationValue = (String) adapterView.getAdapter().getItem(i);
+                String locationValue = (String) adapterView.getAdapter().getItem(i);
+                handleSearchParameters.setParamLocation(locationValue);
             }
         });
 
@@ -117,11 +119,14 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                try {
-                    maxPriceValue = Float.parseFloat(charSequence.toString());
-                } catch (NumberFormatException e) {
-                    editMaxPrice.setError(getString(R.string.nan));
-                }
+                if(charSequence.length() > 0) {
+                    try {
+                        Float maxPriceValue = Float.parseFloat(charSequence.toString());
+                        handleSearchParameters.setParamMaxPrice(maxPriceValue);
+                    } catch (NumberFormatException e) {
+                        editMaxPrice.setError(getString(R.string.nan));
+                    }
+                } else handleSearchParameters.setParamMaxPrice(null);
             }
 
             @Override
@@ -131,29 +136,39 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
         });
 
         this.search.setOnClickListener(this);
+        this.reset.setOnClickListener(this);
 
         return root;
     }
 
     @Override
     public void onClick(View view) {
-        if(this.typeValue != null) {
-            this.handleSearchParameters.setParamType(this.typeValue);
+        if(view.getId() == R.id.button_search) {
+            this.handleSearchRequest.search();
+            this.reset();
+        } else {
+            this.reset();
         }
-        if(this.locationValue != null) {
-            this.handleSearchParameters.setParamLocation(this.locationValue);
-        }
-        if(this.maxPriceValue != null) {
-            this.handleSearchParameters.setParamMaxPrice(this.maxPriceValue);
-        }
-
-        this.handleSearchRequest.search();
     }
+
+    private void reset() {
+        this.handleResetParameters.reset();
+
+        this.selectType.setText("");
+        this.selectLocation.setText("");
+        this.editMaxPrice.setText("");
+    }
+
+
 
     interface HandleSearchParameters {
         void setParamType(EstateType type);
         void setParamLocation(String location);
         void setParamMaxPrice(Float maxPrice);
+    }
+
+    interface HandleResetParameters {
+        void reset();
     }
 
     interface HandleSearchRequest {

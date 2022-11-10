@@ -13,12 +13,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Space
+        android:id="@+id/space_1"
+        android:layout_width="@dimen/big_space"
+        android:layout_height="@dimen/big_space"
+        app:layout_constraintTop_toBottomOf="@id/frame_layout_search_parameters"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frame_layout_search_parameters">
+        app:layout_constraintTop_toBottomOf="@id/space_1">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
