@@ -23,5 +23,10 @@
         android:icon="@drawable/ic_baseline_home_24"
         android:title="@string/home"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="@string/settings"
+        app:showAsAction="never"/>
 
 </menu>

@@ -19,6 +19,7 @@ import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.ui.Action;
 import com.openclassrooms.realestatemanager.ui.fragments.BaseFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
+import com.openclassrooms.realestatemanager.ui.fragments.UseSharedPreferenceFragment;
 import com.openclassrooms.realestatemanager.ui.viewmodels.FormViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
@@ -26,7 +27,7 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewMode
 import java.util.List;
 import java.util.Map;
 
-public abstract class FormFragment extends BaseFragment implements
+public abstract class FormFragment extends UseSharedPreferenceFragment implements
         FormMandatoryFragment.HandleFormMandatoryFields,
         FormAddressFragment.HandleAddressFields,
         FormDescriptionDetailsFragment.HandleDescriptionDetailsData,
@@ -40,8 +41,6 @@ public abstract class FormFragment extends BaseFragment implements
     private final int LAYOUT_ID = R.layout.fragment_form;
 
     protected LinearLayout formStepsProgressBar;
-
-    private Map<FormStepEnum, Integer> steps;
 
     protected FormViewModel formViewModel;
 
@@ -257,6 +256,7 @@ public abstract class FormFragment extends BaseFragment implements
             @Override
             public FormSaveSkipFragment visitMandatory() {
                 return new FormMandatoryFragment(
+                        FormFragment.this,
                         FormFragment.this,
                         FormFragment.this,
                         FormFragment.this,

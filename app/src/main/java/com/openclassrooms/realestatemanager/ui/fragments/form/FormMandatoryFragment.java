@@ -17,9 +17,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
-import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.ui.exceptions.MandatoryException;
+import com.openclassrooms.realestatemanager.ui.fragments.HandleDevise;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 
 import java.util.Arrays;
@@ -27,9 +27,11 @@ import java.util.List;
 
 public class FormMandatoryFragment extends FormSaveSkipFragment implements AdapterView.OnItemClickListener  {
 
-    private final int LAYOUT_ID = R.layout.fragment_form_mandatory_fields;
+    private static final int LAYOUT_ID = R.layout.fragment_form_mandatory_fields;
 
-    private HandleFormMandatoryFields handleFormMandatoryFields;
+    private final HandleFormMandatoryFields handleFormMandatoryFields;
+
+    private final HandleDevise handleDevise;
 
     protected ConstraintLayout formMainLayout;
 
@@ -49,16 +51,18 @@ public class FormMandatoryFragment extends FormSaveSkipFragment implements Adapt
             SaveEstateDataUpdate saveEstateDataUpdate,
             Next next,
             FormData formData,
-            HandleFormMandatoryFields handleFormMandatoryFields
+            HandleFormMandatoryFields handleFormMandatoryFields,
+            HandleDevise handleDevise
     ) {
         super(saveEstateDataUpdate, next, formData);
         this.handleFormMandatoryFields = handleFormMandatoryFields;
+        this.handleDevise = handleDevise;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(this.LAYOUT_ID, container, false);
+        View root = inflater.inflate(LAYOUT_ID, container, false);
 
         this.formMainLayout = root.findViewById(R.id.frame_layout_form);
         this.type = root.findViewById(R.id.spinner_type);
@@ -68,19 +72,23 @@ public class FormMandatoryFragment extends FormSaveSkipFragment implements Adapt
         this.skip = root.findViewById(R.id.button_skip_form);
         List<String> types = Arrays.asList(EstateType.FLAT.toString(), EstateType.DUPLEX.toString(), EstateType.HOUSE.toString());
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, types
         );
         this.type.setAdapter(adapter);
         this.type.setOnItemClickListener(this);
 
+        this.price.setHint(this.handleDevise.getPreferenceDeviseAsString());
+
         this.hideButton(this.skip);
+
         Estate currentEstate = this.handleFormMandatoryFields.getInitializedEstate();
         if(currentEstate != null && currentEstate.getId() != null && currentEstate.getId() > 0) {
             this.estateType = currentEstate.getType().toString();
             this.type.setText(this.estateType);
             this.location.setText(currentEstate.getLocation());
-            this.price.setText(currentEstate.getPrice().toString());
+            this.price.setText(String.valueOf(this.handleDevise.getPriceInPreferenceDevise(currentEstate)));
+
             this.showButton(this.skip);
         }
 
@@ -90,9 +98,8 @@ public class FormMandatoryFragment extends FormSaveSkipFragment implements Adapt
             this.save();
             this.next();
         });
-        this.skip.setOnClickListener(view -> {
-            this.next();
-        });
+
+        this.skip.setOnClickListener(view -> this.next());
 
         return root;
     }
@@ -146,7 +153,7 @@ public class FormMandatoryFragment extends FormSaveSkipFragment implements Adapt
             this.price.setError(mandatoryFieldError);
         }
         // Devise
-        estate.setDevise(Devise.DOLLAR); // TODO Autocomplete field
+        estate.setDevise(this.handleDevise.getPreferenceDevise());
 
         this.handleFormMandatoryFields.setMandatoryFields(estate);
         this.saveEstateDataUpdate.saveEstateDataUpdate();

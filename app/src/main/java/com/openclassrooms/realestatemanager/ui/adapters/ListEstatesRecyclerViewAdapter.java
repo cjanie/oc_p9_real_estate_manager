@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.adapters;
 
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
-import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.ui.Action;
+import com.openclassrooms.realestatemanager.ui.fragments.HandleDevise;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
 import java.util.ArrayList;
@@ -33,9 +30,12 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     private List<Estate> estates;
 
-    public ListEstatesRecyclerViewAdapter(SharedViewModel sharedViewModel) {
+    private HandleDevise handleDevise;
+
+    public ListEstatesRecyclerViewAdapter(SharedViewModel sharedViewModel, HandleDevise handleDevise) {
         this.sharedViewModel = sharedViewModel;
         this.estates = new ArrayList<>();
+        this.handleDevise = handleDevise;
     }
 
     public void updateList(List<Estate> estates) {
@@ -68,8 +68,8 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             Estate estate = this.estates.get(position);
             ((ItemViewHolder) holder).type.setText(estate.getType().toString());
             ((ItemViewHolder) holder).location.setText(estate.getLocation());
-            String devise = estate.getDevise().equals(Devise.DOLLAR) ? "$" : "€";
-            ((ItemViewHolder) holder).price.setText(devise + estate.getPrice());
+
+            ((ItemViewHolder) holder).price.setText(this.handleDevise.getPreferenceDeviseAsString() + " " + this.handleDevise.getPriceInPreferenceDevise(estate));
 
             if(estate.getMedia() != null && !estate.getMedia().isEmpty()) {
                 ((ItemViewHolder) holder).photo.setImageBitmap(BitmapFactory.decodeFile(estate.getMedia().get(0)));
