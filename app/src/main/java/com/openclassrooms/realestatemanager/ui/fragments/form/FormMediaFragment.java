@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.businesslogic.entities.Media;
 import com.openclassrooms.realestatemanager.ui.adapters.PhotosRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 import com.openclassrooms.realestatemanager.ui.utils.StorageManagerUtil;
@@ -114,12 +115,12 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
         this.skip.setOnClickListener(this);
 
         // Read media when update mode
-        List<String> media = this.getFormData().getMedia();
+        List<Media> media = this.getFormData().getMedia();
 
         if(!media.isEmpty()) {
             List<Bitmap> bitmaps = new ArrayList<>();
-            for (String path : media) {
-                Bitmap bitmap = BitmapFactory.decodeFile(path);
+            for (Media m : media) {
+                Bitmap bitmap = BitmapFactory.decodeFile(m.getPath());
                 bitmaps.add(bitmap);
             }
             this.photosAdapter.updateList(bitmaps);
@@ -147,13 +148,17 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
 
         if(!this.photos.isEmpty()) {
             // save photos in storage and get the path
-            List<String> paths = new ArrayList<>();
+            List<Media> media = new ArrayList<>();
             for(Bitmap photo: this.photos) {
                 String path = this.saveImageInStorage(photo);
-                paths.add(path);
+                String name = path; // TODO get name media from input
+                Media m = new Media();
+                m.setPath(path);
+                m.setName(name);
+                media.add(m);
             }
             // Save file paths in db
-            this.saveFilePathsInDb(paths);
+            this.saveMediaInDb(media);
         }
     }
 
@@ -162,14 +167,14 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
         return path;
     }
 
-    private void saveFilePathsInDb(List<String> paths) {
-        List<String> pathsExisting = this.getFormData().getMedia();
+    private void saveMediaInDb(List<Media> media) {
+        List<Media> existing = this.getFormData().getMedia();
 
-        List<String> pathsUpdate = new ArrayList<>();
-        pathsUpdate.addAll(pathsExisting);
-        pathsUpdate.addAll(paths);
+        List<Media> update = new ArrayList<>();
+        update.addAll(existing);
+        update.addAll(media);
 
-        this.handleMediaData.setEstateMediaData(pathsUpdate);
+        this.handleMediaData.setEstateMediaData(update);
         this.saveEstateDataUpdate.saveEstateDataUpdate();
     }
 
@@ -179,6 +184,6 @@ public class FormMediaFragment extends FormSaveSkipFragment implements View.OnCl
     }
 
     interface HandleMediaData {
-        void setEstateMediaData(List<String> media);
+        void setEstateMediaData(List<Media> media);
     }
 }

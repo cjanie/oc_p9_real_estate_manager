@@ -1,10 +1,14 @@
 package com.openclassrooms.realestatemanager.data.gatewaysimpl;
 
+import com.openclassrooms.realestatemanager.businesslogic.entities.Media;
 import com.openclassrooms.realestatemanager.ui.utils.Utils;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.gateways.EstateCommandGateway;
 import com.openclassrooms.realestatemanager.data.database.dao.EstateDAO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EstateCommandGatewayImpl implements EstateCommandGateway {
 
@@ -39,7 +43,17 @@ public class EstateCommandGatewayImpl implements EstateCommandGateway {
 
         dto.setDescription(estate.getDescription());
 
-        dto.setMediaPaths(estate.getMedia());
+        // Media
+        if(!estate.getMedia().isEmpty()) {
+            List<com.openclassrooms.realestatemanager.data.database.dtoentities.Media> mediaListDto = new ArrayList<>();
+            for(Media m: estate.getMedia()) {
+                com.openclassrooms.realestatemanager.data.database.dtoentities.Media mDto
+                        = new com.openclassrooms.realestatemanager.data.database.dtoentities.Media(m.getPath());
+                mDto.setName(m.getName());
+                mediaListDto.add(mDto);
+            }
+            dto.setMedia(mediaListDto);
+        }
 
         dto.setLatitude(estate.getLatitude());
         dto.setLongitude(estate.getLongitude());

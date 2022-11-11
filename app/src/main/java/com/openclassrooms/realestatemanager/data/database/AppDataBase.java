@@ -12,7 +12,7 @@ import com.openclassrooms.realestatemanager.data.database.dtoentities.Estate;
 import com.openclassrooms.realestatemanager.data.database.dtoentities.Media;
 import com.openclassrooms.realestatemanager.data.database.typeconverters.MediaConverter;
 
-@Database(entities = {Media.class, Estate.class}, version = 1)
+@Database(entities = {Estate.class}, version = 1)
 @TypeConverters({MediaConverter.class})
 public abstract class AppDataBase extends RoomDatabase {
 

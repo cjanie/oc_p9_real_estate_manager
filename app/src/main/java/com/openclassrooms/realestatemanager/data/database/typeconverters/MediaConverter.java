@@ -13,18 +13,17 @@ import java.util.List;
 public class MediaConverter {
 
     @TypeConverter
-    public List<String> fromString(String json) {
+    public List<Media> fromJson(String json) {
         if(json == null) {
             return Collections.emptyList();
         }
-        Type listType = new TypeToken<List<String>>() {}.getType();
-        return new Gson().fromJson(json, listType);
+        Type type = new TypeToken<List<Media>>() {}.getType();
+        return new Gson().fromJson(json, type);
     }
 
     @TypeConverter
-    public String fromList(List<String> mediaPaths) {
+    public String fromMedias(List<Media> medias) {
         Gson gson = new Gson();
-        String json = gson.toJson(mediaPaths);
-        return json;
+        return gson.toJson(medias);
     }
 }

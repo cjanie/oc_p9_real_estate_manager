@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.businesslogic.entities.Media;
 import com.openclassrooms.realestatemanager.ui.Action;
 import com.openclassrooms.realestatemanager.ui.fragments.BaseFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
@@ -121,7 +122,7 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
     }
 
     @Override
-    public void setEstateMediaData(List<String> media) {
+    public void setEstateMediaData(List<Media> media) {
         this.formViewModel.setEstateDataMedia(media);
         this.handleProgressBarStepMedia(this.isCompleteMedia(media));
     }
@@ -181,7 +182,7 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
         return !estate.getMedia().isEmpty();
     }
 
-    protected boolean isCompleteMedia(List<String> media) {
+    protected boolean isCompleteMedia(List<Media> media) {
         return !media.isEmpty();
     }
 

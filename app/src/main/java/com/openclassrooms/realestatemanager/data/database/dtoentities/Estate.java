@@ -2,7 +2,6 @@ package com.openclassrooms.realestatemanager.data.database.dtoentities;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
@@ -44,12 +43,18 @@ public class Estate {
     private String description;
 
     @TypeConverters({MediaConverter.class})
-    private List<String> mediaPaths;
+    private List<Media> media;
 
     private Double latitude;
 
     private Double longitude;
 
+    // Constructor
+
+
+    public Estate() {
+        this.media = new ArrayList<>();
+    }
 
     public Integer getId() {
         return id;
@@ -155,12 +160,12 @@ public class Estate {
         this.description = description;
     }
 
-    public List<String> getMediaPaths() {
-        return mediaPaths;
+    public List<Media> getMedia() {
+        return this.media;
     }
 
-    public void setMediaPaths(List<String> mediaPaths) {
-        this.mediaPaths = mediaPaths;
+    public void setMedia(List<Media> media) {
+        this.media = media;
     }
 
     public Double getLatitude() {

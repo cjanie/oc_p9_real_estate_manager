@@ -39,7 +39,7 @@ public class Estate {
 
     private String description;
 
-    private List<String> media;
+    private List<Media> media;
 
     private Double latitude;
 
@@ -169,11 +169,11 @@ public class Estate {
         this.description = description;
     }
 
-    public List<String> getMedia() {
+    public List<Media> getMedia() {
         return media;
     }
 
-    public void setMedia(List<String> media) {
+    public void setMedia(List<Media> media) {
         this.media = media;
     }
 
