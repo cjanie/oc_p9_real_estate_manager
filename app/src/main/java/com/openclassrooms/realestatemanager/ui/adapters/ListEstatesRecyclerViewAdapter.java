@@ -69,7 +69,7 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             ((ItemViewHolder) holder).type.setText(estate.getType().toString());
             ((ItemViewHolder) holder).location.setText(estate.getLocation());
 
-            ((ItemViewHolder) holder).price.setText(this.handleDevise.getDeviseAsString() + " " + this.handleDevise.getPriceInCurrentDevise(estate));
+            ((ItemViewHolder) holder).price.setText(this.handleDevise.getPreferenceDeviseAsString() + " " + this.handleDevise.getPriceInPreferenceDevise(estate));
 
             if(estate.getMedia() != null && !estate.getMedia().isEmpty()) {
                 ((ItemViewHolder) holder).photo.setImageBitmap(BitmapFactory.decodeFile(estate.getMedia().get(0)));

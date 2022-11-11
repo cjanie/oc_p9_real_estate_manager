@@ -2,16 +2,18 @@ package com.openclassrooms.realestatemanager.businesslogic.usecases;
 
 import com.openclassrooms.realestatemanager.businesslogic.MapSearchEstatesParamsConfig;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.businesslogic.enums.SearchParameter;
 import com.openclassrooms.realestatemanager.businesslogic.enums.SearchParameterVisitor;
 import com.openclassrooms.realestatemanager.businesslogic.gateways.EstateGateway;
+import com.openclassrooms.realestatemanager.ui.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SearchEstatesUseCase {
+public class SearchEstatesUseCase extends HasDeviseReference {
 
     private EstateGateway estateGateway;
 
@@ -19,7 +21,15 @@ public class SearchEstatesUseCase {
         this.estateGateway = estateGateway;
     }
 
-    public List<Estate> handle(Map<SearchParameter, Object> params) {
+    public List<Estate> handle(Map<SearchParameter, Object> params, Devise preferenceDevise) {
+
+        Float maxPrice = (Float)params.get(SearchParameter.MAX_PRICE_IN_DOLLARS);
+        if(maxPrice != null) {
+            if(preferenceDevise.equals(Devise.EURO) && this.reference.equals(Devise.DOLLAR)) {
+                Integer convertedToDollars = Utils.convertEuroToDollar(Math.round(maxPrice));
+                params.put(SearchParameter.MAX_PRICE_IN_DOLLARS, convertedToDollars.floatValue());
+            }
+        }
 
         List<Estate> found = new ArrayList<>();
 

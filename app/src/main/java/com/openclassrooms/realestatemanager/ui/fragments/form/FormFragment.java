@@ -42,8 +42,6 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
 
     protected LinearLayout formStepsProgressBar;
 
-    private Map<FormStepEnum, Integer> steps;
-
     protected FormViewModel formViewModel;
 
     protected SharedViewModel sharedViewModel;

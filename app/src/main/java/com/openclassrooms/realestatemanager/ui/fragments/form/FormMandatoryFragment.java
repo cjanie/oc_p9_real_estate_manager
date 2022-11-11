@@ -78,7 +78,7 @@ public class FormMandatoryFragment extends FormSaveSkipFragment implements Adapt
         this.type.setAdapter(adapter);
         this.type.setOnItemClickListener(this);
 
-        this.price.setHint(this.handleDevise.getDeviseAsString());
+        this.price.setHint(this.handleDevise.getPreferenceDeviseAsString());
 
         this.hideButton(this.skip);
 
@@ -87,7 +87,7 @@ public class FormMandatoryFragment extends FormSaveSkipFragment implements Adapt
             this.estateType = currentEstate.getType().toString();
             this.type.setText(this.estateType);
             this.location.setText(currentEstate.getLocation());
-            this.price.setText(String.valueOf(this.handleDevise.getPriceInCurrentDevise(currentEstate)));
+            this.price.setText(String.valueOf(this.handleDevise.getPriceInPreferenceDevise(currentEstate)));
 
             this.showButton(this.skip);
         }
@@ -153,7 +153,7 @@ public class FormMandatoryFragment extends FormSaveSkipFragment implements Adapt
             this.price.setError(mandatoryFieldError);
         }
         // Devise
-        estate.setDevise(this.handleDevise.getDevise());
+        estate.setDevise(this.handleDevise.getPreferenceDevise());
 
         this.handleFormMandatoryFields.setMandatoryFields(estate);
         this.saveEstateDataUpdate.saveEstateDataUpdate();

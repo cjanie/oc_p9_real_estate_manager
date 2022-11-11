@@ -92,7 +92,7 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
         this.selectLocation.setAdapter(locationsAdapter);
 
         // set devise in view
-        this.editMaxPrice.setHint(this.handleDevise.getDeviseAsString());
+        this.editMaxPrice.setHint(this.handleDevise.getPreferenceDeviseAsString());
 
         // set listeners
         this.selectType.setOnItemClickListener(new AdapterView.OnItemClickListener() {

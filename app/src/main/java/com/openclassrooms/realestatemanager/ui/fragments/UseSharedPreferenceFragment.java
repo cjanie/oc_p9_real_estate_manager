@@ -37,17 +37,17 @@ public class UseSharedPreferenceFragment extends BaseFragment implements HandleD
     }
 
     @Override
-    public String getDeviseAsString() {
+    public String getPreferenceDeviseAsString() {
         return this.isDeviseEuro ? this.getString(R.string.euro) : this.getString(R.string.dollar);
     }
 
     @Override
-    public Devise getDevise() {
+    public Devise getPreferenceDevise() {
         return this.isDeviseEuro ? Devise.EURO : Devise.DOLLAR;
     }
 
     @Override
-    public Float getPriceInCurrentDevise(Estate estate) {
+    public Float getPriceInPreferenceDevise(Estate estate) {
         Float priceInCurrentDevise;
         if(this.isDeviseEuro) {
             Integer priceInEuro;

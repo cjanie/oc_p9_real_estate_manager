@@ -5,10 +5,10 @@ import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 
 public interface HandleDevise {
 
-    Float getPriceInCurrentDevise(Estate estate);
+    Float getPriceInPreferenceDevise(Estate estate);
 
-    String getDeviseAsString();
+    String getPreferenceDeviseAsString();
 
-    Devise getDevise();
+    Devise getPreferenceDevise();
 
 }

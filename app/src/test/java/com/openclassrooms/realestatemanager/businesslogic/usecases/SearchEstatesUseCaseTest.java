@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.businesslogic.usecases;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.businesslogic.enums.SearchParameter;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.InMemoryEstateGateway;
@@ -26,7 +27,7 @@ public class SearchEstatesUseCaseTest {
         searchParams.put(SearchParameter.TYPE, EstateType.FLAT);
 
         // SUT
-        List<Estate> found = new SearchEstatesUseCase(estateGateway).handle(searchParams);
+        List<Estate> found = new SearchEstatesUseCase(estateGateway).handle(searchParams, Devise.DOLLAR);
 
         // Assertion
         Assert.assertEquals(0, found.size(), 0);
@@ -43,7 +44,7 @@ public class SearchEstatesUseCaseTest {
 
         Map<SearchParameter, Object> params = new HashMap<>();
         params.put(SearchParameter.TYPE, EstateType.FLAT);
-        List<Estate> found = new SearchEstatesUseCase(estateGateway).handle(params);
+        List<Estate> found = new SearchEstatesUseCase(estateGateway).handle(params, Devise.DOLLAR);
         Assert.assertEquals(2, found.size(), 0);
     }
 
@@ -57,7 +58,7 @@ public class SearchEstatesUseCaseTest {
 
         Map<SearchParameter, Object> params = new HashMap<>();
         params.put(SearchParameter.LOCATION, "Paris");
-        List<Estate> found = new SearchEstatesUseCase(estateGateway).handle(params);
+        List<Estate> found = new SearchEstatesUseCase(estateGateway).handle(params, Devise.DOLLAR);
         Assert.assertEquals(1, found.size());
     }
 
@@ -76,7 +77,7 @@ public class SearchEstatesUseCaseTest {
         searchParamsMap.put(SearchParameter.TYPE, EstateType.FLAT);
         searchParamsMap.put(SearchParameter.LOCATION, "Paris");
 
-        List<Estate> found = new SearchEstatesUseCase(estateGateway).handle(searchParamsMap);
+        List<Estate> found = new SearchEstatesUseCase(estateGateway).handle(searchParamsMap, Devise.DOLLAR);
 
         Assert.assertEquals(2, found.size());
     }
@@ -111,7 +112,7 @@ public class SearchEstatesUseCaseTest {
 
         SearchEstatesUseCase searchUseCase = new SearchEstatesUseCase(estateGateway);
 
-        List<Estate> found = searchUseCase.handle(searchParamsMap);
+        List<Estate> found = searchUseCase.handle(searchParamsMap, Devise.DOLLAR);
         Assert.assertEquals(1, found.size());
         Assert.assertEquals(EstateType.DUPLEX, found.get(0).getType());
         Assert.assertEquals("Paris", found.get(0).getLocation());
@@ -127,7 +128,7 @@ public class SearchEstatesUseCaseTest {
         Map<SearchParameter, Object> searchParamsMap = new HashMap<>();
         searchParamsMap.put(SearchParameter.LOCATION, "Paris");
         List<Estate> found = new SearchEstatesUseCase(estateGateway)
-                .handle(searchParamsMap);
+                .handle(searchParamsMap, Devise.DOLLAR);
         Assert.assertEquals(1, found.size());
     }
 
@@ -144,7 +145,7 @@ public class SearchEstatesUseCaseTest {
         Map<SearchParameter, Object> searchParamsMap = new HashMap<>();
         searchParamsMap.put(SearchParameter.TYPE, EstateType.DUPLEX);
         List<Estate> found = new SearchEstatesUseCase(estateGateway)
-                .handle(searchParamsMap);
+                .handle(searchParamsMap, Devise.DOLLAR);
 
         Assert.assertEquals(1, found.size());
     }
@@ -160,7 +161,7 @@ public class SearchEstatesUseCaseTest {
         Map<SearchParameter, Object> searchParamsMap = new HashMap<>();
         searchParamsMap.put(SearchParameter.MAX_PRICE_IN_DOLLARS, 5000f);
         List<Estate> found = new SearchEstatesUseCase(estateGateway)
-                .handle(searchParamsMap);
+                .handle(searchParamsMap, Devise.DOLLAR);
         Assert.assertEquals(0, found.size());
     }
 
@@ -178,7 +179,7 @@ public class SearchEstatesUseCaseTest {
         searchParamsMap.put(SearchParameter.MAX_PRICE_IN_DOLLARS, 2000000f);
 
         List<Estate> found = new SearchEstatesUseCase(estateGateway)
-                .handle(searchParamsMap);
+                .handle(searchParamsMap, Devise.DOLLAR);
         Assert.assertEquals(1, found.size());
     }
 
@@ -208,7 +209,7 @@ public class SearchEstatesUseCaseTest {
 
         // SUT
         SearchEstatesUseCase searchUseCase = new SearchEstatesUseCase(estateGateway);
-        List<Estate> results = searchUseCase.handle(params);
+        List<Estate> results = searchUseCase.handle(params, Devise.DOLLAR);
 
         // Assertion
         Assert.assertEquals(1, results.size());
@@ -236,12 +237,9 @@ public class SearchEstatesUseCaseTest {
 
         // SUT
         SearchEstatesUseCase searchUseCase = new SearchEstatesUseCase(estateGateway);
-        List<Estate> results = searchUseCase.handle(params);
+        List<Estate> results = searchUseCase.handle(params, Devise.DOLLAR);
 
         // Assertion
         Assert.assertEquals(0, results.size());
     }
-
-
-
 }

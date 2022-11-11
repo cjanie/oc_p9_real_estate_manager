@@ -110,7 +110,7 @@ public class SearchFragment extends UseSharedPreferenceFragment implements
             params.put(SearchParameter.MAX_PRICE_IN_DOLLARS, this.maxPriceParam);
         }
 
-        this.searchViewModel.fetchSearchResultsToUpdateLiveData(params);
+        this.searchViewModel.fetchSearchResultsToUpdateLiveData(params, this.getPreferenceDevise());
     }
 
     @Override
