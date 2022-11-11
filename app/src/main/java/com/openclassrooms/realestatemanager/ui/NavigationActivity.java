@@ -160,7 +160,7 @@ public class NavigationActivity extends BaseActivity {
         return true;
     }
 
-    private void createDynamicMenu(Menu menu) { // TODO menuItem
+    private void createDynamicMenu(Menu menu) { // TODO refactor create menu
         //MenuItem item = null;
         // int id = -1
         // Récupérer un item ; si pas null > false

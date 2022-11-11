@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.adapters;
 
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
-import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.ui.Action;
-import com.openclassrooms.realestatemanager.ui.utils.Utils;
+import com.openclassrooms.realestatemanager.ui.fragments.HandleDevise;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
 import java.util.ArrayList;
@@ -34,12 +30,12 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     private List<Estate> estates;
 
-    private boolean isDeviseEuro;
+    private HandleDevise handleDevise;
 
-    public ListEstatesRecyclerViewAdapter(SharedViewModel sharedViewModel, boolean isDeviseEuro) {
+    public ListEstatesRecyclerViewAdapter(SharedViewModel sharedViewModel, HandleDevise handleDevise) {
         this.sharedViewModel = sharedViewModel;
         this.estates = new ArrayList<>();
-        this.isDeviseEuro = isDeviseEuro;
+        this.handleDevise = handleDevise;
     }
 
     public void updateList(List<Estate> estates) {
@@ -73,29 +69,7 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             ((ItemViewHolder) holder).type.setText(estate.getType().toString());
             ((ItemViewHolder) holder).location.setText(estate.getLocation());
 
-            StringBuilder sb;
-            if(this.isDeviseEuro) {
-                sb = new StringBuilder("€ ");
-                if(estate.getDevise().equals(Devise.DOLLAR)) {
-                    int priceInEuro = Utils.convertDollarToEuro(Math.round(estate.getPrice()));
-                    sb.append(priceInEuro);
-                    ((ItemViewHolder) holder).price.setText(sb.append(priceInEuro).toString());
-                } else {
-                    int priceInEuro = Math.round(estate.getPrice());
-                    ((ItemViewHolder) holder).price.setText(sb.append(priceInEuro).toString());
-                }
-            } else {
-                sb = new StringBuilder("$ ");
-                if(estate.getDevise().equals(Devise.EURO)) {
-                    int priceInDollar = Utils.convertEuroToDollar(Math.round(estate.getPrice()));
-                    sb.append(priceInDollar);
-                } else {
-                    int priceInDollar = Math.round(estate.getPrice());
-                    sb.append(priceInDollar);
-                }
-            }
-
-            ((ItemViewHolder) holder).price.setText(sb.toString());
+            ((ItemViewHolder) holder).price.setText(this.handleDevise.getDeviseAsString() + " " + this.handleDevise.getPriceInCurrentDevise(estate));
 
             if(estate.getMedia() != null && !estate.getMedia().isEmpty()) {
                 ((ItemViewHolder) holder).photo.setImageBitmap(BitmapFactory.decodeFile(estate.getMedia().get(0)));

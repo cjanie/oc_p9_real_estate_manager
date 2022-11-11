@@ -46,7 +46,7 @@ public class EstatesFragment extends UseSharedPreferenceFragment {
         this.recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
         this.sharedViewModel = new ViewModelProvider(this.requireActivity()).get(SharedViewModel.class);
-        this.adapter = new ListEstatesRecyclerViewAdapter(this.sharedViewModel, this.isDeviseEuro);
+        this.adapter = new ListEstatesRecyclerViewAdapter(this.sharedViewModel, this);
         this.recyclerView.setAdapter(adapter);
 
         EstatesViewModelFactory viewModelFactory = ((Launch)this.getActivity().getApplication()).estatesViewModelFactory();

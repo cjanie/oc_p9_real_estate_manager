@@ -68,7 +68,7 @@ public class SearchFragment extends UseSharedPreferenceFragment implements
                         this,
                         this));
 
-        this.adapter = new ListEstatesRecyclerViewAdapter(sharedViewModel, this.isDeviseEuro);
+        this.adapter = new ListEstatesRecyclerViewAdapter(sharedViewModel, this);
         this.fragmentUtil.showFragment(fragmentManager, R.id.frame_layout_search_results,
                 new SearchResultsFragment(this.adapter));
 
