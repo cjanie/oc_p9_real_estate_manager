@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -188,6 +189,7 @@ public class NavigationActivity extends BaseActivity {
             MenuItem item = menu.findItem(R.id.action_home);
             item.setVisible(false);
         }
+
     }
 
     @Override
@@ -205,7 +207,10 @@ public class NavigationActivity extends BaseActivity {
             case R.id.action_home:
                 this.onHomeCalled();
                 return true;
-
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                this.startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

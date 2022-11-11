@@ -20,6 +20,7 @@ import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.ui.exceptions.MandatoryException;
+import com.openclassrooms.realestatemanager.ui.fragments.HandleDevise;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 
 import java.util.Arrays;
@@ -30,6 +31,8 @@ public class FormMandatoryFragment extends FormSaveSkipFragment implements Adapt
     private final int LAYOUT_ID = R.layout.fragment_form_mandatory_fields;
 
     private HandleFormMandatoryFields handleFormMandatoryFields;
+
+    private HandleDevise handleDevise;
 
     protected ConstraintLayout formMainLayout;
 
@@ -49,10 +52,12 @@ public class FormMandatoryFragment extends FormSaveSkipFragment implements Adapt
             SaveEstateDataUpdate saveEstateDataUpdate,
             Next next,
             FormData formData,
-            HandleFormMandatoryFields handleFormMandatoryFields
+            HandleFormMandatoryFields handleFormMandatoryFields,
+            HandleDevise handleDevise
     ) {
         super(saveEstateDataUpdate, next, formData);
         this.handleFormMandatoryFields = handleFormMandatoryFields;
+        this.handleDevise = handleDevise;
     }
 
     @Nullable
@@ -73,6 +78,8 @@ public class FormMandatoryFragment extends FormSaveSkipFragment implements Adapt
         );
         this.type.setAdapter(adapter);
         this.type.setOnItemClickListener(this);
+
+        this.price.setHint(this.handleDevise.isDeviseEuro() ? R.string.euro : R.string.dollar);
 
         this.hideButton(this.skip);
         Estate currentEstate = this.handleFormMandatoryFields.getInitializedEstate();

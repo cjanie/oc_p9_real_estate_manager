@@ -18,6 +18,7 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.ui.Action;
+import com.openclassrooms.realestatemanager.ui.utils.Utils;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
 import java.util.ArrayList;
@@ -33,9 +34,12 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     private List<Estate> estates;
 
-    public ListEstatesRecyclerViewAdapter(SharedViewModel sharedViewModel) {
+    private boolean isDeviseEuro;
+
+    public ListEstatesRecyclerViewAdapter(SharedViewModel sharedViewModel, boolean isDeviseEuro) {
         this.sharedViewModel = sharedViewModel;
         this.estates = new ArrayList<>();
+        this.isDeviseEuro = isDeviseEuro;
     }
 
     public void updateList(List<Estate> estates) {
@@ -68,8 +72,30 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             Estate estate = this.estates.get(position);
             ((ItemViewHolder) holder).type.setText(estate.getType().toString());
             ((ItemViewHolder) holder).location.setText(estate.getLocation());
-            String devise = estate.getDevise().equals(Devise.DOLLAR) ? "$" : "€";
-            ((ItemViewHolder) holder).price.setText(devise + estate.getPrice());
+
+            StringBuilder sb;
+            if(this.isDeviseEuro) {
+                sb = new StringBuilder("€ ");
+                if(estate.getDevise().equals(Devise.DOLLAR)) {
+                    int priceInEuro = Utils.convertDollarToEuro(Math.round(estate.getPrice()));
+                    sb.append(priceInEuro);
+                    ((ItemViewHolder) holder).price.setText(sb.append(priceInEuro).toString());
+                } else {
+                    int priceInEuro = Math.round(estate.getPrice());
+                    ((ItemViewHolder) holder).price.setText(sb.append(priceInEuro).toString());
+                }
+            } else {
+                sb = new StringBuilder("$ ");
+                if(estate.getDevise().equals(Devise.EURO)) {
+                    int priceInDollar = Utils.convertEuroToDollar(Math.round(estate.getPrice()));
+                    sb.append(priceInDollar);
+                } else {
+                    int priceInDollar = Math.round(estate.getPrice());
+                    sb.append(priceInDollar);
+                }
+            }
+
+            ((ItemViewHolder) holder).price.setText(sb.toString());
 
             if(estate.getMedia() != null && !estate.getMedia().isEmpty()) {
                 ((ItemViewHolder) holder).photo.setImageBitmap(BitmapFactory.decodeFile(estate.getMedia().get(0)));

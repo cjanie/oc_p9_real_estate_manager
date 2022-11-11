@@ -45,15 +45,19 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
 
     private HandleSearchRequest handleSearchRequest;
 
+    private HandleDevise handleDevise;
+
     // Constructor
 
     public SearchParametersFragment(
             HandleSearchParameters handleSearchParameters,
             HandleResetParameters handleResetParameters,
-            HandleSearchRequest handleSearchRequest) {
+            HandleSearchRequest handleSearchRequest,
+            HandleDevise handleDevise) {
         this.handleSearchParameters = handleSearchParameters;
         this.handleSearchRequest = handleSearchRequest;
         this.handleResetParameters = handleResetParameters;
+        this.handleDevise = handleDevise;
     }
 
     @Nullable
@@ -86,6 +90,13 @@ public class SearchParametersFragment extends Fragment implements View.OnClickLi
                 android.R.layout.simple_list_item_1, android.R.id.text1, locations
         );
         this.selectLocation.setAdapter(locationsAdapter);
+
+        // set devise in view
+        if(this.handleDevise.isDeviseEuro()) {
+            this.editMaxPrice.setHint(R.string.euro);
+        } else {
+            this.editMaxPrice.setHint(R.string.dollar);
+        }
 
         // set listeners
         this.selectType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
