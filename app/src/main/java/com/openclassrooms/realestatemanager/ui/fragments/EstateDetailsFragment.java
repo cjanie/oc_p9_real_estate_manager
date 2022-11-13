@@ -3,7 +3,6 @@ package com.openclassrooms.realestatemanager.ui.fragments;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.ui.adapters.PhotosRecyclerViewAdapter;
-import com.openclassrooms.realestatemanager.ui.utils.Utils;
 import com.openclassrooms.realestatemanager.ui.viewmodels.DetailsViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
@@ -152,7 +150,7 @@ public class EstateDetailsFragment extends BaseFragment {
 
             if(estate.getLatitude() != null && estate.getLongitude() != null) {
                 String titleForMarker = estate.getStreetNumberAndStreetName() != null ? estate.getStreetNumberAndStreetName(): estate.getLocation();
-                MapsFragment mapsFragment = new MapDetailsFragment(estate.getLatitude(), estate.getLongitude(), titleForMarker);
+                MapsFragment mapsFragment = new MapEstateFragment(estate.getLatitude(), estate.getLongitude(), titleForMarker);
                 this.getChildFragmentManager().beginTransaction()
                         .replace(R.id.frame_layout_google_map, mapsFragment)
                         .commit();

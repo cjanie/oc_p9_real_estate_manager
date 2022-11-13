@@ -5,7 +5,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapDetailsFragment extends MapsFragment {
+public class MapEstateFragment extends MapsFragment {
 
     private Double latitude;
 
@@ -13,14 +13,14 @@ public class MapDetailsFragment extends MapsFragment {
 
     private String placeName;
 
-    public MapDetailsFragment(Double latitude, Double longitude, String placeName) {
+    public MapEstateFragment(Double latitude, Double longitude, String placeName) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.placeName = placeName;
     }
 
     @Override
-    protected GoogleMap addMarker(GoogleMap googleMap) {
+    protected void updateMap(GoogleMap googleMap) {
         if(this.latitude != null && this.longitude != null) {
             LatLng position = new LatLng(latitude, longitude);
             String title = placeName != null ? placeName : "";
@@ -30,6 +30,5 @@ public class MapDetailsFragment extends MapsFragment {
             googleMap.setMinZoomPreference(6.0f);
             googleMap.setMaxZoomPreference(14.0f);
         }
-        return googleMap;
     }
 }
