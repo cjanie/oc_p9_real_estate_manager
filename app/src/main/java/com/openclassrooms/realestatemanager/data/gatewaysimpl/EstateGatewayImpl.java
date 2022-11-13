@@ -67,11 +67,15 @@ public class EstateGatewayImpl implements EstateGateway {
 
     private Estate convertDtoToEstate(com.openclassrooms.realestatemanager.data.database.dtoentities.Estate dto) {
         Estate estate = new Estate();
+
         estate.setId(dto.getId());
+
         estate.setType(dto.getType());
         estate.setLocation(dto.getLocation());
         estate.setPrice(dto.getPriceInDollars());
         estate.setDevise(Devise.DOLLAR);
+
+        estate.setStatus(dto.getStatus());
 
         estate.setSurface(dto.getSurfaceInMeterSquare());
         estate.setNumberOfRooms(dto.getNumberOfRooms());

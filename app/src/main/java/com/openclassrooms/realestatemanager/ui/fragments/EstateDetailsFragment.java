@@ -36,6 +36,10 @@ public class EstateDetailsFragment extends BaseFragment {
     private RecyclerView photosRecyclerView;
     private PhotosRecyclerViewAdapter photosRecyclerViewAdapter;
 
+    TextView status;
+    TextView statusDate;
+    TextView agent;
+
     private TextView surface;
     private TextView numberOfRooms;
     private TextView numberOfBathrooms;
@@ -63,6 +67,10 @@ public class EstateDetailsFragment extends BaseFragment {
         View root = inflater.inflate(this.LAYOUT_ID, container, false);
 
         this.photosRecyclerView = root.findViewById(R.id.recyclerView_media);
+
+        this.status = root.findViewById(R.id.estate_status);
+        this.statusDate = root.findViewById(R.id.estate_status_date);
+        this.agent = root.findViewById(R.id.estate_agent);
 
         this.description = root.findViewById(R.id.estate_decription_content);
 
@@ -96,6 +104,8 @@ public class EstateDetailsFragment extends BaseFragment {
                 }
             }
             this.photosRecyclerViewAdapter.updateList(photos);
+
+            this.status.setText(estate.getStatus().toString());
 
             if(estate.getDescription() != null) {
                 this.description.setText(estate.getDescription());

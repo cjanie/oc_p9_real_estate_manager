@@ -10,6 +10,7 @@
     <string name="address_complements">Address complements</string>
     <string name="zip_code">Zip code</string>
     <string name="country">Country</string>
+    <string name="status">Status</string>
     <string name="add">Add</string>
     <string name="edit">Edit</string>
     <string name="reset">Reset</string>
