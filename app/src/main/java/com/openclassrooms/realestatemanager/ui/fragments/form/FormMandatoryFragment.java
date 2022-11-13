@@ -17,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.ui.exceptions.MandatoryException;
 import com.openclassrooms.realestatemanager.ui.fragments.HandleDevise;

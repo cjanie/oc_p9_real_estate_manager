@@ -2,8 +2,10 @@ package com.openclassrooms.realestatemanager.businesslogic.entities;
 
 
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
+import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,9 +47,21 @@ public class Estate {
 
     private Double longitude;
 
+    private EstateStatus status;
+
+    private LocalDate dateOfEntreeIntoMarket;
+
+    private LocalDate dateOfSale;
+
+    private Agent agent;
+
+    // Constructor
+
     public Estate() {
         this.media = new ArrayList<>();
     }
+
+    // Getters and setters
 
     public Integer getId() {
         return id;
@@ -191,5 +205,37 @@ public class Estate {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public EstateStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EstateStatus status) {
+        this.status = status;
+    }
+
+    public LocalDate getDateOfEntreeIntoMarket() {
+        return dateOfEntreeIntoMarket;
+    }
+
+    public void setDateOfEntreeIntoMarket(LocalDate dateOfEntreeIntoMarket) {
+        this.dateOfEntreeIntoMarket = dateOfEntreeIntoMarket;
+    }
+
+    public LocalDate getDateOfSale() {
+        return dateOfSale;
+    }
+
+    public void setDateOfSale(LocalDate dateOfSale) {
+        this.dateOfSale = dateOfSale;
+    }
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 }

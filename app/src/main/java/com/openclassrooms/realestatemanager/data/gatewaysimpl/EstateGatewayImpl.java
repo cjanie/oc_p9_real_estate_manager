@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.data.gatewaysimpl;
 
+import com.openclassrooms.realestatemanager.businesslogic.entities.Agent;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
@@ -67,11 +68,20 @@ public class EstateGatewayImpl implements EstateGateway {
 
     private Estate convertDtoToEstate(com.openclassrooms.realestatemanager.data.database.dtoentities.Estate dto) {
         Estate estate = new Estate();
+
         estate.setId(dto.getId());
+
         estate.setType(dto.getType());
         estate.setLocation(dto.getLocation());
         estate.setPrice(dto.getPriceInDollars());
         estate.setDevise(Devise.DOLLAR);
+
+        estate.setStatus(dto.getStatus());
+        estate.setDateOfEntreeIntoMarket(dto.getDateOfEntryIntoMarket());
+
+        Agent agent = new Agent();
+        agent.setName(dto.getAgentName());
+        estate.setAgent(agent);
 
         estate.setSurface(dto.getSurfaceInMeterSquare());
         estate.setNumberOfRooms(dto.getNumberOfRooms());

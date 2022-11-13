@@ -18,7 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.ui.adapters.PhotosRecyclerViewAdapter;
+import com.openclassrooms.realestatemanager.ui.utils.Utils;
 import com.openclassrooms.realestatemanager.ui.viewmodels.DetailsViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
@@ -35,6 +37,10 @@ public class EstateDetailsFragment extends BaseFragment {
 
     private RecyclerView photosRecyclerView;
     private PhotosRecyclerViewAdapter photosRecyclerViewAdapter;
+
+    TextView status;
+    TextView statusDate;
+    TextView agent;
 
     private TextView surface;
     private TextView numberOfRooms;
@@ -63,6 +69,10 @@ public class EstateDetailsFragment extends BaseFragment {
         View root = inflater.inflate(this.LAYOUT_ID, container, false);
 
         this.photosRecyclerView = root.findViewById(R.id.recyclerView_media);
+
+        this.status = root.findViewById(R.id.estate_status);
+        this.statusDate = root.findViewById(R.id.estate_status_date);
+        this.agent = root.findViewById(R.id.estate_agent);
 
         this.description = root.findViewById(R.id.estate_decription_content);
 
@@ -96,6 +106,18 @@ public class EstateDetailsFragment extends BaseFragment {
                 }
             }
             this.photosRecyclerViewAdapter.updateList(photos);
+
+            this.status.setText(estate.getStatus().toString());
+
+            if(estate.getStatus().equals(EstateStatus.SALE)) {
+                String startDate = estate.getDateOfEntreeIntoMarket().toString();
+                this.statusDate.setText(startDate);
+            } else {
+                String dateOfSale = estate.getDateOfSale().toString();
+                this.statusDate.setText(dateOfSale);
+            }
+
+            this.agent.setText(estate.getAgent().getName());
 
             if(estate.getDescription() != null) {
                 this.description.setText(estate.getDescription());

@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.fragments.form;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +14,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.ui.Action;
+import com.openclassrooms.realestatemanager.ui.SettingsActivity;
 import com.openclassrooms.realestatemanager.ui.fragments.BaseFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 import com.openclassrooms.realestatemanager.ui.fragments.UseSharedPreferenceFragment;
@@ -60,7 +64,15 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
 
         this.showFragment(this.getFragmentForStep(FormStepEnum.MANDATORY));
 
+        this.setAgent();
+
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.setAgent();
     }
 
     private void configureProgressBar(LayoutInflater inflater) {
@@ -86,6 +98,17 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
     private void showFragment(Fragment fragment) {
         FragmentManager fragmentManager = getChildFragmentManager();
         fragmentManager.beginTransaction().add(R.id.frame_layout_form, fragment).commit();
+    }
+
+    private void setAgent() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+        String agentName = sharedPreferences.getString(this.getString(R.string.user_name_preference_key), "");
+        if(agentName.isEmpty()) {
+            Intent intent = new Intent(this.getContext(), SettingsActivity.class);
+            this.startActivity(intent);
+        } else {
+            this.formViewModel.setAgentName(agentName);
+        }
     }
 
     @Override

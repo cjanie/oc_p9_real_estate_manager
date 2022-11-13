@@ -37,6 +37,10 @@ public class EstateCommandGatewayImpl implements EstateCommandGateway {
         dto.setZipcode(estate.getZipCode());
         dto.setCountry(estate.getCountry());
 
+        dto.setStatus(estate.getStatus());
+        dto.setDateOfEntryIntoMarket(estate.getDateOfEntreeIntoMarket());
+        dto.setAgentName(estate.getAgent().getName());
+
         dto.setDescription(estate.getDescription());
 
         dto.setMediaPaths(estate.getMedia());

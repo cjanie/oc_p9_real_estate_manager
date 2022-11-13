@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.fragments.form;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
+
+import java.time.LocalDate;
 
 public class FormAddEstateFragment extends FormFragment {
 
@@ -22,7 +26,8 @@ public class FormAddEstateFragment extends FormFragment {
 
     @Override
     public Estate getInitializedEstate() {
-        return new Estate();
+        Estate estate = new Estate();
+        return estate;
     }
 
 

@@ -17,6 +17,7 @@
         <entry key="app/src/main/res/layout/component_form_details.xml" value="0.1" />
         <entry key="app/src/main/res/layout/component_form_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/form_main.xml" value="0.680921052631579" />
+        <entry key="app/src/main/res/layout/fragment_camera.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_details.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_estate_details.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_estate_list_item.xml" value="0.1" />
@@ -38,6 +39,7 @@
         <entry key="app/src/main/res/layout/layout_details_description.xml" value="0.165" />
         <entry key="app/src/main/res/layout/layout_details_description_details.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_estate_details_address.xml" value="0.13072916666666667" />
+        <entry key="app/src/main/res/layout/layout_estate_status.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_form_progress.xml" value="0.165" />
         <entry key="app/src/main/res/layout/layout_form_step_checked_icon.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_media_list_item.xml" value="0.1" />
@@ -45,7 +47,7 @@
         <entry key="app/src/main/res/layout/search_parameters.xml" value="0.1" />
         <entry key="app/src/main/res/layout/settings_activity.xml" value="0.1" />
         <entry key="app/src/main/res/menu/toolbar_menu.xml" value="0.1" />
-        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.1" />
+        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.125" />
       </map>
     </option>
   </component>

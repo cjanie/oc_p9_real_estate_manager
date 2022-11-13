@@ -5,10 +5,14 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
+import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
+import com.openclassrooms.realestatemanager.data.database.typeconverters.EstateStatusConverter;
 import com.openclassrooms.realestatemanager.data.database.typeconverters.EstateTypeConverter;
+import com.openclassrooms.realestatemanager.data.database.typeconverters.LocalDateConverter;
 import com.openclassrooms.realestatemanager.data.database.typeconverters.MediaConverter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +53,14 @@ public class Estate {
     private Double latitude;
 
     private Double longitude;
+
+    @TypeConverters(EstateStatusConverter.class)
+    private EstateStatus status;
+
+    @TypeConverters(LocalDateConverter.class)
+    private LocalDate dateOfEntryIntoMarket;
+
+    private String agentName;
 
 
     public Integer getId() {
@@ -177,5 +189,29 @@ public class Estate {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public EstateStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EstateStatus status) {
+        this.status = status;
+    }
+
+    public LocalDate getDateOfEntryIntoMarket() {
+        return dateOfEntryIntoMarket;
+    }
+
+    public void setDateOfEntryIntoMarket(LocalDate dateOfEntryIntoMarket) {
+        this.dateOfEntryIntoMarket = dateOfEntryIntoMarket;
+    }
+
+    public String getAgentName() {
+        return agentName;
+    }
+
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
     }
 }
