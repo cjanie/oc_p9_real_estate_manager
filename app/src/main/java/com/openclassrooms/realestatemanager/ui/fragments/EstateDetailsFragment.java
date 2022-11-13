@@ -152,7 +152,7 @@ public class EstateDetailsFragment extends BaseFragment {
 
             if(estate.getLatitude() != null && estate.getLongitude() != null) {
                 String titleForMarker = estate.getStreetNumberAndStreetName() != null ? estate.getStreetNumberAndStreetName(): estate.getLocation();
-                MapsFragment mapsFragment = new MapsFragment(estate.getLatitude(), estate.getLongitude(), titleForMarker);
+                MapsFragment mapsFragment = new MapDetailsFragment(estate.getLatitude(), estate.getLongitude(), titleForMarker);
                 this.getChildFragmentManager().beginTransaction()
                         .replace(R.id.frame_layout_google_map, mapsFragment)
                         .commit();
