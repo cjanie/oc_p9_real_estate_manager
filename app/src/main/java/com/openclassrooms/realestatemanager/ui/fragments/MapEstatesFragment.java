@@ -24,11 +24,7 @@ public class MapEstatesFragment extends MapsFragment {
 
     private EstatesViewModel estatesViewModel;
 
-    List<Estate> estates;
 
-    public MapEstatesFragment(List<Estate> estates) {
-        this.estates = estates;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +36,7 @@ public class MapEstatesFragment extends MapsFragment {
     @Override
     protected void updateMap(GoogleMap googleMap) {
         this.estatesViewModel.getEstates().observe(this.getViewLifecycleOwner(), estates -> {
-            if(!this.estates.isEmpty()) {
+            if(!estates.isEmpty()) {
                 for(Estate estate: estates) {
                     if(estate.getLatitude() != null && estate.getLongitude() != null) {
                         LatLng position = new LatLng(estate.getLatitude(), estate.getLongitude());
