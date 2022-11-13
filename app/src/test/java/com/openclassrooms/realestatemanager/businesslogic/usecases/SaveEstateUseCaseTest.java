@@ -2,13 +2,14 @@ package com.openclassrooms.realestatemanager.businesslogic.usecases;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
+import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.InMemoryEstateCommandGateway;
+import com.openclassrooms.realestatemanager.dateprovider.DeterministicDateProvider;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-
-
+import java.time.LocalDate;
 
 
 public class SaveEstateUseCaseTest {
@@ -18,7 +19,13 @@ public class SaveEstateUseCaseTest {
         InMemoryEstateCommandGateway estateGateway = new InMemoryEstateCommandGateway();
         Estate estate = new Estate();
         estate.setDevise(Devise.DOLLAR);
-        long addedId = new SaveEstateUseCase(estateGateway).handle(estate);
+
+        DeterministicDateProvider dateProvider
+                = new DeterministicDateProvider(LocalDate.of(
+                2022, 12, 5)
+        );
+
+        long addedId = new SaveEstateUseCase(estateGateway, dateProvider).handle(estate);
         Assert.assertEquals(1, addedId, 0);
     }
 
@@ -28,8 +35,46 @@ public class SaveEstateUseCaseTest {
         Estate estate = new Estate();
         estate.setPrice(35f);
         estate.setDevise(Devise.EURO);
-        new SaveEstateUseCase(commandGateway).handle(estate);
+
+        DeterministicDateProvider dateProvider
+                = new DeterministicDateProvider(LocalDate.of(
+                2022, 12, 5)
+        );
+
+        new SaveEstateUseCase(commandGateway, dateProvider).handle(estate);
         Assert.assertEquals(Devise.DOLLAR, commandGateway.getEstate().getDevise());
         Assert.assertNotEquals(35f, commandGateway.getEstate().getPrice());
+    }
+
+    @Test
+    public void savesEstateStatusSaleAsDefault() {
+        InMemoryEstateCommandGateway commandGateway = new InMemoryEstateCommandGateway();
+        Estate estate = new Estate();
+        estate.setPrice(35f);
+        estate.setDevise(Devise.EURO);
+
+        DeterministicDateProvider dateProvider
+                = new DeterministicDateProvider(LocalDate.of(
+                        2022, 12, 5)
+        );
+
+        new SaveEstateUseCase(commandGateway, dateProvider).handle(estate);
+        Assert.assertEquals(EstateStatus.SALE, commandGateway.getEstate().getStatus());
+    }
+
+    @Test
+    public void savesOnlyWithDefinedDateOfCreation() {
+        InMemoryEstateCommandGateway commandGateway = new InMemoryEstateCommandGateway();
+        Estate estate = new Estate();
+        estate.setPrice(35f);
+        estate.setDevise(Devise.EURO);
+
+        DeterministicDateProvider dateProvider
+                = new DeterministicDateProvider(LocalDate.of(
+                2022, 12, 5)
+        );
+
+        new SaveEstateUseCase(commandGateway, dateProvider).handle(estate);
+        Assert.assertEquals(5, commandGateway.getEstate().getDateOfEntreeIntoMarket().getDayOfMonth());
     }
 }

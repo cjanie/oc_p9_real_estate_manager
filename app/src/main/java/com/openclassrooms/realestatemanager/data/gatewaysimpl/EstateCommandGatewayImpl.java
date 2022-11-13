@@ -38,6 +38,7 @@ public class EstateCommandGatewayImpl implements EstateCommandGateway {
         dto.setCountry(estate.getCountry());
 
         dto.setStatus(estate.getStatus());
+        dto.setDateOfEntryIntoMarket(estate.getDateOfEntreeIntoMarket());
 
         dto.setDescription(estate.getDescription());
 

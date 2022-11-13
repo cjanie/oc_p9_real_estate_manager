@@ -9,8 +9,10 @@ import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.data.database.typeconverters.EstateStatusConverter;
 import com.openclassrooms.realestatemanager.data.database.typeconverters.EstateTypeConverter;
+import com.openclassrooms.realestatemanager.data.database.typeconverters.LocalDateConverter;
 import com.openclassrooms.realestatemanager.data.database.typeconverters.MediaConverter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +56,9 @@ public class Estate {
 
     @TypeConverters(EstateStatusConverter.class)
     private EstateStatus status;
+
+    @TypeConverters(LocalDateConverter.class)
+    private LocalDate dateOfEntryIntoMarket;
 
 
     public Integer getId() {
@@ -190,5 +195,13 @@ public class Estate {
 
     public void setStatus(EstateStatus status) {
         this.status = status;
+    }
+
+    public LocalDate getDateOfEntryIntoMarket() {
+        return dateOfEntryIntoMarket;
+    }
+
+    public void setDateOfEntryIntoMarket(LocalDate dateOfEntryIntoMarket) {
+        this.dateOfEntryIntoMarket = dateOfEntryIntoMarket;
     }
 }

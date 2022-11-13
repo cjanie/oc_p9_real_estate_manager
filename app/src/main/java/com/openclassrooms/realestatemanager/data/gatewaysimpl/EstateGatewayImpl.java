@@ -76,6 +76,7 @@ public class EstateGatewayImpl implements EstateGateway {
         estate.setDevise(Devise.DOLLAR);
 
         estate.setStatus(dto.getStatus());
+        estate.setDateOfEntreeIntoMarket(dto.getDateOfEntryIntoMarket());
 
         estate.setSurface(dto.getSurfaceInMeterSquare());
         estate.setNumberOfRooms(dto.getNumberOfRooms());

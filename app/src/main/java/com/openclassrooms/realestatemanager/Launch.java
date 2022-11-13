@@ -12,6 +12,8 @@ import com.openclassrooms.realestatemanager.data.database.AppDataBase;
 import com.openclassrooms.realestatemanager.data.database.dao.EstateDAO;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateCommandGatewayImpl;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateGatewayImpl;
+import com.openclassrooms.realestatemanager.dateprovider.DateProvider;
+import com.openclassrooms.realestatemanager.dateprovider.RealDateProvider;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
@@ -27,6 +29,9 @@ public class Launch extends Application {
     // Gateways
     private EstateGateway estateGateway;
     private EstateCommandGateway estateCommandGateway;
+
+    // Providers
+    private DateProvider dateProvider;
 
     // Use Cases
     private GetEstatesUseCase getEstatesUseCase;
@@ -71,6 +76,14 @@ public class Launch extends Application {
         return this.estateCommandGateway;
     }
 
+    // Providers
+    private synchronized DateProvider dateProvider() {
+        if(this.dateProvider == null) {
+            this.dateProvider = new RealDateProvider();
+        }
+        return this.dateProvider;
+    }
+
     // Use Cases
     private synchronized GetEstatesUseCase getEstatesUseCase() {
         if(this.getEstatesUseCase == null) {
@@ -81,7 +94,10 @@ public class Launch extends Application {
 
     private synchronized SaveEstateUseCase saveEstateUseCase() {
         if(this.saveEstateUseCase == null) {
-            this.saveEstateUseCase = new SaveEstateUseCase(this.estateCommandGateway());
+            this.saveEstateUseCase = new SaveEstateUseCase(
+                    this.estateCommandGateway(),
+                    this.dateProvider()
+            );
         }
         return this.saveEstateUseCase;
     }

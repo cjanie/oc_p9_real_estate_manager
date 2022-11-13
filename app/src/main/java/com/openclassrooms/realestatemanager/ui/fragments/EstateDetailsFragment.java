@@ -18,7 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.ui.adapters.PhotosRecyclerViewAdapter;
+import com.openclassrooms.realestatemanager.ui.utils.Utils;
 import com.openclassrooms.realestatemanager.ui.viewmodels.DetailsViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
@@ -106,6 +108,14 @@ public class EstateDetailsFragment extends BaseFragment {
             this.photosRecyclerViewAdapter.updateList(photos);
 
             this.status.setText(estate.getStatus().toString());
+
+            if(estate.getStatus().equals(EstateStatus.SALE)) {
+                String startDate = estate.getDateOfEntreeIntoMarket().toString();
+                this.statusDate.setText(startDate);
+            } else {
+                String dateOfSale = estate.getDateOfSale().toString();
+                this.statusDate.setText(dateOfSale);
+            }
 
             if(estate.getDescription() != null) {
                 this.description.setText(estate.getDescription());
