@@ -47,7 +47,7 @@
         <entry key="app/src/main/res/layout/search_parameters.xml" value="0.1" />
         <entry key="app/src/main/res/layout/settings_activity.xml" value="0.1" />
         <entry key="app/src/main/res/menu/toolbar_menu.xml" value="0.1" />
-        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.1" />
+        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.125" />
       </map>
     </option>
   </component>

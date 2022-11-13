@@ -117,6 +117,8 @@ public class EstateDetailsFragment extends BaseFragment {
                 this.statusDate.setText(dateOfSale);
             }
 
+            this.agent.setText(estate.getAgent().getName());
+
             if(estate.getDescription() != null) {
                 this.description.setText(estate.getDescription());
             }

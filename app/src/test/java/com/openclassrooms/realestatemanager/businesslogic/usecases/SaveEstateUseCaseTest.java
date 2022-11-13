@@ -25,7 +25,7 @@ public class SaveEstateUseCaseTest {
                 2022, 12, 5)
         );
 
-        long addedId = new SaveEstateUseCase(estateGateway, dateProvider).handle(estate);
+        long addedId = new SaveEstateUseCase(estateGateway, dateProvider).handle(estate, "Janie");
         Assert.assertEquals(1, addedId, 0);
     }
 
@@ -41,7 +41,7 @@ public class SaveEstateUseCaseTest {
                 2022, 12, 5)
         );
 
-        new SaveEstateUseCase(commandGateway, dateProvider).handle(estate);
+        new SaveEstateUseCase(commandGateway, dateProvider).handle(estate, "Janie");
         Assert.assertEquals(Devise.DOLLAR, commandGateway.getEstate().getDevise());
         Assert.assertNotEquals(35f, commandGateway.getEstate().getPrice());
     }
@@ -58,7 +58,7 @@ public class SaveEstateUseCaseTest {
                         2022, 12, 5)
         );
 
-        new SaveEstateUseCase(commandGateway, dateProvider).handle(estate);
+        new SaveEstateUseCase(commandGateway, dateProvider).handle(estate, "Janie");
         Assert.assertEquals(EstateStatus.SALE, commandGateway.getEstate().getStatus());
     }
 
@@ -74,7 +74,24 @@ public class SaveEstateUseCaseTest {
                 2022, 12, 5)
         );
 
-        new SaveEstateUseCase(commandGateway, dateProvider).handle(estate);
+        new SaveEstateUseCase(commandGateway, dateProvider).handle(estate, "Janie");
         Assert.assertEquals(5, commandGateway.getEstate().getDateOfEntreeIntoMarket().getDayOfMonth());
     }
+
+    @Test
+    public void savesOnlyWithDefinedAgent() {
+        InMemoryEstateCommandGateway commandGateway = new InMemoryEstateCommandGateway();
+        Estate estate = new Estate();
+        estate.setPrice(35f);
+        estate.setDevise(Devise.EURO);
+
+        DeterministicDateProvider dateProvider
+                = new DeterministicDateProvider(LocalDate.of(
+                2022, 12, 5)
+        );
+
+        new SaveEstateUseCase(commandGateway, dateProvider).handle(estate, "Jogo");
+        Assert.assertEquals("Jogo", commandGateway.getEstate().getAgent().getName());
+    }
+
 }

@@ -16,6 +16,8 @@ public class FormViewModel extends ViewModel {
 
     private Estate estateData;
 
+    private String agentName;
+
     public FormViewModel(SaveEstateUseCase saveEstateUseCase) {
         this.saveEstateUseCase = saveEstateUseCase;
         this.estateData = new Estate();
@@ -27,6 +29,10 @@ public class FormViewModel extends ViewModel {
 
     public Estate getEstateData() {
         return this.estateData;
+    }
+
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
     }
 
     public void setEstateDataMandatory(
@@ -77,7 +83,7 @@ public class FormViewModel extends ViewModel {
     }
 
     public Long saveEstateDataUpdate() {
-        Long id = this.saveEstateUseCase.handle(this.estateData);
+        Long id = this.saveEstateUseCase.handle(this.estateData, this.agentName);
         this.estateData.setId(Integer.parseInt(id.toString()));
         return id;
     }
