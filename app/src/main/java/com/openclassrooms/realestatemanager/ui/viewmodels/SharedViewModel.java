@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
-import com.openclassrooms.realestatemanager.ui.Action;
+import com.openclassrooms.realestatemanager.ui.enums.Action;
 
 public class SharedViewModel extends ViewModel {
 

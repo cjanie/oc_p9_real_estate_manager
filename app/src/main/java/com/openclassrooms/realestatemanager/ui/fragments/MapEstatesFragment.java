@@ -25,7 +25,6 @@ public class MapEstatesFragment extends MapsFragment {
     private EstatesViewModel estatesViewModel;
 
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +34,9 @@ public class MapEstatesFragment extends MapsFragment {
 
     @Override
     protected void updateMap(GoogleMap googleMap) {
+        // TODO enable my position
+
+        // Put the markers on the map observing list from the view model
         this.estatesViewModel.getEstates().observe(this.getViewLifecycleOwner(), estates -> {
             if(!estates.isEmpty()) {
                 for(Estate estate: estates) {
@@ -46,8 +48,8 @@ public class MapEstatesFragment extends MapsFragment {
                 }
             }
         });
-
         googleMap.setMinZoomPreference(6.0f);
         googleMap.setMaxZoomPreference(14.0f);
     }
+
 }

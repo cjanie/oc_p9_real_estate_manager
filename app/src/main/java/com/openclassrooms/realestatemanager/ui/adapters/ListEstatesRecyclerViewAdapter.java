@@ -9,11 +9,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
-import com.openclassrooms.realestatemanager.ui.Action;
+import com.openclassrooms.realestatemanager.ui.enums.Action;
 import com.openclassrooms.realestatemanager.ui.fragments.HandleDevise;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
@@ -26,14 +27,12 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     private static final int TYPE_ITEM_VIEW = 1;
 
-    private SharedViewModel sharedViewModel;
-
     private List<Estate> estates;
-
+    private HandleEstateDetails handleEstateDetails;
     private HandleDevise handleDevise;
 
-    public ListEstatesRecyclerViewAdapter(SharedViewModel sharedViewModel, HandleDevise handleDevise) {
-        this.sharedViewModel = sharedViewModel;
+    public ListEstatesRecyclerViewAdapter(HandleEstateDetails handleEstateDetails, HandleDevise handleDevise) {
+        this.handleEstateDetails = handleEstateDetails;
         this.estates = new ArrayList<>();
         this.handleDevise = handleDevise;
     }
@@ -77,7 +76,7 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
             boolean isTablet = holder.itemView.getContext().getResources().getBoolean(R.bool.is_tablet);
             if(isTablet) {
-                sharedViewModel.getEstateSelectionId().observe((LifecycleOwner) holder.itemView.getContext(), estateSelectionId -> {
+                this.handleEstateDetails.getEstateSelectionId().observe((LifecycleOwner) holder.itemView.getContext(), estateSelectionId -> {
                     if(estateSelectionId != estate.getId()) {
                         holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.white));
                     }
@@ -86,9 +85,9 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
 
             holder.itemView.setOnClickListener(view -> {
-                // View Model Action
-                sharedViewModel.updateAction(Action.DETAILS);
-                sharedViewModel.updateEstateSelection(estate.getId());
+                handleEstateDetails.setEstateSelectionId(estate.getId());
+                handleEstateDetails.onDetailsCalled();
+
                 if(isTablet) {
                     view.setBackgroundColor(holder.itemView.getResources().getColor(R.color.selection_item));
                 }
@@ -133,6 +132,12 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             this.photo = itemView.findViewById(R.id.estate_list_item_photo);
         }
 
+    }
+
+    public interface HandleEstateDetails {
+        void setEstateSelectionId(int estateId);
+        void onDetailsCalled();
+        LiveData<Integer> getEstateSelectionId();
     }
 
 }

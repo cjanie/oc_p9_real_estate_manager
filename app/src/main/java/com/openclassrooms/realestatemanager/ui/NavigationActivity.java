@@ -12,17 +12,25 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.ui.adapters.ListEstatesRecyclerViewAdapter;
+import com.openclassrooms.realestatemanager.ui.enums.Action;
+import com.openclassrooms.realestatemanager.ui.enums.ActionVisitor;
 import com.openclassrooms.realestatemanager.ui.fragments.EstateDetailsFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.EstatesFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.MapEstatesFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.form.FormAddEstateFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.form.FormUpdateEstateFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.SearchFragment;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
-public class NavigationActivity extends BaseActivity {
+import java.util.HashMap;
+import java.util.Map;
+
+public class NavigationActivity extends BaseActivity implements ListEstatesRecyclerViewAdapter.HandleEstateDetails {
 
     private final int LAYOUT_ID = R.layout.activity_navigation;
 
@@ -34,9 +42,17 @@ public class NavigationActivity extends BaseActivity {
 
     private final int SECOND_FRAMELAYOUT_FOR_TABLET = R.id.frame_layout_details;
 
-    private EstateDetailsFragment estateDetailsFragment = null;
+    private Map<Integer, Action> menuItemIdToActionMap;
 
+    public NavigationActivity() {
 
+        this.menuItemIdToActionMap = new HashMap<>();
+        menuItemIdToActionMap.put(R.id.action_home, Action.HOME);
+        menuItemIdToActionMap.put(R.id.action_add, Action.ADD);
+        menuItemIdToActionMap.put(R.id.action_edit, Action.EDIT);
+        menuItemIdToActionMap.put(R.id.action_search, Action.SEARCH);
+        menuItemIdToActionMap.put(R.id.action_map, Action.MAP);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,79 +61,107 @@ public class NavigationActivity extends BaseActivity {
 
         this.sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         this.fragmentManager = this.getSupportFragmentManager();
-        //this.estateDetailsFragment = new EstateDetailsFragment();
         this.isTablet = this.getResources().getBoolean(R.bool.is_tablet);
 
         // Observe menu action state
         this.sharedViewModel.getAction().observe(this, action -> {
-            this.switchFragment(action);
+            this.showFragmentForAction(action);
             this.invalidateMenu(); // Launches creation of the menu
 
-            //this.additionalSwitchForTablet(action);
         });
 
     }
 
-    private void switchFragment(Action action) {
-        switch(action) {
-            case SEARCH:
-                this.showFragment(new SearchFragment());
-                if(isTablet) {
-                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
-                }
-                break;
-            case HOME:
-                this.showFragment(new EstatesFragment());
-                if(isTablet) {
-                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
-                }
-                break;
-            case ADD:
-                this.showFragment(new FormAddEstateFragment());
-                if(isTablet) {
-                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
-                }
-                break;
-            case EDIT:
-                this.showFragment(new FormUpdateEstateFragment());
-                if(isTablet) {
-                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
-                }
-                break;
-            case DETAILS:
-                if(!isTablet) {
-                    this.showFragment(new EstateDetailsFragment());
-                } else {
-                    this.showFragmentForTablet(new EstateDetailsFragment());
-                }
-                break;
-        }
-    }
-
-    /*
-    private void additionalSwitchForTablet(Action action) {
-        if(this.isTablet) {
-               switch(action) {
-                case HOME:
-                    this.removeDetails(R.id.frame_layout_details);
-                    break;
-                case SEARCH:
-                    this.removeDetails(R.id.frame_layout_details);
-                    break;
-                case ADD:
-                    this.removeDetails(R.id.frame_layout_details);
-                    break;
-                case EDIT:
-                    this.removeDetails(R.id.frame_layout_details);
-                    break;
-                case DETAILS:
-                    this.showDetails(R.id.frame_layout_details);
-                    break;
+    private Fragment getFragmentForAction(Action action) {
+        return action.accept(new ActionVisitor<Fragment>() {
+            @Override
+            public Fragment visitHome() {
+                return new EstatesFragment(NavigationActivity.this);
             }
+
+            @Override
+            public Fragment visitAdd() {
+                return new FormAddEstateFragment();
+            }
+
+            @Override
+            public Fragment visitEdit() {
+                return new FormUpdateEstateFragment();
+            }
+
+            @Override
+            public Fragment visitSearch() {
+                return new SearchFragment(NavigationActivity.this);
+            }
+
+            @Override
+            public Fragment visitDetails() {
+                return new EstateDetailsFragment();
+            }
+
+            @Override
+            public Fragment visitMap() {
+                return new MapEstatesFragment();
+            }
+        });
+    }
+
+    private boolean showFragmentForAction(Action action) {
+        Fragment fragment = this.getFragmentForAction(action);
+        return action.accept(new ActionVisitor<Boolean>() {
+
+            @Override
+            public Boolean visitHome() {
+                fullScreenOnMobileAndTablet(fragment);
+                return true;
+            }
+
+            @Override
+            public Boolean visitAdd() {
+                fullScreenOnMobileAndTablet(fragment);
+                return true;
+            }
+
+            @Override
+            public Boolean visitEdit() {
+                fullScreenOnMobileAndTablet(fragment);
+                return true;
+            }
+
+            @Override
+            public Boolean visitSearch() {
+                fullScreenOnMobileAndTablet(fragment);
+                return true;
+            }
+
+            @Override
+            public Boolean visitDetails() {
+                hasSpecialScreenOnTablet(fragment);
+                return true;
+            }
+
+            @Override
+            public Boolean visitMap() {
+                fullScreenOnMobileAndTablet(fragment);
+                return true;
+            }
+        });
+    }
+
+    private void fullScreenOnMobileAndTablet(Fragment fragment) {
+        showFragment(fragment);
+        if(this.isTablet) {
+            this.hideFrameLayout(SECOND_FRAMELAYOUT_FOR_TABLET);
         }
     }
 
-     */
+    private void hasSpecialScreenOnTablet(Fragment fragment) {
+        if(!isTablet) {
+            this.showFragment(fragment);
+        } else {
+            this.showFragmentForTablet(fragment);
+        }
+    }
 
     private void showFragment(Fragment fragment) {
         FragmentTransaction transaction = this.fragmentManager.beginTransaction();
@@ -160,60 +204,117 @@ public class NavigationActivity extends BaseActivity {
         return true;
     }
 
-    private void createDynamicMenu(Menu menu) { // TODO refactor create menu
-        //MenuItem item = null;
-        // int id = -1
-        // Récupérer un item ; si pas null > false
+    private void createDynamicMenu(Menu menu) {
 
-        // Externaliser getValue et switch ; définir l'id ; définir l'item dans les cas du switch;
-        // pas le default mais toutes les valeurs de l'enum;
-        // default -> exception
-        // à la toute fin, change visibility menu si int est different de -1 avec une autre méthode;
-        if(!this.sharedViewModel.getAction().getValue().equals(Action.DETAILS)) {
-            MenuItem item = menu.findItem(R.id.action_edit);
-            item.setVisible(false);
-        }
-        if(this.sharedViewModel.getAction().getValue().equals(Action.EDIT)) {
-            MenuItem item = menu.findItem(R.id.action_edit);
-            item.setVisible(false);
-        }
-        if(this.sharedViewModel.getAction().getValue().equals(Action.ADD)) {
-            MenuItem item = menu.findItem(R.id.action_add);
-            item.setVisible(false);
-        }
-        if(this.sharedViewModel.getAction().getValue().equals(Action.SEARCH)) {
-            MenuItem item = menu.findItem(R.id.action_search);
-            item.setVisible(false);
-        }
-        if(this.sharedViewModel.getAction().getValue().equals(Action.HOME)) {
-            MenuItem item = menu.findItem(R.id.action_home);
-            item.setVisible(false);
-        }
+        Action action = this.sharedViewModel.getAction().getValue();
+        this.handleMenuItemVisibilityWhenAction(action, menu);
 
     }
 
+    private Integer handleMenuItemVisibilityWhenAction(Action action, Menu menu) {
+
+        this.setMenuItemVisible(menu, R.id.action_edit, false);
+
+        return action.accept(new ActionVisitor<Integer>() {
+
+            @Override
+            public Integer visitHome() {
+                setMenuItemVisible(menu, R.id.action_home,false);
+                return R.id.action_home;
+            }
+
+            @Override
+            public Integer visitAdd() {
+                setMenuItemVisible(menu, R.id.action_add, false);
+                return R.id.action_add;
+            }
+
+            @Override
+            public Integer visitEdit() {
+                setMenuItemVisible(menu, R.id.action_edit,false);
+                return R.id.action_edit;
+            }
+
+            @Override
+            public Integer visitSearch() {
+                setMenuItemVisible(menu, R.id.action_search, false);
+                return R.id.action_search;
+            }
+
+            @Override
+            public Integer visitDetails() {
+                setMenuItemVisible(menu, R.id.action_edit, true); // So
+                return -1;
+            }
+
+            @Override
+            public Integer visitMap() {
+                setMenuItemVisible(menu, R.id.action_map,false);
+                return R.id.action_map;
+            }
+        });
+    }
+
+    private void setMenuItemVisible(Menu menu, int menuItemId, boolean visible) {
+        MenuItem menuItem = menu.findItem(menuItemId);
+        menuItem.setVisible(visible);
+    }
+
+    private boolean onActionCalled(Action action) {
+        return action.accept(new ActionVisitor<Boolean>() {
+            @Override
+            public Boolean visitHome() {
+                onHomeCalled();
+                return true;
+            }
+
+            @Override
+            public Boolean visitAdd() {
+                onAddCalled();
+                return true;
+            }
+
+            @Override
+            public Boolean visitEdit() {
+                onEditCalled();
+                return true;
+            }
+
+            @Override
+            public Boolean visitSearch() {
+                onSearchCalled();
+                return true;
+            }
+
+            @Override
+            public Boolean visitDetails() {
+                onDetailsCalled();
+                return false;
+            }
+
+            @Override
+            public Boolean visitMap() {
+                onMapCalled();
+                return true;
+            }
+        });
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add:
-                this.onAddCalled();
-                return true;
-            case R.id.action_edit:
-                this.onEditCalled();
-                return true;
-            case R.id.action_search:
-                this.onSearchCalled();
-                return true;
-            case R.id.action_home:
-                this.onHomeCalled();
-                return true;
-            case R.id.action_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                this.startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if(item.getItemId() == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            this.startActivity(intent);
+        } else {
+            Action action = this.menuItemIdToActionMap.get(item.getItemId());
+            this.onActionCalled(action);
         }
+        return true;
+    }
+
+    private void onMapCalled() {
+        this.sharedViewModel.updateAction(Action.MAP);
     }
 
     private void onAddCalled() {
@@ -233,4 +334,19 @@ public class NavigationActivity extends BaseActivity {
         this.sharedViewModel.updateAction(Action.HOME);
     }
 
+    @Override
+    public void setEstateSelectionId(int estateId) {
+        this.sharedViewModel.updateEstateSelection(estateId);
+    }
+
+    @Override
+    public void onDetailsCalled() {
+        this.sharedViewModel.updateAction(Action.DETAILS);
+
+    }
+
+    @Override
+    public LiveData<Integer> getEstateSelectionId() {
+        return this.sharedViewModel.getEstateSelectionId();
+    }
 }

@@ -19,9 +19,8 @@ import androidx.preference.PreferenceManager;
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
-import com.openclassrooms.realestatemanager.ui.Action;
+import com.openclassrooms.realestatemanager.ui.enums.Action;
 import com.openclassrooms.realestatemanager.ui.SettingsActivity;
-import com.openclassrooms.realestatemanager.ui.fragments.BaseFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 import com.openclassrooms.realestatemanager.ui.fragments.UseSharedPreferenceFragment;
 import com.openclassrooms.realestatemanager.ui.viewmodels.FormViewModel;
@@ -29,7 +28,6 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
 
 import java.util.List;
-import java.util.Map;
 
 public abstract class FormFragment extends UseSharedPreferenceFragment implements
         FormMandatoryFragment.HandleFormMandatoryFields,

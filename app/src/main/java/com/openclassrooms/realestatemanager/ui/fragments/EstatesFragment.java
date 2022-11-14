@@ -27,7 +27,11 @@ public class EstatesFragment extends UseSharedPreferenceFragment {
 
     private EstatesViewModel estatesViewModel;
 
-    private SharedViewModel sharedViewModel;
+    private ListEstatesRecyclerViewAdapter.HandleEstateDetails handleEstateDetails;
+
+    public EstatesFragment(ListEstatesRecyclerViewAdapter.HandleEstateDetails handleEstateDetails) {
+        this.handleEstateDetails = handleEstateDetails;
+    }
 
     private RecyclerView recyclerView;
 
@@ -45,8 +49,7 @@ public class EstatesFragment extends UseSharedPreferenceFragment {
         this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         this.recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
-        this.sharedViewModel = new ViewModelProvider(this.requireActivity()).get(SharedViewModel.class);
-        this.adapter = new ListEstatesRecyclerViewAdapter(this.sharedViewModel, this);
+        this.adapter = new ListEstatesRecyclerViewAdapter(this.handleEstateDetails, this);
         this.recyclerView.setAdapter(adapter);
 
         EstatesViewModelFactory viewModelFactory = ((Launch)this.getActivity().getApplication()).estatesViewModelFactory();
