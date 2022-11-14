@@ -4,45 +4,33 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.ui.adapters.ListEstatesRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.ui.enums.Action;
 import com.openclassrooms.realestatemanager.ui.enums.ActionVisitor;
-import com.openclassrooms.realestatemanager.ui.fragments.EstateDetailsFragment;
-import com.openclassrooms.realestatemanager.ui.fragments.EstatesFragment;
-import com.openclassrooms.realestatemanager.ui.fragments.MapEstatesFragment;
-import com.openclassrooms.realestatemanager.ui.fragments.form.FormAddEstateFragment;
-import com.openclassrooms.realestatemanager.ui.fragments.form.FormUpdateEstateFragment;
-import com.openclassrooms.realestatemanager.ui.fragments.SearchFragment;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class NavigationActivity extends MobileAndTabletActivity {
+public class MenuPagerActivity extends MobileAndTabletActivity {
 
     protected SharedViewModel sharedViewModel;
 
     private Map<Integer, Action> menuItemIdToActionMap;
 
-    public NavigationActivity() {
+    public MenuPagerActivity() {
         this.menuItemIdToActionMap = new HashMap<>();
-        menuItemIdToActionMap.put(R.id.action_home, Action.HOME);
-        menuItemIdToActionMap.put(R.id.action_add, Action.ADD);
-        menuItemIdToActionMap.put(R.id.action_edit, Action.EDIT);
-        menuItemIdToActionMap.put(R.id.action_search, Action.SEARCH);
-        menuItemIdToActionMap.put(R.id.action_map, Action.MAP);
+        menuItemIdToActionMap.put(R.id.menu_item_home, Action.HOME);
+        menuItemIdToActionMap.put(R.id.menu_item_add, Action.ADD);
+        menuItemIdToActionMap.put(R.id.menu_item_edit, Action.EDIT);
+        menuItemIdToActionMap.put(R.id.menu_item_search, Action.SEARCH);
+        menuItemIdToActionMap.put(R.id.menu_item_map, Action.MAP);
     }
 
     @Override
@@ -72,43 +60,43 @@ public class NavigationActivity extends MobileAndTabletActivity {
 
     private Integer handleMenuItemVisibilityWhenAction(Action action, Menu menu) {
 
-        this.setMenuItemVisible(menu, R.id.action_edit, false);
+        this.setMenuItemVisible(menu, R.id.menu_item_edit, false);
         return action.accept(new ActionVisitor<Integer>() {
 
             @Override
             public Integer visitHome() {
-                setMenuItemVisible(menu, R.id.action_home,false);
-                return R.id.action_home;
+                setMenuItemVisible(menu, R.id.menu_item_home,false);
+                return R.id.menu_item_home;
             }
 
             @Override
             public Integer visitAdd() {
-                setMenuItemVisible(menu, R.id.action_add, false);
-                return R.id.action_add;
+                setMenuItemVisible(menu, R.id.menu_item_add, false);
+                return R.id.menu_item_add;
             }
 
             @Override
             public Integer visitEdit() {
-                setMenuItemVisible(menu, R.id.action_edit,false);
-                return R.id.action_edit;
+                setMenuItemVisible(menu, R.id.menu_item_edit,false);
+                return R.id.menu_item_edit;
             }
 
             @Override
             public Integer visitSearch() {
-                setMenuItemVisible(menu, R.id.action_search, false);
-                return R.id.action_search;
+                setMenuItemVisible(menu, R.id.menu_item_search, false);
+                return R.id.menu_item_search;
             }
 
             @Override
             public Integer visitDetails() {
-                setMenuItemVisible(menu, R.id.action_edit, true); // So
+                setMenuItemVisible(menu, R.id.menu_item_edit, true); // So
                 return -1;
             }
 
             @Override
             public Integer visitMap() {
-                setMenuItemVisible(menu, R.id.action_map,false);
-                return R.id.action_map;
+                setMenuItemVisible(menu, R.id.menu_item_map,false);
+                return R.id.menu_item_map;
             }
         });
     }
@@ -120,7 +108,7 @@ public class NavigationActivity extends MobileAndTabletActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        if(item.getItemId() == R.id.action_settings) {
+        if(item.getItemId() == R.id.menu_item_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             this.startActivity(intent);
 
