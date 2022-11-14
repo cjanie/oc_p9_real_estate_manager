@@ -40,17 +40,17 @@ public abstract class MobileAndTabletActivity extends BaseActivity implements Li
     }
 
     private void fullScreenOnMobileAndTablet(Fragment fragment) {
-        showFragment(fragment);
+        this.showFragment(fragment);
         if(this.isTablet) {
-            this.hideFrameLayout(SECOND_FRAMELAYOUT_FOR_TABLET);
+            this.setFrameLayoutVisible(SECOND_FRAMELAYOUT_FOR_TABLET, false);
         }
     }
 
     private void hasSpecialScreenOnTablet(Fragment fragment) {
-        if(!isTablet) {
-            this.showFragment(fragment);
-        } else {
+        if(this.isTablet) {
             this.showFragmentForTablet(fragment);
+        } else {
+            this.showFragment(fragment);
         }
     }
 
@@ -79,17 +79,20 @@ public abstract class MobileAndTabletActivity extends BaseActivity implements Li
         transaction.commit();
 
         // Make the view visible
-        FrameLayout frameLayout = this.findViewById(this.SECOND_FRAMELAYOUT_FOR_TABLET);
-        frameLayout.setVisibility(View.VISIBLE);
+        this.setFrameLayoutVisible(this.SECOND_FRAMELAYOUT_FOR_TABLET, true);
     }
 
-
-    private void hideFrameLayout(int frameLayoutId) {
+    private void setFrameLayoutVisible(int frameLayoutId, boolean visible) {
         FrameLayout frameLayout = this.findViewById(frameLayoutId);
-        frameLayout.setVisibility(View.GONE);
+        if(visible) {
+            frameLayout.setVisibility(View.VISIBLE);
+        } else {
+            frameLayout.setVisibility(View.GONE);
+        }
     }
 
     protected boolean showFragmentForAction(Action action) {
+
         Fragment fragment = this.getFragmentForAction(action);
         return action.accept(new ActionVisitor<Boolean>() {
 
@@ -132,7 +135,9 @@ public abstract class MobileAndTabletActivity extends BaseActivity implements Li
     }
 
     private Fragment getFragmentForAction(Action action) {
+
         return action.accept(new ActionVisitor<Fragment>() {
+
             @Override
             public Fragment visitHome() {
                 return new EstatesFragment(MobileAndTabletActivity.this);
@@ -164,6 +169,5 @@ public abstract class MobileAndTabletActivity extends BaseActivity implements Li
             }
         });
     }
-
 
 }
