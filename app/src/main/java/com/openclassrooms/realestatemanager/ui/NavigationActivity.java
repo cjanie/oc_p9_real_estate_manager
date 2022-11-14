@@ -30,22 +30,13 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NavigationActivity extends BaseActivity implements ListEstatesRecyclerViewAdapter.HandleEstateDetails {
-
-    private final int LAYOUT_ID = R.layout.activity_navigation;
+public class NavigationActivity extends MobileAndTabletActivity {
 
     protected SharedViewModel sharedViewModel;
-
-    private FragmentManager fragmentManager;
-
-    private boolean isTablet;
-
-    private final int SECOND_FRAMELAYOUT_FOR_TABLET = R.id.frame_layout_details;
 
     private Map<Integer, Action> menuItemIdToActionMap;
 
     public NavigationActivity() {
-
         this.menuItemIdToActionMap = new HashMap<>();
         menuItemIdToActionMap.put(R.id.action_home, Action.HOME);
         menuItemIdToActionMap.put(R.id.action_add, Action.ADD);
@@ -57,144 +48,14 @@ public class NavigationActivity extends BaseActivity implements ListEstatesRecyc
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(this.LAYOUT_ID);
 
         this.sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-        this.fragmentManager = this.getSupportFragmentManager();
-        this.isTablet = this.getResources().getBoolean(R.bool.is_tablet);
 
         // Observe menu action state
         this.sharedViewModel.getAction().observe(this, action -> {
             this.showFragmentForAction(action);
             this.invalidateMenu(); // Launches creation of the menu
-
         });
-
-    }
-
-    private Fragment getFragmentForAction(Action action) {
-        return action.accept(new ActionVisitor<Fragment>() {
-            @Override
-            public Fragment visitHome() {
-                return new EstatesFragment(NavigationActivity.this);
-            }
-
-            @Override
-            public Fragment visitAdd() {
-                return new FormAddEstateFragment();
-            }
-
-            @Override
-            public Fragment visitEdit() {
-                return new FormUpdateEstateFragment();
-            }
-
-            @Override
-            public Fragment visitSearch() {
-                return new SearchFragment(NavigationActivity.this);
-            }
-
-            @Override
-            public Fragment visitDetails() {
-                return new EstateDetailsFragment();
-            }
-
-            @Override
-            public Fragment visitMap() {
-                return new MapEstatesFragment();
-            }
-        });
-    }
-
-    private boolean showFragmentForAction(Action action) {
-        Fragment fragment = this.getFragmentForAction(action);
-        return action.accept(new ActionVisitor<Boolean>() {
-
-            @Override
-            public Boolean visitHome() {
-                fullScreenOnMobileAndTablet(fragment);
-                return true;
-            }
-
-            @Override
-            public Boolean visitAdd() {
-                fullScreenOnMobileAndTablet(fragment);
-                return true;
-            }
-
-            @Override
-            public Boolean visitEdit() {
-                fullScreenOnMobileAndTablet(fragment);
-                return true;
-            }
-
-            @Override
-            public Boolean visitSearch() {
-                fullScreenOnMobileAndTablet(fragment);
-                return true;
-            }
-
-            @Override
-            public Boolean visitDetails() {
-                hasSpecialScreenOnTablet(fragment);
-                return true;
-            }
-
-            @Override
-            public Boolean visitMap() {
-                fullScreenOnMobileAndTablet(fragment);
-                return true;
-            }
-        });
-    }
-
-    private void fullScreenOnMobileAndTablet(Fragment fragment) {
-        showFragment(fragment);
-        if(this.isTablet) {
-            this.hideFrameLayout(SECOND_FRAMELAYOUT_FOR_TABLET);
-        }
-    }
-
-    private void hasSpecialScreenOnTablet(Fragment fragment) {
-        if(!isTablet) {
-            this.showFragment(fragment);
-        } else {
-            this.showFragmentForTablet(fragment);
-        }
-    }
-
-    private void showFragment(Fragment fragment) {
-        FragmentTransaction transaction = this.fragmentManager.beginTransaction();
-        // if transaction.replace is used: onBackPressed considers the activity;
-        // if transaction.add is uses: onBackPressed considers the fragments
-        // First fragment should not be added to back stack
-        if(this.fragmentManager.getFragments().isEmpty()) {
-            transaction.add(R.id.frame_layout, fragment);
-        } else {
-            transaction.add(R.id.frame_layout, fragment).addToBackStack(fragment.getClass().getName());
-        }
-        transaction.commit();
-    }
-
-    private void showFragmentForTablet(Fragment fragment) {
-        FragmentTransaction transaction = this.fragmentManager.beginTransaction();
-        // replace() for blank when backPressed
-        // add to backstack to stay on the same activity and remove the fragment
-        if(this.fragmentManager.getFragments().isEmpty()) {
-            transaction.replace(this.SECOND_FRAMELAYOUT_FOR_TABLET, fragment).addToBackStack(fragment.getClass().getName());
-        } else {
-            transaction.add(this.SECOND_FRAMELAYOUT_FOR_TABLET, fragment).addToBackStack(fragment.getClass().getName());
-        }
-        transaction.commit();
-
-        // Make the view visible
-        FrameLayout frameLayout = this.findViewById(this.SECOND_FRAMELAYOUT_FOR_TABLET);
-        frameLayout.setVisibility(View.VISIBLE);
-    }
-
-    private void hideFrameLayout(int frameLayoutId) {
-        FrameLayout frameLayout = this.findViewById(frameLayoutId);
-        frameLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -205,16 +66,13 @@ public class NavigationActivity extends BaseActivity implements ListEstatesRecyc
     }
 
     private void createDynamicMenu(Menu menu) {
-
         Action action = this.sharedViewModel.getAction().getValue();
         this.handleMenuItemVisibilityWhenAction(action, menu);
-
     }
 
     private Integer handleMenuItemVisibilityWhenAction(Action action, Menu menu) {
 
         this.setMenuItemVisible(menu, R.id.action_edit, false);
-
         return action.accept(new ActionVisitor<Integer>() {
 
             @Override
@@ -256,12 +114,26 @@ public class NavigationActivity extends BaseActivity implements ListEstatesRecyc
     }
 
     private void setMenuItemVisible(Menu menu, int menuItemId, boolean visible) {
-        MenuItem menuItem = menu.findItem(menuItemId);
-        menuItem.setVisible(visible);
+        menu.findItem(menuItemId).setVisible(visible);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId() == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            this.startActivity(intent);
+
+        } else {
+            Action action = this.menuItemIdToActionMap.get(item.getItemId());
+            this.onActionCalled(action);
+        }
+        return true;
     }
 
     private boolean onActionCalled(Action action) {
         return action.accept(new ActionVisitor<Boolean>() {
+
             @Override
             public Boolean visitHome() {
                 onHomeCalled();
@@ -300,21 +172,8 @@ public class NavigationActivity extends BaseActivity implements ListEstatesRecyc
         });
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.action_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            this.startActivity(intent);
-        } else {
-            Action action = this.menuItemIdToActionMap.get(item.getItemId());
-            this.onActionCalled(action);
-        }
-        return true;
-    }
-
-    private void onMapCalled() {
-        this.sharedViewModel.updateAction(Action.MAP);
+    private void onHomeCalled() {
+        this.sharedViewModel.updateAction(Action.HOME);
     }
 
     private void onAddCalled() {
@@ -330,8 +189,8 @@ public class NavigationActivity extends BaseActivity implements ListEstatesRecyc
         this.sharedViewModel.updateAction(Action.SEARCH);
     }
 
-    private void onHomeCalled() {
-        this.sharedViewModel.updateAction(Action.HOME);
+    private void onMapCalled() {
+        this.sharedViewModel.updateAction(Action.MAP);
     }
 
     @Override
@@ -342,11 +201,11 @@ public class NavigationActivity extends BaseActivity implements ListEstatesRecyc
     @Override
     public void onDetailsCalled() {
         this.sharedViewModel.updateAction(Action.DETAILS);
-
     }
 
     @Override
     public LiveData<Integer> getEstateSelectionId() {
         return this.sharedViewModel.getEstateSelectionId();
     }
+
 }
