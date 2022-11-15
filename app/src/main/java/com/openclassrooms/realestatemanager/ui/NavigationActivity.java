@@ -20,7 +20,7 @@ import com.openclassrooms.realestatemanager.ui.fragments.SearchFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.form.FormAddEstateFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.form.FormUpdateEstateFragment;
 
-public abstract class MobileAndTabletActivity extends BaseActivity implements ListEstatesRecyclerViewAdapter.HandleEstateDetails {
+public abstract class NavigationActivity extends LocationActivity implements ListEstatesRecyclerViewAdapter.HandleEstateDetails {
 
     private final int LAYOUT_ID = R.layout.activity_navigation;
 
@@ -140,7 +140,7 @@ public abstract class MobileAndTabletActivity extends BaseActivity implements Li
 
             @Override
             public Fragment visitHome() {
-                return new EstatesFragment(MobileAndTabletActivity.this);
+                return new EstatesFragment(NavigationActivity.this);
             }
 
             @Override
@@ -155,7 +155,7 @@ public abstract class MobileAndTabletActivity extends BaseActivity implements Li
 
             @Override
             public Fragment visitSearch() {
-                return new SearchFragment(MobileAndTabletActivity.this);
+                return new SearchFragment(NavigationActivity.this);
             }
 
             @Override

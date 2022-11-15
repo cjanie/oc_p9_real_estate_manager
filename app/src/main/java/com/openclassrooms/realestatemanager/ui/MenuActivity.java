@@ -18,13 +18,13 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MenuPagerActivity extends MobileAndTabletActivity {
+public class MenuActivity extends NavigationActivity {
 
     protected SharedViewModel sharedViewModel;
 
     private Map<Integer, Action> menuItemIdToActionMap;
 
-    public MenuPagerActivity() {
+    public MenuActivity() {
         this.menuItemIdToActionMap = new HashMap<>();
         menuItemIdToActionMap.put(R.id.menu_item_home, Action.HOME);
         menuItemIdToActionMap.put(R.id.menu_item_add, Action.ADD);

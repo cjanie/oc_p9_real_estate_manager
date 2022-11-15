@@ -1,10 +1,13 @@
 package com.openclassrooms.realestatemanager.ui.fragments;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,6 +26,15 @@ import java.util.List;
 public class MapEstatesFragment extends MapsFragment {
 
     private EstatesViewModel estatesViewModel;
+
+    private String PERMISSION_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+
+    private ActivityResultLauncher launcherRequestLocation = this.registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            isPermissionGranted -> {
+                this.handleLocationPermissionIsGranted();
+            }
+    );
 
 
     @Override
@@ -50,6 +62,10 @@ public class MapEstatesFragment extends MapsFragment {
         });
         googleMap.setMinZoomPreference(6.0f);
         googleMap.setMaxZoomPreference(14.0f);
+    }
+
+    void handleLocationPermissionIsGranted() {
+
     }
 
 }
