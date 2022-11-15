@@ -35,7 +35,7 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
         FormDescriptionDetailsFragment.HandleDescriptionDetailsData,
         FormDescriptionFragment.HandleDescriptionData,
         FormMediaFragment.HandleMediaData,
-        FormGeolocationFragment.HandleGeolocation,
+        FormGeolocationPermissionFragmentForm.HandleGeolocation,
         SaveEstateDataUpdate,
         Next,
         FormData {
@@ -297,7 +297,7 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
 
             @Override
             public FormSaveSkipFragment visitGeolocation() {
-                return new FormGeolocationFragment(
+                return new FormGeolocationPermissionFragmentForm(
                         FormFragment.this,
                         FormFragment.this,
                         FormFragment.this,

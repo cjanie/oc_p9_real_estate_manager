@@ -1,10 +1,8 @@
 package com.openclassrooms.realestatemanager.ui.fragments;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
+import android.location.Location;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -12,30 +10,42 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.ui.LocationActivity;
 import com.openclassrooms.realestatemanager.ui.viewmodels.EstatesViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
-
-import java.util.List;
 
 public class MapEstatesFragment extends MapsFragment {
 
     private EstatesViewModel estatesViewModel;
 
-    private String PERMISSION_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private LocationActivity locationActivity;
 
-    private ActivityResultLauncher launcherRequestLocation = this.registerForActivityResult(
+    private Location myPosition;
+
+    private GoogleMap googleMap;
+
+
+    private ActivityResultLauncher launcherLocationPermission = this.registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
             isPermissionGranted -> {
                 this.handleLocationPermissionIsGranted();
             }
     );
 
+    public MapEstatesFragment(LocationActivity locationActivity) {
+        this.locationActivity = locationActivity;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,7 +56,9 @@ public class MapEstatesFragment extends MapsFragment {
 
     @Override
     protected void updateMap(GoogleMap googleMap) {
-        // TODO enable my position
+        this.googleMap = googleMap;
+        // Enable my position
+        this.locationActivity.launchLocationPermissionRequest(this.launcherLocationPermission);
 
         // Put the markers on the map observing list from the view model
         this.estatesViewModel.getEstates().observe(this.getViewLifecycleOwner(), estates -> {
@@ -55,17 +67,52 @@ public class MapEstatesFragment extends MapsFragment {
                     if(estate.getLatitude() != null && estate.getLongitude() != null) {
                         LatLng position = new LatLng(estate.getLatitude(), estate.getLongitude());
                         String title = estate.getStreetNumberAndStreetName() != null ? estate.getStreetNumberAndStreetName() : "";
-                        googleMap.addMarker(new MarkerOptions().position(position).title(title));
+                        this.googleMap.addMarker(new MarkerOptions().position(position).title(title));
                     }
                 }
             }
         });
-        googleMap.setMinZoomPreference(6.0f);
-        googleMap.setMaxZoomPreference(14.0f);
+        this.googleMap.setMinZoomPreference(6.0f);
+        this.googleMap.setMaxZoomPreference(14.0f);
     }
 
-    void handleLocationPermissionIsGranted() {
+    @SuppressLint("MissingPermission")
+    private void handleLocationPermissionIsGranted() {
+        // Get location when permission is not missing
+        FusedLocationProviderClient fusedLocationProviderClient =
+                LocationServices.getFusedLocationProviderClient(this.getActivity());
+
+        LocationCallback locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                if (!locationResult.getLocations().isEmpty()) {
+                    locationActivity.stopLocationUpdates(fusedLocationProviderClient, this);
+                    myPosition = locationResult.getLocations().get(0);
+                    displayMyPosition();
+                }
+            }
+
+            @Override
+            public void onLocationAvailability(@NonNull LocationAvailability locationAvailability) {
+                if (locationAvailability.isLocationAvailable()) {
+                    fusedLocationProviderClient.getLastLocation().addOnSuccessListener(
+                            location -> myPosition = location
+                    );
+                } else {
+                    locationActivity.requestLocationUpdates(fusedLocationProviderClient, this);
+                }
+            }
+
+        };
+        this.locationActivity.requestLocationUpdates(fusedLocationProviderClient, locationCallback);
+    }
+
+    @SuppressLint("MissingPermission")
+    private void displayMyPosition() {
+        this.googleMap.setMyLocationEnabled(true);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(myPosition.getLatitude(), myPosition.getLongitude())));
 
     }
 
 }
+

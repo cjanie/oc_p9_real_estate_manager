@@ -1,7 +1,5 @@
 package com.openclassrooms.realestatemanager.ui.fragments.form;
 
-import android.annotation.SuppressLint;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,16 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationAvailability;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.ui.LocationFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 
-public class FormGeolocationFragment extends LocationFragment implements View.OnClickListener {
+public class FormGeolocationPermissionFragmentForm extends FormLocationPermissionFragment implements View.OnClickListener {
 
     private final int LAYOUT_ID = R.layout.fragment_geolocation;
 
@@ -35,7 +27,7 @@ public class FormGeolocationFragment extends LocationFragment implements View.On
 
     private HandleGeolocation handleGeolocation;
 
-    public FormGeolocationFragment(
+    public FormGeolocationPermissionFragmentForm(
             SaveEstateDataUpdate saveEstateDataUpdate,
             Next next,
             FormData formData,

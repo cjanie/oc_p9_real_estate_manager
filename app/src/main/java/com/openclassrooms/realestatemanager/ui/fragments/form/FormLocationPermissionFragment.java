@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui;
+package com.openclassrooms.realestatemanager.ui.fragments.form;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -21,7 +21,7 @@ import com.openclassrooms.realestatemanager.ui.fragments.form.FormData;
 import com.openclassrooms.realestatemanager.ui.fragments.form.FormSaveSkipFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.form.SaveEstateDataUpdate;
 
-public abstract class LocationFragment extends FormSaveSkipFragment {
+public abstract class FormLocationPermissionFragment extends FormSaveSkipFragment {
 
     private String PERMISSION_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -34,7 +34,7 @@ public abstract class LocationFragment extends FormSaveSkipFragment {
             }
     );
 
-    public LocationFragment(SaveEstateDataUpdate saveEstateDataUpdate, Next next, FormData formData) {
+    public FormLocationPermissionFragment(SaveEstateDataUpdate saveEstateDataUpdate, Next next, FormData formData) {
         super(saveEstateDataUpdate, next, formData);
     }
 

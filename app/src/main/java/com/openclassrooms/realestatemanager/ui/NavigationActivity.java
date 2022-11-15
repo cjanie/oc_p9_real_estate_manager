@@ -165,7 +165,7 @@ public abstract class NavigationActivity extends LocationActivity implements Lis
 
             @Override
             public Fragment visitMap() {
-                return new MapEstatesFragment();
+                return new MapEstatesFragment(NavigationActivity.this);
             }
         });
     }
