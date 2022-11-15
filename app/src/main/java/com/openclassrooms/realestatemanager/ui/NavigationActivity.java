@@ -145,12 +145,12 @@ public abstract class NavigationActivity extends LocationActivity implements Lis
 
             @Override
             public Fragment visitAdd() {
-                return new FormAddEstateFragment();
+                return new FormAddEstateFragment(NavigationActivity.this);
             }
 
             @Override
             public Fragment visitEdit() {
-                return new FormUpdateEstateFragment();
+                return new FormUpdateEstateFragment(NavigationActivity.this);
             }
 
             @Override

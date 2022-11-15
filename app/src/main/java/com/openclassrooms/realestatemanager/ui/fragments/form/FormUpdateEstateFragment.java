@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.ui.LocationActivity;
 import com.openclassrooms.realestatemanager.ui.viewmodels.DetailsViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
@@ -18,6 +19,10 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewM
 public class FormUpdateEstateFragment extends FormFragment {
 
     private DetailsViewModel detailsViewModel;
+
+    public FormUpdateEstateFragment(LocationActivity locationActivity) {
+        super(locationActivity);
+    }
 
     @Nullable
     @Override

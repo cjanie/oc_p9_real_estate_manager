@@ -19,6 +19,7 @@ import androidx.preference.PreferenceManager;
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.ui.LocationActivity;
 import com.openclassrooms.realestatemanager.ui.enums.Action;
 import com.openclassrooms.realestatemanager.ui.SettingsActivity;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
@@ -47,6 +48,12 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
     protected FormViewModel formViewModel;
 
     protected SharedViewModel sharedViewModel;
+
+    private LocationActivity locationActivity;
+
+    public FormFragment(LocationActivity locationActivity) {
+        this.locationActivity = locationActivity;
+    }
 
     @Nullable
     @Override
@@ -301,7 +308,8 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
                         FormFragment.this,
                         FormFragment.this,
                         FormFragment.this,
-                        FormFragment.this);
+                        FormFragment.this,
+                        FormFragment.this.locationActivity);
             }
 
             @Override

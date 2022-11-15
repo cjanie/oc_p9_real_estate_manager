@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.ui.fragments.form;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Looper;
@@ -15,31 +14,29 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.openclassrooms.realestatemanager.ui.fragments.BaseFragment;
+import com.openclassrooms.realestatemanager.ui.LocationActivity;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
-import com.openclassrooms.realestatemanager.ui.fragments.form.FormData;
-import com.openclassrooms.realestatemanager.ui.fragments.form.FormSaveSkipFragment;
-import com.openclassrooms.realestatemanager.ui.fragments.form.SaveEstateDataUpdate;
 
 public abstract class FormLocationPermissionFragment extends FormSaveSkipFragment {
 
-    private String PERMISSION_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private LocationActivity locationActivity;
 
     protected Location myPosition;
 
-    private ActivityResultLauncher launcherRequestLocation = this.registerForActivityResult(
+    private ActivityResultLauncher launcherLocationPermission = this.registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
             isPermissionGranted -> {
                 this.handleLocationPermissionIsGranted();
             }
     );
 
-    public FormLocationPermissionFragment(SaveEstateDataUpdate saveEstateDataUpdate, Next next, FormData formData) {
+    public FormLocationPermissionFragment(SaveEstateDataUpdate saveEstateDataUpdate, Next next, FormData formData, LocationActivity locationActivity) {
         super(saveEstateDataUpdate, next, formData);
+        this.locationActivity = locationActivity;
     }
 
     protected void launchLocationPermissionRequest() {
-        this.launcherRequestLocation.launch(this.PERMISSION_LOCATION);
+        this.locationActivity.launchLocationPermissionRequest(this.launcherLocationPermission);
     }
 
     @SuppressLint("MissingPermission")
@@ -52,7 +49,7 @@ public abstract class FormLocationPermissionFragment extends FormSaveSkipFragmen
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
                 if (!locationResult.getLocations().isEmpty()) {
-                    stopLocationUpdates(fusedLocationProviderClient, this);
+                    locationActivity.stopLocationUpdates(fusedLocationProviderClient, this);
                     myPosition = locationResult.getLocations().get(0);
                     displayMyPosition(myPosition.getLatitude(), myPosition.getLongitude());
                 }
@@ -65,33 +62,14 @@ public abstract class FormLocationPermissionFragment extends FormSaveSkipFragmen
                             location -> myPosition = location
                     );
                 } else {
-                    requestLocationUpdates(fusedLocationProviderClient, this);
+                    locationActivity.requestLocationUpdates(fusedLocationProviderClient, this);
                 }
             }
 
         };
-        requestLocationUpdates(fusedLocationProviderClient, locationCallback);
+        this.locationActivity.requestLocationUpdates(fusedLocationProviderClient, locationCallback);
     }
 
     protected abstract void displayMyPosition(Double latitude, Double longitude);
-
-    @SuppressLint("MissingPermission")
-    protected void requestLocationUpdates(
-            FusedLocationProviderClient fusedLocationProviderClient,
-            LocationCallback locationCallback
-    ) {
-        LocationRequest locationRequest = new LocationRequest.Builder(100).build();
-        fusedLocationProviderClient.requestLocationUpdates(
-                locationRequest, locationCallback, Looper.getMainLooper()
-        );
-    }
-
-    protected void stopLocationUpdates(
-            FusedLocationProviderClient fusedLocationProviderClient,
-            LocationCallback locationCallback
-    ) {
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
-    }
-
 
 }

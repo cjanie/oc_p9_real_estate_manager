@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.ui.LocationActivity;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 
 public class FormGeolocationPermissionFragmentForm extends FormLocationPermissionFragment implements View.OnClickListener {
@@ -31,8 +32,9 @@ public class FormGeolocationPermissionFragmentForm extends FormLocationPermissio
             SaveEstateDataUpdate saveEstateDataUpdate,
             Next next,
             FormData formData,
-            HandleGeolocation handleGeolocation) {
-        super(saveEstateDataUpdate, next, formData);
+            HandleGeolocation handleGeolocation,
+            LocationActivity locationActivity) {
+        super(saveEstateDataUpdate, next, formData, locationActivity);
         this.handleGeolocation = handleGeolocation;
     }
 
