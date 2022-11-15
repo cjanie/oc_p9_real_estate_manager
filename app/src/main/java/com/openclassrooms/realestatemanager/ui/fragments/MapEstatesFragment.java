@@ -33,7 +33,7 @@ public class MapEstatesFragment extends MapsFragment {
 
     private Location myPosition;
 
-    private GoogleMap googleMap;
+    private GoogleMap map;
 
 
     private ActivityResultLauncher launcherLocationPermission = this.registerForActivityResult(
@@ -56,9 +56,6 @@ public class MapEstatesFragment extends MapsFragment {
 
     @Override
     protected void updateMap(GoogleMap googleMap) {
-        this.googleMap = googleMap;
-        // Enable my position
-        this.locationActivity.launchLocationPermissionRequest(this.launcherLocationPermission);
 
         // Put the markers on the map observing list from the view model
         this.estatesViewModel.getEstates().observe(this.getViewLifecycleOwner(), estates -> {
@@ -67,13 +64,18 @@ public class MapEstatesFragment extends MapsFragment {
                     if(estate.getLatitude() != null && estate.getLongitude() != null) {
                         LatLng position = new LatLng(estate.getLatitude(), estate.getLongitude());
                         String title = estate.getStreetNumberAndStreetName() != null ? estate.getStreetNumberAndStreetName() : "";
-                        this.googleMap.addMarker(new MarkerOptions().position(position).title(title));
+                        googleMap.addMarker(new MarkerOptions().position(position).title(title));
                     }
                 }
             }
         });
-        this.googleMap.setMinZoomPreference(6.0f);
-        this.googleMap.setMaxZoomPreference(14.0f);
+        this.estatesViewModel.fetchEstatesToUpdateLiveData();
+        this.map = googleMap;
+        // Enable my position
+        this.locationActivity.launchLocationPermissionRequest(this.launcherLocationPermission);
+
+        this.map.setMinZoomPreference(6.0f);
+        this.map.setMaxZoomPreference(14.0f);
     }
 
     @SuppressLint("MissingPermission")
@@ -109,8 +111,8 @@ public class MapEstatesFragment extends MapsFragment {
 
     @SuppressLint("MissingPermission")
     private void displayMyPosition() {
-        this.googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(myPosition.getLatitude(), myPosition.getLongitude())));
+        this.map.setMyLocationEnabled(true);
+        this.map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(myPosition.getLatitude(), myPosition.getLongitude())));
 
     }
 
