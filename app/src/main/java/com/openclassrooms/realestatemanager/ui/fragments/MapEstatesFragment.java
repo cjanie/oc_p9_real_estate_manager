@@ -51,7 +51,7 @@ public class MapEstatesFragment extends MapsFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EstatesViewModelFactory estatesViewModelFactory = ((Launch) this.getActivity().getApplication()).estatesViewModelFactory();
-        this.estatesViewModel = new ViewModelProvider(this.getActivity(), estatesViewModelFactory).get(EstatesViewModel.class);
+        this.estatesViewModel = new ViewModelProvider(this, estatesViewModelFactory).get(EstatesViewModel.class);
     }
 
     @Override
