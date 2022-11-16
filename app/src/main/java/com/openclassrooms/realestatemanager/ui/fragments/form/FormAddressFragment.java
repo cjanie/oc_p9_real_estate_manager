@@ -17,7 +17,8 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 
-public class FormAddressFragment extends FormSaveSkipFragment implements TextWatcher, View.OnClickListener {
+public class FormAddressFragment extends FormOnTextChangedFragment implements
+        View.OnClickListener {
 
     private final int LAYOUT_ID = R.layout.fragment_form_address;
 
@@ -86,20 +87,8 @@ public class FormAddressFragment extends FormSaveSkipFragment implements TextWat
     }
 
     @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        if(charSequence.length() > 0) {
-            this.enableButton(this.save);
-        }
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {
-
+    protected void enableButtonSave() {
+        this.enableButton(this.save);
     }
 
     @Override

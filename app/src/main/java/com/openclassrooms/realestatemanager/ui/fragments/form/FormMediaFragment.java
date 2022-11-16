@@ -29,7 +29,8 @@ import com.openclassrooms.realestatemanager.ui.utils.StorageManagerUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FormMediaFragment extends FormSaveSkipFragment implements View.OnClickListener {
+public class FormMediaFragment extends FormSaveSkipFragment implements
+        View.OnClickListener {
 
     private final int LAYOUT_ID = R.layout.fragment_form_media;
 

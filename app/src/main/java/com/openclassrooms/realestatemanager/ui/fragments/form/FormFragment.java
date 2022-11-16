@@ -39,7 +39,7 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
         FormGeolocationPermissionFragmentForm.HandleGeolocation,
         SaveEstateDataUpdate,
         Next,
-        FormData {
+        FormData, FormDelete {
 
     private final int LAYOUT_ID = R.layout.fragment_form;
 
@@ -318,6 +318,7 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
                         FormFragment.this,
                         FormFragment.this,
                         FormFragment.this,
+                        FormFragment.this,
                         FormFragment.this
                 );
             }
@@ -325,6 +326,7 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
             @Override
             public FormSaveSkipFragment visitDescriptionDetails() {
                 return new FormDescriptionDetailsFragment(
+                        FormFragment.this,
                         FormFragment.this,
                         FormFragment.this,
                         FormFragment.this,
@@ -374,6 +376,67 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
             @Override
             public Integer visitAddress() {
                 return R.drawable.ic_baseline_location_city_24;
+            }
+        });
+    }
+
+    @Override
+    public boolean delete(FormField formField) {
+        return formField.accept(new FormFieldVisitor<Boolean>() {
+            @Override
+            public Boolean visitDescription() {
+                formViewModel.setEstateDataDescription(null);
+                handleProgressBarStepDescription(false);
+                saveEstateDataUpdate();
+                return true;
+            }
+
+            @Override
+            public Boolean visitSurface() {
+                Integer rooms = formViewModel.getEstateData().getNumberOfRooms();
+                Integer bathrooms = formViewModel.getEstateData().getNumberOfBathrooms();
+                Integer bedrooms = formViewModel.getEstateData().getNumberOfBedrooms();
+
+                formViewModel.setEstateDataDescriptionDetails(null, rooms, bathrooms, bedrooms);
+                handleProgressBarStepDescriptionDetails(false);
+                saveEstateDataUpdate();
+                return true;
+            }
+
+            @Override
+            public Boolean visitRooms() {
+                Integer surface = formViewModel.getEstateData().getSurface();
+                Integer bathrooms = formViewModel.getEstateData().getNumberOfBathrooms();
+                Integer bedrooms = formViewModel.getEstateData().getNumberOfBedrooms();
+
+                formViewModel.setEstateDataDescriptionDetails(surface,null, bathrooms, bedrooms);
+                handleProgressBarStepDescriptionDetails(surface != null ? true : false);
+                saveEstateDataUpdate();
+                return true;
+            }
+
+            @Override
+            public Boolean visitBathrooms() {
+                Integer surface = formViewModel.getEstateData().getSurface();
+                Integer rooms = formViewModel.getEstateData().getNumberOfRooms();
+                Integer bedrooms = formViewModel.getEstateData().getNumberOfBedrooms();
+
+                formViewModel.setEstateDataDescriptionDetails(surface, rooms, null, bedrooms);
+                handleProgressBarStepDescriptionDetails(surface != null ? true : false);
+                saveEstateDataUpdate();
+                return true;
+            }
+
+            @Override
+            public Boolean visitBedrooms() {
+                Integer surface = formViewModel.getEstateData().getSurface();
+                Integer rooms = formViewModel.getEstateData().getNumberOfRooms();
+                Integer bathrooms = formViewModel.getEstateData().getNumberOfBathrooms();
+
+                formViewModel.setEstateDataDescriptionDetails(surface, rooms, bathrooms, null);
+                handleProgressBarStepDescriptionDetails(surface != null ? true : false);
+                saveEstateDataUpdate();
+                return true;
             }
         });
     }

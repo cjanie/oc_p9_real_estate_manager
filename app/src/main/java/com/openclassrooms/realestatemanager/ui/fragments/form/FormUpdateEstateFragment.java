@@ -39,24 +39,7 @@ public class FormUpdateEstateFragment extends FormFragment {
             if(estate != null) {
 
                 this.formViewModel.setEstateData(estate);
-
-                // is completeMandatory
-                this.handleProgressBarStepMandatory(this.isCompleteMandatory(estate));
-
-                // is completeAddress
-                this.handleProgressBarStepAddress(this.isCompleteAddress(estate));
-
-                // is complete description
-                this.handleProgressBarStepDescription(this.isCompleteDescription(estate));
-
-                // is completeDescriptionDetails
-                this.handleProgressBarStepDescriptionDetails(this.isCompleteDescriptionDetails(estate));
-
-                // is complete media
-                this.handleProgressBarStepMedia(this.isCompleteMedia(estate));
-
-                // is complete geolocation
-                this.handleProgressBarStepGeolocation(this.isCompleteGeolocation(estate));
+                this.handleProgressBar(estate);
             }
         });
 
@@ -65,6 +48,26 @@ public class FormUpdateEstateFragment extends FormFragment {
         });
 
         return root;
+    }
+
+    private void handleProgressBar(Estate estate) {
+        // is completeMandatory
+        this.handleProgressBarStepMandatory(this.isCompleteMandatory(estate));
+
+        // is completeAddress
+        this.handleProgressBarStepAddress(this.isCompleteAddress(estate));
+
+        // is complete description
+        this.handleProgressBarStepDescription(this.isCompleteDescription(estate));
+
+        // is completeDescriptionDetails
+        this.handleProgressBarStepDescriptionDetails(this.isCompleteDescriptionDetails(estate));
+
+        // is complete media
+        this.handleProgressBarStepMedia(this.isCompleteMedia(estate));
+
+        // is complete geolocation
+        this.handleProgressBarStepGeolocation(this.isCompleteGeolocation(estate));
     }
 
     @Override

@@ -57,6 +57,12 @@ public class Utils {
      * @return
      */
     public static Boolean isInternetAvailable(Context context){
+        // dans test d'integration, accès au service
+        // mettre le wifi à false et tester la connection
+        // DNS 8888: internet est présent
+        // GMS service
+
+        // Wifi service + // Connection service
         WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
         return wifi.isWifiEnabled();
     }

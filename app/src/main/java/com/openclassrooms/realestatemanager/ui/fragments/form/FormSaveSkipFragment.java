@@ -6,12 +6,14 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.ui.fragments.BaseFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 import com.openclassrooms.realestatemanager.ui.fragments.form.FormData;
 import com.openclassrooms.realestatemanager.ui.fragments.form.FormStep;
 import com.openclassrooms.realestatemanager.ui.fragments.form.SaveEstateDataUpdate;
 
-public abstract class FormSaveSkipFragment extends Fragment implements FormStep {
+public abstract class FormSaveSkipFragment extends BaseFragment implements
+        FormStep {
 
     private Next next;
 

@@ -14,7 +14,8 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.ui.LocationActivity;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 
-public class FormGeolocationPermissionFragmentForm extends FormLocationPermissionFragment implements View.OnClickListener {
+public class FormGeolocationPermissionFragmentForm extends FormLocationPermissionFragment implements
+        View.OnClickListener {
 
     private final int LAYOUT_ID = R.layout.fragment_geolocation;
 
