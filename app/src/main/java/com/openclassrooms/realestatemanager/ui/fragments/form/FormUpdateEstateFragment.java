@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.ui.LocationActivity;
 import com.openclassrooms.realestatemanager.ui.viewmodels.DetailsViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
@@ -18,6 +19,10 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewM
 public class FormUpdateEstateFragment extends FormFragment {
 
     private DetailsViewModel detailsViewModel;
+
+    public FormUpdateEstateFragment(LocationActivity locationActivity) {
+        super(locationActivity);
+    }
 
     @Nullable
     @Override
@@ -34,24 +39,7 @@ public class FormUpdateEstateFragment extends FormFragment {
             if(estate != null) {
 
                 this.formViewModel.setEstateData(estate);
-
-                // is completeMandatory
-                this.handleProgressBarStepMandatory(this.isCompleteMandatory(estate));
-
-                // is completeAddress
-                this.handleProgressBarStepAddress(this.isCompleteAddress(estate));
-
-                // is complete description
-                this.handleProgressBarStepDescription(this.isCompleteDescription(estate));
-
-                // is completeDescriptionDetails
-                this.handleProgressBarStepDescriptionDetails(this.isCompleteDescriptionDetails(estate));
-
-                // is complete media
-                this.handleProgressBarStepMedia(this.isCompleteMedia(estate));
-
-                // is complete geolocation
-                this.handleProgressBarStepGeolocation(this.isCompleteGeolocation(estate));
+                this.handleProgressBar(estate);
             }
         });
 
@@ -60,6 +48,26 @@ public class FormUpdateEstateFragment extends FormFragment {
         });
 
         return root;
+    }
+
+    private void handleProgressBar(Estate estate) {
+        // is completeMandatory
+        this.handleProgressBarStepMandatory(this.isCompleteMandatory(estate));
+
+        // is completeAddress
+        this.handleProgressBarStepAddress(this.isCompleteAddress(estate));
+
+        // is complete description
+        this.handleProgressBarStepDescription(this.isCompleteDescription(estate));
+
+        // is completeDescriptionDetails
+        this.handleProgressBarStepDescriptionDetails(this.isCompleteDescriptionDetails(estate));
+
+        // is complete media
+        this.handleProgressBarStepMedia(this.isCompleteMedia(estate));
+
+        // is complete geolocation
+        this.handleProgressBarStepGeolocation(this.isCompleteGeolocation(estate));
     }
 
     @Override

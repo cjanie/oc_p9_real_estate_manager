@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.Launch;
@@ -17,6 +18,7 @@ import com.openclassrooms.realestatemanager.businesslogic.MapSearchEstatesParams
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.businesslogic.enums.SearchParameter;
 import com.openclassrooms.realestatemanager.ui.adapters.ListEstatesRecyclerViewAdapter;
+import com.openclassrooms.realestatemanager.ui.enums.Action;
 import com.openclassrooms.realestatemanager.ui.utils.ShowFragmentUtil;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SearchViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
@@ -28,11 +30,12 @@ import java.util.Map;
 public class SearchFragment extends UseSharedPreferenceFragment implements
         SearchParametersFragment.HandleSearchParameters,
         SearchParametersFragment.HandleResetParameters,
-        SearchParametersFragment.HandleSearchRequest {
+        SearchParametersFragment.HandleSearchRequest
+{
 
     private SearchViewModel searchViewModel;
 
-    private SharedViewModel sharedViewModel;
+    //private SharedViewModel sharedViewModel;
 
     private EstateType typeParam;
 
@@ -40,11 +43,14 @@ public class SearchFragment extends UseSharedPreferenceFragment implements
 
     private Float maxPriceParam;
 
-    ShowFragmentUtil fragmentUtil;
-
     private ListEstatesRecyclerViewAdapter adapter;
 
-    public SearchFragment() {
+    private ListEstatesRecyclerViewAdapter.HandleEstateDetails handleEstateDetails;
+
+    private ShowFragmentUtil fragmentUtil;
+
+    public SearchFragment(ListEstatesRecyclerViewAdapter.HandleEstateDetails handleEstateDetails) {
+        this.handleEstateDetails = handleEstateDetails;
         this.fragmentUtil = new ShowFragmentUtil();
     }
 
@@ -54,8 +60,6 @@ public class SearchFragment extends UseSharedPreferenceFragment implements
 
         SearchViewModelFactory viewModelFactory = ((Launch)this.getActivity().getApplication()).searchViewModelFactory();
         this.searchViewModel = new ViewModelProvider(this, viewModelFactory).get(SearchViewModel.class);
-
-        this.sharedViewModel = new ViewModelProvider(this.requireActivity()).get(SharedViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_search, container, false);
 
@@ -68,7 +72,7 @@ public class SearchFragment extends UseSharedPreferenceFragment implements
                         this,
                         this));
 
-        this.adapter = new ListEstatesRecyclerViewAdapter(sharedViewModel, this);
+        this.adapter = new ListEstatesRecyclerViewAdapter(this.handleEstateDetails, this);
         this.fragmentUtil.showFragment(fragmentManager, R.id.frame_layout_search_results,
                 new SearchResultsFragment(this.adapter));
 
@@ -119,4 +123,5 @@ public class SearchFragment extends UseSharedPreferenceFragment implements
         this.locationParam = null;
         this.maxPriceParam = null;
     }
+
 }

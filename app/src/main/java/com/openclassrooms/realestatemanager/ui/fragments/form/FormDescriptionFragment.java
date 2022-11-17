@@ -1,14 +1,13 @@
 package com.openclassrooms.realestatemanager.ui.fragments.form;
 
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,9 +16,12 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 
-public class FormDescriptionFragment extends FormSaveSkipFragment implements View.OnClickListener, TextWatcher {
+public class FormDescriptionFragment extends FormOnTextChangedFragment implements
+        View.OnClickListener {
 
     private EditText description;
+
+    private ImageButton delete;
 
     private Button save;
 
@@ -27,14 +29,18 @@ public class FormDescriptionFragment extends FormSaveSkipFragment implements Vie
 
     private HandleDescriptionData handleDescriptionData;
 
+    private FormDelete formDelete;
+
     public FormDescriptionFragment(
             SaveEstateDataUpdate saveEstateDataUpdate,
             Next next,
             FormData formData,
-            HandleDescriptionData handleDescriptionData
+            HandleDescriptionData handleDescriptionData,
+            FormDelete formDelete
             ) {
         super(saveEstateDataUpdate, next, formData);
         this.handleDescriptionData = handleDescriptionData;
+        this.formDelete = formDelete;
     }
 
     @Nullable
@@ -43,26 +49,34 @@ public class FormDescriptionFragment extends FormSaveSkipFragment implements Vie
         View root = inflater.inflate(R.layout.fragment_form_description, container, false);
 
         this.description = root.findViewById(R.id.editText_form_description);
+        this.delete = root.findViewById(R.id.button_delete);
         this.save = root.findViewById(R.id.button_save_form);
         this.skip = root.findViewById(R.id.button_skip_form);
 
         this.description.addTextChangedListener(this);
+        this.delete.setOnClickListener(this);
         this.save.setOnClickListener(this);
         this.skip.setOnClickListener(this);
 
         Estate currentEstate = this.getFormData();
         if(currentEstate != null) {
-            if(currentEstate.getDescription() != null) {
-                this.description.setText(currentEstate.getDescription());
-            }
+            this.description.setText(currentEstate.getDescription());
         }
 
         return root;
     }
 
     @Override
+    protected void enableButtonSave() {
+        this.enableButton(this.save);
+    }
+
+    @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.button_save_form) {
+        if(view.getId() == R.id.button_delete) {
+            this.formDelete.delete(FormField.DESCRIPTION);
+            this.description.setText("");
+        } else if(view.getId() == R.id.button_save_form) {
             if(!TextUtils.isEmpty(this.description.getText())) {
                 this.save();
                 this.next();
@@ -74,23 +88,12 @@ public class FormDescriptionFragment extends FormSaveSkipFragment implements Vie
     }
 
     @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        this.enableButton(this.save);
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {
-
-    }
-
-    @Override
     protected void save() {
-        this.handleDescriptionData.setEstateDescriptionData(this.description.getText().toString());
+        String description = null;
+        if(!TextUtils.isEmpty(this.description.getText())) {
+            description = this.description.getText().toString();
+        }
+        this.handleDescriptionData.setEstateDescriptionData(description);
         this.saveEstateDataUpdate.saveEstateDataUpdate();
     }
 

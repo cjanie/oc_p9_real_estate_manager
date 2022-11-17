@@ -8,27 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.openclassrooms.realestatemanager.R;
 
-public class MapsFragment extends BaseFragment {
-
-    private Double latitude;
-
-    private Double longitude;
-
-    private String placeName;
-
-    public MapsFragment(Double latitude, Double longitude, String placeName) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.placeName = placeName;
-    }
+public abstract class MapsFragment extends BaseFragment {
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -43,20 +28,7 @@ public class MapsFragment extends BaseFragment {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            /*
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-            */
-            if(latitude != null && longitude != null) {
-                LatLng position = new LatLng(latitude, longitude);
-                String title = placeName != null ? placeName : "";
-                googleMap.addMarker(new MarkerOptions().position(position).title(title));
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
-
-                googleMap.setMinZoomPreference(6.0f);
-                googleMap.setMaxZoomPreference(14.0f);
-            }
+            updateMap(googleMap);
         }
     };
 
@@ -77,5 +49,7 @@ public class MapsFragment extends BaseFragment {
             mapFragment.getMapAsync(callback);
         }
     }
+
+    protected abstract void updateMap(GoogleMap googleMap);
 
 }

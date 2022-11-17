@@ -11,10 +11,15 @@ import androidx.annotation.Nullable;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
+import com.openclassrooms.realestatemanager.ui.LocationActivity;
 
 import java.time.LocalDate;
 
 public class FormAddEstateFragment extends FormFragment {
+
+    public FormAddEstateFragment(LocationActivity locationActivity) {
+        super(locationActivity);
+    }
 
     @Nullable
     @Override

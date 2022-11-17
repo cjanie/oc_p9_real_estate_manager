@@ -1,123 +1,58 @@
 package com.openclassrooms.realestatemanager.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.ui.adapters.ListEstatesRecyclerViewAdapter;
+import com.openclassrooms.realestatemanager.ui.enums.Action;
+import com.openclassrooms.realestatemanager.ui.enums.ActionVisitor;
 import com.openclassrooms.realestatemanager.ui.fragments.EstateDetailsFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.EstatesFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.MapEstatesFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.SearchFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.form.FormAddEstateFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.form.FormUpdateEstateFragment;
-import com.openclassrooms.realestatemanager.ui.fragments.SearchFragment;
-import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
-public class NavigationActivity extends BaseActivity {
+public abstract class NavigationActivity extends LocationActivity implements ListEstatesRecyclerViewAdapter.HandleEstateDetails {
 
     private final int LAYOUT_ID = R.layout.activity_navigation;
 
-    protected SharedViewModel sharedViewModel;
+    private boolean isTablet;
 
     private FragmentManager fragmentManager;
 
-    private boolean isTablet;
-
     private final int SECOND_FRAMELAYOUT_FOR_TABLET = R.id.frame_layout_details;
-
-    private EstateDetailsFragment estateDetailsFragment = null;
-
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(this.LAYOUT_ID);
 
-        this.sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-        this.fragmentManager = this.getSupportFragmentManager();
-        //this.estateDetailsFragment = new EstateDetailsFragment();
         this.isTablet = this.getResources().getBoolean(R.bool.is_tablet);
-
-        // Observe menu action state
-        this.sharedViewModel.getAction().observe(this, action -> {
-            this.switchFragment(action);
-            this.invalidateMenu(); // Launches creation of the menu
-
-            //this.additionalSwitchForTablet(action);
-        });
-
+        this.fragmentManager = this.getSupportFragmentManager();
     }
 
-    private void switchFragment(Action action) {
-        switch(action) {
-            case SEARCH:
-                this.showFragment(new SearchFragment());
-                if(isTablet) {
-                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
-                }
-                break;
-            case HOME:
-                this.showFragment(new EstatesFragment());
-                if(isTablet) {
-                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
-                }
-                break;
-            case ADD:
-                this.showFragment(new FormAddEstateFragment());
-                if(isTablet) {
-                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
-                }
-                break;
-            case EDIT:
-                this.showFragment(new FormUpdateEstateFragment());
-                if(isTablet) {
-                    this.hideFrameLayout(this.SECOND_FRAMELAYOUT_FOR_TABLET);
-                }
-                break;
-            case DETAILS:
-                if(!isTablet) {
-                    this.showFragment(new EstateDetailsFragment());
-                } else {
-                    this.showFragmentForTablet(new EstateDetailsFragment());
-                }
-                break;
-        }
-    }
-
-    /*
-    private void additionalSwitchForTablet(Action action) {
+    private void fullScreenOnMobileAndTablet(Fragment fragment) {
+        this.showFragment(fragment);
         if(this.isTablet) {
-               switch(action) {
-                case HOME:
-                    this.removeDetails(R.id.frame_layout_details);
-                    break;
-                case SEARCH:
-                    this.removeDetails(R.id.frame_layout_details);
-                    break;
-                case ADD:
-                    this.removeDetails(R.id.frame_layout_details);
-                    break;
-                case EDIT:
-                    this.removeDetails(R.id.frame_layout_details);
-                    break;
-                case DETAILS:
-                    this.showDetails(R.id.frame_layout_details);
-                    break;
-            }
+            this.setFrameLayoutVisible(SECOND_FRAMELAYOUT_FOR_TABLET, false);
         }
     }
 
-     */
+    private void hasSpecialScreenOnTablet(Fragment fragment) {
+        if(this.isTablet) {
+            this.showFragmentForTablet(fragment);
+        } else {
+            this.showFragment(fragment);
+        }
+    }
 
     private void showFragment(Fragment fragment) {
         FragmentTransaction transaction = this.fragmentManager.beginTransaction();
@@ -144,93 +79,95 @@ public class NavigationActivity extends BaseActivity {
         transaction.commit();
 
         // Make the view visible
-        FrameLayout frameLayout = this.findViewById(this.SECOND_FRAMELAYOUT_FOR_TABLET);
-        frameLayout.setVisibility(View.VISIBLE);
+        this.setFrameLayoutVisible(this.SECOND_FRAMELAYOUT_FOR_TABLET, true);
     }
 
-    private void hideFrameLayout(int frameLayoutId) {
+    private void setFrameLayoutVisible(int frameLayoutId, boolean visible) {
         FrameLayout frameLayout = this.findViewById(frameLayoutId);
-        frameLayout.setVisibility(View.GONE);
+        if(visible) {
+            frameLayout.setVisibility(View.VISIBLE);
+        } else {
+            frameLayout.setVisibility(View.GONE);
+        }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        this.getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        this.createDynamicMenu(menu);
-        return true;
-    }
+    protected boolean showFragmentForAction(Action action) {
 
-    private void createDynamicMenu(Menu menu) { // TODO refactor create menu
-        //MenuItem item = null;
-        // int id = -1
-        // Récupérer un item ; si pas null > false
+        Fragment fragment = this.getFragmentForAction(action);
+        return action.accept(new ActionVisitor<Boolean>() {
 
-        // Externaliser getValue et switch ; définir l'id ; définir l'item dans les cas du switch;
-        // pas le default mais toutes les valeurs de l'enum;
-        // default -> exception
-        // à la toute fin, change visibility menu si int est different de -1 avec une autre méthode;
-        if(!this.sharedViewModel.getAction().getValue().equals(Action.DETAILS)) {
-            MenuItem item = menu.findItem(R.id.action_edit);
-            item.setVisible(false);
-        }
-        if(this.sharedViewModel.getAction().getValue().equals(Action.EDIT)) {
-            MenuItem item = menu.findItem(R.id.action_edit);
-            item.setVisible(false);
-        }
-        if(this.sharedViewModel.getAction().getValue().equals(Action.ADD)) {
-            MenuItem item = menu.findItem(R.id.action_add);
-            item.setVisible(false);
-        }
-        if(this.sharedViewModel.getAction().getValue().equals(Action.SEARCH)) {
-            MenuItem item = menu.findItem(R.id.action_search);
-            item.setVisible(false);
-        }
-        if(this.sharedViewModel.getAction().getValue().equals(Action.HOME)) {
-            MenuItem item = menu.findItem(R.id.action_home);
-            item.setVisible(false);
-        }
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add:
-                this.onAddCalled();
+            @Override
+            public Boolean visitHome() {
+                fullScreenOnMobileAndTablet(fragment);
                 return true;
-            case R.id.action_edit:
-                this.onEditCalled();
+            }
+
+            @Override
+            public Boolean visitAdd() {
+                fullScreenOnMobileAndTablet(fragment);
                 return true;
-            case R.id.action_search:
-                this.onSearchCalled();
+            }
+
+            @Override
+            public Boolean visitEdit() {
+                fullScreenOnMobileAndTablet(fragment);
                 return true;
-            case R.id.action_home:
-                this.onHomeCalled();
+            }
+
+            @Override
+            public Boolean visitSearch() {
+                fullScreenOnMobileAndTablet(fragment);
                 return true;
-            case R.id.action_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                this.startActivity(intent);
+            }
+
+            @Override
+            public Boolean visitDetails() {
+                hasSpecialScreenOnTablet(fragment);
                 return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+            }
+
+            @Override
+            public Boolean visitMap() {
+                fullScreenOnMobileAndTablet(fragment);
+                return true;
+            }
+        });
     }
 
-    private void onAddCalled() {
-        this.sharedViewModel.updateAction(Action.ADD);
-        this.sharedViewModel.initEstateSelection();
-    }
+    private Fragment getFragmentForAction(Action action) {
 
-    private void onEditCalled() {
-        this.sharedViewModel.updateAction(Action.EDIT);
-    }
+        return action.accept(new ActionVisitor<Fragment>() {
 
-    private void onSearchCalled() {
-        this.sharedViewModel.updateAction(Action.SEARCH);
-    }
+            @Override
+            public Fragment visitHome() {
+                return new EstatesFragment(NavigationActivity.this);
+            }
 
-    private void onHomeCalled() {
-        this.sharedViewModel.updateAction(Action.HOME);
+            @Override
+            public Fragment visitAdd() {
+                return new FormAddEstateFragment(NavigationActivity.this);
+            }
+
+            @Override
+            public Fragment visitEdit() {
+                return new FormUpdateEstateFragment(NavigationActivity.this);
+            }
+
+            @Override
+            public Fragment visitSearch() {
+                return new SearchFragment(NavigationActivity.this);
+            }
+
+            @Override
+            public Fragment visitDetails() {
+                return new EstateDetailsFragment();
+            }
+
+            @Override
+            public Fragment visitMap() {
+                return new MapEstatesFragment(NavigationActivity.this);
+            }
+        });
     }
 
 }

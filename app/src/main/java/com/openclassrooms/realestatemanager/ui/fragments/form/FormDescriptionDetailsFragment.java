@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,11 +18,14 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 
-public class FormDescriptionDetailsFragment extends FormSaveSkipFragment implements TextWatcher, View.OnClickListener {
+public class  FormDescriptionDetailsFragment extends FormOnTextChangedFragment implements
+        View.OnClickListener {
 
     private final int LAYOUT_ID = R.layout.fragment_form_description_details;
 
     private HandleDescriptionDetailsData handleDescriptionDetailsData;
+
+    private FormDelete formDelete;
 
     // Views
     private EditText surface;
@@ -32,6 +36,14 @@ public class FormDescriptionDetailsFragment extends FormSaveSkipFragment impleme
 
     private EditText numberOfBedrooms;
 
+    private ImageButton deleteSurface;
+
+    private ImageButton deleteNumberOfRooms;
+
+    private ImageButton deleteNumberOfBathrooms;
+
+    private ImageButton deleteNumberOfBedrooms;
+
     private Button save;
 
     private Button skip;
@@ -41,10 +53,12 @@ public class FormDescriptionDetailsFragment extends FormSaveSkipFragment impleme
             SaveEstateDataUpdate saveEstateDataUpdate,
             Next next,
             FormData formData,
-            HandleDescriptionDetailsData handleDescriptionDetailsData
+            HandleDescriptionDetailsData handleDescriptionDetailsData,
+            FormDelete formDelete
     ) {
         super(saveEstateDataUpdate, next, formData);
         this.handleDescriptionDetailsData = handleDescriptionDetailsData;
+        this.formDelete = formDelete;
     }
 
     @Nullable
@@ -56,6 +70,12 @@ public class FormDescriptionDetailsFragment extends FormSaveSkipFragment impleme
         this.numberOfRooms = root.findViewById(R.id.editText_numberOfRooms);
         this.numberOfBathrooms = root.findViewById(R.id.editText_numberOfBathrooms);
         this.numberOfBedrooms = root.findViewById(R.id.editText_numberOfBedrooms);
+
+        this.deleteSurface = root.findViewById(R.id.button_delete_surface);
+        this.deleteNumberOfRooms = root.findViewById(R.id.button_delete_rooms);
+        this.deleteNumberOfBathrooms = root.findViewById(R.id.button_delete_bathrooms);
+        this.deleteNumberOfBedrooms = root.findViewById(R.id.button_delete_bedrooms);
+
         this.save = root.findViewById(R.id.button_save_form_description_details);
         this.skip = root.findViewById(R.id.button_skip_form_description_details);
 
@@ -63,6 +83,11 @@ public class FormDescriptionDetailsFragment extends FormSaveSkipFragment impleme
         this.numberOfRooms.addTextChangedListener(this);
         this.numberOfBathrooms.addTextChangedListener(this);
         this.numberOfBedrooms.addTextChangedListener(this);
+
+        this.deleteSurface.setOnClickListener(this);
+        this.deleteNumberOfRooms.setOnClickListener(this);
+        this.deleteNumberOfBathrooms.setOnClickListener(this);
+        this.deleteNumberOfBedrooms.setOnClickListener(this);
 
         this.save.setOnClickListener(this);
         this.skip.setOnClickListener(this);
@@ -87,25 +112,22 @@ public class FormDescriptionDetailsFragment extends FormSaveSkipFragment impleme
     }
 
     @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        if(charSequence.length() > 0) {
-            this.enableButton(this.save);
-        }
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {
-
-    }
-
-    @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.button_save_form_description_details) {
+        // Delete buttons
+        if(view.getId() == R.id.button_delete_surface) {
+            this.formDelete.delete(FormField.SURFACE);
+            this.surface.setText("");
+        } else if(view.getId() == R.id.button_delete_rooms) {
+            this.formDelete.delete(FormField.ROOMS);
+            this.numberOfRooms.setText("");
+        } else if(view.getId() == R.id.button_delete_bathrooms) {
+            this.formDelete.delete(FormField.BATHROOMS);
+            this.numberOfBathrooms.setText("");
+        } else if(view.getId() == R.id.button_delete_bedrooms) {
+            this.formDelete.delete(FormField.BEDROOMS);
+            this.numberOfBedrooms.setText("");
+
+        } else if(view.getId() == R.id.button_save_form_description_details) {
             try {
                 this.save();
                 this.next();
@@ -129,6 +151,11 @@ public class FormDescriptionDetailsFragment extends FormSaveSkipFragment impleme
         }
         return null;
 
+    }
+
+    @Override
+    protected void enableButtonSave() {
+        this.enableButton(this.save);
     }
 
     @Override
