@@ -1,9 +1,7 @@
-//apply plugin: 'com.android.application'
-
 plugins {
     id('com.android.application')
     // ...
-    id("de.mannodermaus.android-junit5")
+//    id("de.mannodermaus.android-junit5")
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
@@ -13,14 +11,15 @@ apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
 android {
 
-    compileSdk 32
+    compileSdk 33
+
     defaultConfig {
         applicationId "com.openclassrooms.realestatemanager"
         minSdkVersion 19
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         def addConstant = {constantName, constantValue ->
             manifestPlaceholders += [ (constantName):constantValue]
@@ -49,10 +48,39 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation 'androidx.preference:preference:1.1.1'
 
-    testImplementation 'junit:junit:4.12'
-    //androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    //androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    // Instrumented tests
 
+    // Core library
+    def androidXTestVersion0 = "1.5.0"
+    androidTestImplementation "androidx.test:core:$androidXTestVersion0"
+
+    // AndroidJUnitRunner and JUnit Rules
+    def androidXTestVersion = "1.5.0"
+    androidTestImplementation "androidx.test:runner:$androidXTestVersion"
+    androidTestImplementation "androidx.test:rules:$androidXTestVersion"
+
+    // Assertions
+    def testJunitVersion = "1.1.4"
+    androidTestImplementation "androidx.test.ext:junit:$testJunitVersion"
+    def truthVersion = "1.5.0"
+    androidTestImplementation "androidx.test.ext:truth:$truthVersion"
+
+    // Espresso dependencies
+    def espressoVersion = "3.5.0"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-accessibility:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-web:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso.idling:idling-concurrent:$espressoVersion"
+
+    // The following Espresso dependency can be either "implementation",
+    // or "androidTestImplementation", depending on whether you want the
+    // dependency to appear on your APK’"s compile classpath or the test APK
+    // classpath.
+    androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
+
+    // Unit tests
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.8.2"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.8.2"
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.8.2"
