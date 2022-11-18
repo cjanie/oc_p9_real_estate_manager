@@ -5,7 +5,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapEstateFragment extends MapsFragment {
+public class MapEstateFragment extends MapWifiFragment {
 
     private Double latitude;
 
@@ -21,6 +21,7 @@ public class MapEstateFragment extends MapsFragment {
 
     @Override
     protected void updateMap(GoogleMap googleMap) {
+
         if(this.latitude != null && this.longitude != null) {
             LatLng position = new LatLng(latitude, longitude);
             String title = placeName != null ? placeName : "";
