@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -33,7 +35,9 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-
+        WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        Utils.isWifiEnabled(wifiManager);
+        Utils.setWifiEnabled(wifiManager, false, this);
     }
 
     private void configureTextViewMain(){
