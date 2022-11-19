@@ -34,10 +34,6 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
-        WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        Utils.isWifiEnabled(wifiManager);
-        Utils.setWifiEnabled(wifiManager, false, this);
     }
 
     private void configureTextViewMain(){

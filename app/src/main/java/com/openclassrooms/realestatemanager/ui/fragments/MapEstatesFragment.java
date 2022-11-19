@@ -19,10 +19,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.GeoApiContext;
+import com.openclassrooms.realestatemanager.BuildConfig;
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
 import com.openclassrooms.realestatemanager.ui.LocationActivity;
 import com.openclassrooms.realestatemanager.ui.exceptions.GeolocationException;
+import com.openclassrooms.realestatemanager.ui.exceptions.PayloadException;
 import com.openclassrooms.realestatemanager.ui.exceptions.WifiException;
 import com.openclassrooms.realestatemanager.ui.viewmodels.EstatesViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
@@ -97,6 +101,8 @@ public class MapEstatesFragment extends MapWifiFragment {
             }
         } catch (GeolocationException e) {
             e.printStackTrace();
+        } catch (PayloadException e) {
+            e.printStackTrace();
         }
     }
 
@@ -138,7 +144,7 @@ public class MapEstatesFragment extends MapWifiFragment {
 
     }
 
-    private List<Estate> getGeolocalizedEstates(List<Estate> estates) throws WifiException, GeolocationException {
+    private List<Estate> getGeolocalizedEstates(List<Estate> estates) throws WifiException, GeolocationException, PayloadException {
         if(isWifiAvailable()) {
             // TODO from the list of estates : geolocalise each estate from address
             return this.geolocalizeEstates(estates);
@@ -147,37 +153,35 @@ public class MapEstatesFragment extends MapWifiFragment {
         }
     }
 
-    private List<Estate> geolocalizeEstates(List<Estate> estates) throws GeolocationException {
+    private List<Estate> geolocalizeEstates(List<Estate> estates) throws GeolocationException, PayloadException {
         List<Estate> geolocalizedEstates = new ArrayList<>();
         if(!estates.isEmpty()) {
             for(Estate estate: estates) {
                 if(estate.getStreetNumberAndStreetName() != null) {
-                    // TODO geolocalise with api from number and street name and town
-                    Double latitude = 0.0; // TODO api result
-                    Double longitude = 0.0; // TODO api result
-                    if(latitude != null && longitude != null) {
+
+
+
+
                         Estate geolocalizedEstate = this.geolocalizeEstate(estate);
                         geolocalizedEstates.add(geolocalizedEstate);
-                    }
+
                 }
             }
         }
         return geolocalizedEstates;
     }
 
-    private Estate geolocalizeEstate(Estate estate) throws GeolocationException {
-        if(estate.getStreetNumberAndStreetName() != null) {
-            // TODO geolocalise with api from number and street name and town
-            Double latitude = 0.0; // TODO api result
-            Double longitude = 0.0; // TODO api result
-            if(latitude != null && longitude != null) {
-                Estate geolocalizedEstate = estate;
-                geolocalizedEstate.setLatitude(latitude);
-                geolocalizedEstate.setLongitude(longitude);
-                return geolocalizedEstate;
-            }
-        }
-        throw new GeolocationException();
+    private Estate geolocalizeEstate(Estate estate) throws GeolocationException, PayloadException {
+
+        Geolocation geolocation = this.geolocalizeAddress(
+                estate.getStreetNumberAndStreetName(),
+                estate.getLocation(),
+                estate.getCountry());
+
+        Estate geolocalizedEstate = estate;
+        geolocalizedEstate.setLatitude(geolocation.getLatitude());
+        geolocalizedEstate.setLongitude(geolocation.getLongitude());
+        return geolocalizedEstate;
     }
 
 }

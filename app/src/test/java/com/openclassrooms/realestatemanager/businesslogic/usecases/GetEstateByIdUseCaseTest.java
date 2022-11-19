@@ -3,8 +3,8 @@ package com.openclassrooms.realestatemanager.businesslogic.usecases;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.InMemoryEstateGateway;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
@@ -22,7 +22,7 @@ public class GetEstateByIdUseCaseTest {
         GetEstateByIdUseCase getEstateByIdUseCase = new GetEstateByIdUseCase(estateGateway);
 
         // Assert
-        Assert.assertNotNull(getEstateByIdUseCase.handle(1));
+        Assertions.assertNotNull(getEstateByIdUseCase.handle(1));
     }
 
     @Test
@@ -33,7 +33,7 @@ public class GetEstateByIdUseCaseTest {
         GetEstateByIdUseCase getEstateByIdUseCase = new GetEstateByIdUseCase(estateGateway);
 
         // Assert
-        Assert.assertNull(getEstateByIdUseCase.handle(1));
+        Assertions.assertNull(getEstateByIdUseCase.handle(1));
     }
 
 }
