@@ -6,8 +6,8 @@ import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.InMemoryEstateCommandGateway;
 import com.openclassrooms.realestatemanager.dateprovider.DeterministicDateProvider;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
@@ -26,7 +26,7 @@ public class SaveEstateUseCaseTest {
         );
 
         long addedId = new SaveEstateUseCase(estateGateway, dateProvider).handle(estate, "Janie");
-        Assert.assertEquals(1, addedId, 0);
+        Assertions.assertEquals(1, addedId, 0);
     }
 
     @Test
@@ -42,8 +42,8 @@ public class SaveEstateUseCaseTest {
         );
 
         new SaveEstateUseCase(commandGateway, dateProvider).handle(estate, "Janie");
-        Assert.assertEquals(Devise.DOLLAR, commandGateway.getEstate().getDevise());
-        Assert.assertNotEquals(35f, commandGateway.getEstate().getPrice());
+        Assertions.assertEquals(Devise.DOLLAR, commandGateway.getEstate().getDevise());
+        Assertions.assertNotEquals(35f, commandGateway.getEstate().getPrice());
     }
 
     @Test
@@ -59,7 +59,7 @@ public class SaveEstateUseCaseTest {
         );
 
         new SaveEstateUseCase(commandGateway, dateProvider).handle(estate, "Janie");
-        Assert.assertEquals(EstateStatus.SALE, commandGateway.getEstate().getStatus());
+        Assertions.assertEquals(EstateStatus.SALE, commandGateway.getEstate().getStatus());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class SaveEstateUseCaseTest {
         );
 
         new SaveEstateUseCase(commandGateway, dateProvider).handle(estate, "Janie");
-        Assert.assertEquals(5, commandGateway.getEstate().getDateOfEntreeIntoMarket().getDayOfMonth());
+        Assertions.assertEquals(5, commandGateway.getEstate().getDateOfEntreeIntoMarket().getDayOfMonth());
     }
 
     @Test
@@ -91,7 +91,7 @@ public class SaveEstateUseCaseTest {
         );
 
         new SaveEstateUseCase(commandGateway, dateProvider).handle(estate, "Jogo");
-        Assert.assertEquals("Jogo", commandGateway.getEstate().getAgent().getName());
+        Assertions.assertEquals("Jogo", commandGateway.getEstate().getAgent().getName());
     }
 
 }

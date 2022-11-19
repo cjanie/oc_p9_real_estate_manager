@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -32,8 +34,6 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 
     private void configureTextViewMain(){

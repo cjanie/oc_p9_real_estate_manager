@@ -17,6 +17,9 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class FormAddressFragment extends FormOnTextChangedFragment implements
         View.OnClickListener {
 
@@ -64,6 +67,10 @@ public class FormAddressFragment extends FormOnTextChangedFragment implements
         this.zipCode.addTextChangedListener(this);
         this.country.addTextChangedListener(this);
 
+        String location = this.getFormData().getLocation();
+        this.autoCompleteZipCode(location);
+        this.autoCompleteCountry(location);
+
         this.save.setOnClickListener(this);
         this.skip.setOnClickListener(this);
 
@@ -84,6 +91,27 @@ public class FormAddressFragment extends FormOnTextChangedFragment implements
         }
 
         return root;
+    }
+
+    private void autoCompleteZipCode(String location) {
+        if(TextUtils.isEmpty(this.zipCode.getText())) {
+            Map<String, String> locationToZipCodeMap = new HashMap<>();
+            locationToZipCodeMap.put("Paris", "75000");
+            locationToZipCodeMap.put("Montpellier", "34000");
+            locationToZipCodeMap.put("Orange", "84000");
+            this.zipCode.setText(locationToZipCodeMap.get(location));
+        }
+    }
+
+    private void autoCompleteCountry(String location) {
+        if(TextUtils.isEmpty(this.country.getText())) {
+            Map<String, String> locationToCountryMap = new HashMap<>();
+            locationToCountryMap.put("Paris", "France");
+            locationToCountryMap.put("Montpellier", "France");
+            locationToCountryMap.put("Orange", "France");
+            locationToCountryMap.put("Manchester", "England");
+            this.country.setText(locationToCountryMap.get(location));
+        }
     }
 
     @Override

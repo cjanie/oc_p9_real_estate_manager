@@ -1,8 +1,11 @@
 package com.openclassrooms.realestatemanager.ui.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.provider.Settings;
 
 import androidx.annotation.RequiresApi;
 
@@ -53,9 +56,10 @@ public class Utils {
     /**
      * Vérification de la connexion réseau
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
-     * @param context
+
      * @return
      */
+/*
     public static Boolean isInternetAvailable(Context context){
         // dans test d'integration, accès au service
         // mettre le wifi à false et tester la connection
@@ -66,6 +70,36 @@ public class Utils {
         WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
         return wifi.isWifiEnabled();
     }
+*/
+    // TODO
+    public static boolean isWifiEnabled(WifiManager wifiManager) {
+        return wifiManager.isWifiEnabled();
+    }
 
-    // TODO checkWifi()
+    public static void setWifiEnabled(WifiManager wifiManager, boolean enable, Activity activity) {
+        if(enable != wifiManager.isWifiEnabled()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                goToSettingsInternetConnectivity(activity);
+            } else {
+                if(enable) {
+                    enableWifi(wifiManager);
+                } else {
+                    disableWifi(wifiManager);
+                }
+            }
+        }
+    }
+
+    private static void enableWifi(WifiManager wifiManager) {
+        wifiManager.setWifiEnabled(true);
+    }
+
+    private static void disableWifi(WifiManager wifiManager) {
+        wifiManager.setWifiEnabled(false);
+    }
+
+    private static void goToSettingsInternetConnectivity(Activity activity) {
+        activity.startActivity(new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY));
+    }
+
 }

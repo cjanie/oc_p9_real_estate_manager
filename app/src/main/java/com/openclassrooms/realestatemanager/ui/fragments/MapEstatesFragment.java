@@ -19,13 +19,22 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.GeoApiContext;
+import com.openclassrooms.realestatemanager.BuildConfig;
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
 import com.openclassrooms.realestatemanager.ui.LocationActivity;
+import com.openclassrooms.realestatemanager.ui.exceptions.GeolocationException;
+import com.openclassrooms.realestatemanager.ui.exceptions.PayloadException;
+import com.openclassrooms.realestatemanager.ui.exceptions.WifiException;
 import com.openclassrooms.realestatemanager.ui.viewmodels.EstatesViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
 
-public class MapEstatesFragment extends MapsFragment {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MapEstatesFragment extends MapWifiFragment {
 
     private EstatesViewModel estatesViewModel;
 
@@ -59,14 +68,16 @@ public class MapEstatesFragment extends MapsFragment {
 
         // Put the markers on the map observing list from the view model
         this.estatesViewModel.getEstates().observe(this.getViewLifecycleOwner(), estates -> {
-            if(!estates.isEmpty()) {
-                for(Estate estate: estates) {
-                    if(estate.getLatitude() != null && estate.getLongitude() != null) {
-                        LatLng position = new LatLng(estate.getLatitude(), estate.getLongitude());
-                        String title = estate.getStreetNumberAndStreetName() != null ? estate.getStreetNumberAndStreetName() : "";
-                        googleMap.addMarker(new MarkerOptions().position(position).title(title));
-                    }
-                }
+            try {
+                this.setUpMap(estates, googleMap);
+
+            } catch (WifiException e) {
+                e.printStackTrace();
+                this.setWifiEnabled(true);
+
+                // TODO call back on connectivity result
+                // OK > this.setUpMap(estates, googleMap);
+                // Not OK > this.onBackPressed
             }
         });
         this.estatesViewModel.fetchEstatesToUpdateLiveData();
@@ -76,6 +87,23 @@ public class MapEstatesFragment extends MapsFragment {
 
         this.map.setMinZoomPreference(6.0f);
         this.map.setMaxZoomPreference(14.0f);
+    }
+
+    private void setUpMap(List<Estate> estates, GoogleMap googleMap) throws WifiException {
+        try {
+            List<Estate> geolocalizedEstates = this.getGeolocalizedEstates(estates);
+            if(!geolocalizedEstates.isEmpty()) {
+                for(Estate estate: geolocalizedEstates) {
+                    LatLng position = new LatLng(estate.getLatitude(), estate.getLongitude());
+                    String title = estate.getStreetNumberAndStreetName() != null ? estate.getStreetNumberAndStreetName() : "";
+                    googleMap.addMarker(new MarkerOptions().position(position).title(title));
+                }
+            }
+        } catch (GeolocationException e) {
+            e.printStackTrace();
+        } catch (PayloadException e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -114,6 +142,46 @@ public class MapEstatesFragment extends MapsFragment {
         this.map.setMyLocationEnabled(true);
         this.map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(myPosition.getLatitude(), myPosition.getLongitude())));
 
+    }
+
+    private List<Estate> getGeolocalizedEstates(List<Estate> estates) throws WifiException, GeolocationException, PayloadException {
+        if(isWifiAvailable()) {
+            // TODO from the list of estates : geolocalise each estate from address
+            return this.geolocalizeEstates(estates);
+        } else {
+            throw new WifiException();
+        }
+    }
+
+    private List<Estate> geolocalizeEstates(List<Estate> estates) throws GeolocationException, PayloadException {
+        List<Estate> geolocalizedEstates = new ArrayList<>();
+        if(!estates.isEmpty()) {
+            for(Estate estate: estates) {
+                if(estate.getStreetNumberAndStreetName() != null) {
+
+
+
+
+                        Estate geolocalizedEstate = this.geolocalizeEstate(estate);
+                        geolocalizedEstates.add(geolocalizedEstate);
+
+                }
+            }
+        }
+        return geolocalizedEstates;
+    }
+
+    private Estate geolocalizeEstate(Estate estate) throws GeolocationException, PayloadException {
+
+        Geolocation geolocation = this.geolocalizeAddress(
+                estate.getStreetNumberAndStreetName(),
+                estate.getLocation(),
+                estate.getCountry());
+
+        Estate geolocalizedEstate = estate;
+        geolocalizedEstate.setLatitude(geolocation.getLatitude());
+        geolocalizedEstate.setLongitude(geolocation.getLongitude());
+        return geolocalizedEstate;
     }
 
 }
