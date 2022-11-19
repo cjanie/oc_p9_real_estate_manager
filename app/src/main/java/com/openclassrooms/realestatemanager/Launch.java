@@ -8,15 +8,19 @@ import com.openclassrooms.realestatemanager.businesslogic.usecases.GetEstateById
 import com.openclassrooms.realestatemanager.businesslogic.usecases.GetEstatesUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SaveEstateUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SearchEstatesUseCase;
+import com.openclassrooms.realestatemanager.businesslogic.wifimode.gateways.GeolocationGateway;
+import com.openclassrooms.realestatemanager.businesslogic.wifimode.usecases.GeolocalizeFromAddressUseCase;
 import com.openclassrooms.realestatemanager.data.database.AppDataBase;
 import com.openclassrooms.realestatemanager.data.database.dao.EstateDAO;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateCommandGatewayImpl;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateGatewayImpl;
+import com.openclassrooms.realestatemanager.data.gatewaysimpl.GeolocationGatewayImpl;
 import com.openclassrooms.realestatemanager.dateprovider.DateProvider;
 import com.openclassrooms.realestatemanager.dateprovider.RealDateProvider;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
+import com.openclassrooms.realestatemanager.ui.viewmodels.factories.GeolocationViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.SearchViewModelFactory;
 
 public class Launch extends Application {
@@ -29,6 +33,7 @@ public class Launch extends Application {
     // Gateways
     private EstateGateway estateGateway;
     private EstateCommandGateway estateCommandGateway;
+    private GeolocationGateway geolocationGateway;
 
     // Providers
     private DateProvider dateProvider;
@@ -38,12 +43,14 @@ public class Launch extends Application {
     private SaveEstateUseCase saveEstateUseCase;
     private SearchEstatesUseCase searchEstatesUseCase;
     private GetEstateByIdUseCase getEstateByIdUseCase;
+    private GeolocalizeFromAddressUseCase geolocalizeFromAddressUseCase;
 
     // View Model Factory
     private EstatesViewModelFactory estatesViewModelFactory;
     private FormViewModelFactory formViewModelFactory;
     private SearchViewModelFactory searchViewModelFactory;
     private DetailsViewModelFactory detailsViewModelFactory;
+    private GeolocationViewModelFactory geolocationViewModelFactory;
 
 
     /////
@@ -74,6 +81,13 @@ public class Launch extends Application {
             this.estateCommandGateway = new EstateCommandGatewayImpl(this.estateDAO());
         }
         return this.estateCommandGateway;
+    }
+
+    private synchronized GeolocationGateway geolocationGateway() {
+        if(this.geolocationGateway == null) {
+            this.geolocationGateway = new GeolocationGatewayImpl();
+        }
+        return this.geolocationGateway;
     }
 
     // Providers
@@ -118,6 +132,15 @@ public class Launch extends Application {
         return this.getEstateByIdUseCase;
     }
 
+    private synchronized GeolocalizeFromAddressUseCase geolocalizeFromAddressUseCase() {
+        if(this.geolocalizeFromAddressUseCase == null) {
+            this.geolocalizeFromAddressUseCase = new GeolocalizeFromAddressUseCase(
+                    this.geolocationGateway()
+            );
+        }
+        return this.geolocalizeFromAddressUseCase;
+    }
+
     // View Model Factories
     public synchronized EstatesViewModelFactory estatesViewModelFactory() {
         if(this.estatesViewModelFactory == null) {
@@ -145,5 +168,14 @@ public class Launch extends Application {
             this.detailsViewModelFactory = new DetailsViewModelFactory(this.getEstateByIdUseCase());
         }
         return this.detailsViewModelFactory;
+    }
+
+    public synchronized GeolocationViewModelFactory geolocationViewModelFactory() {
+        if(this.geolocationViewModelFactory == null) {
+            this.geolocationViewModelFactory = new GeolocationViewModelFactory(
+                    this.geolocalizeFromAddressUseCase()
+            );
+        }
+        return this.geolocationViewModelFactory;
     }
 }

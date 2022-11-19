@@ -5,10 +5,11 @@ import android.os.Build;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.GeocodingApiRequest;
+import com.google.maps.model.GeocodingResult;
 import com.openclassrooms.realestatemanager.BuildConfig;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.gateways.GeolocationGateway;
-import com.openclassrooms.realestatemanager.ui.exceptions.GeolocationException;
+import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.GeolocationException;
 
 import java.util.Arrays;
 
@@ -30,20 +31,18 @@ public class GeolocationGatewayImpl implements GeolocationGateway {
                 .address(address);
 
         try {
-            request.await();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Arrays.stream(request.await()).map(geocodingResult -> {
-                    Geolocation geolocation = new Geolocation(
-                            geocodingResult.geometry.location.lat,
-                            geocodingResult.geometry.location.lng);
-                    return geolocation;
-                });
-            }
+            final GeocodingResult geocodingResult = request.await()[0];
+
+            Geolocation geolocation = new Geolocation(
+                    geocodingResult.geometry.location.lat,
+                    geocodingResult.geometry.location.lng
+            );
+            return geolocation;
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new GeolocationException();
         }
-        throw new GeolocationException();
     }
 
 }

@@ -2,25 +2,29 @@ package com.openclassrooms.realestatemanager.ui.fragments;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.GeocodingApiRequest;
 import com.openclassrooms.realestatemanager.BuildConfig;
-import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
-import com.openclassrooms.realestatemanager.ui.exceptions.GeolocationException;
-import com.openclassrooms.realestatemanager.ui.exceptions.PayloadException;
+import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.GeolocationException;
+import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.PayloadException;
 import com.openclassrooms.realestatemanager.ui.utils.Utils;
+import com.openclassrooms.realestatemanager.ui.viewmodels.GeolocationViewModel;
+import com.openclassrooms.realestatemanager.ui.viewmodels.factories.GeolocationViewModelFactory;
 
 import java.util.Arrays;
 
 public abstract class MapWifiFragment extends MapsFragment {
+
+    protected GeolocationViewModel geolocationViewModel;
 
     private WifiManager wifiManager;
 
@@ -29,6 +33,10 @@ public abstract class MapWifiFragment extends MapsFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        GeolocationViewModelFactory geolocationViewModelFactory = ((Launch)this.getActivity().getApplicationContext()).geolocationViewModelFactory();
+        this.geolocationViewModel = new ViewModelProvider(this, geolocationViewModelFactory).get(GeolocationViewModel.class);
+
         this.wifiManager = (WifiManager) this.getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }
 
@@ -50,15 +58,15 @@ public abstract class MapWifiFragment extends MapsFragment {
                     .address(streetNumberAndName + " " + location + " " + country);
 
             try {
-                request.await();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    Arrays.stream(request.await()).map(geocodingResult -> {
-                        Geolocation geolocation = new Geolocation(
-                                geocodingResult.geometry.location.lat,
-                                geocodingResult.geometry.location.lng);
-                        return geolocation;
-                    });
-                }
+
+                Arrays.stream(request.await()).map(geocodingResult -> {
+                    Geolocation geolocation = new Geolocation(
+                            geocodingResult.geometry.location.lat,
+                            geocodingResult.geometry.location.lng);
+                    Log.d(this.getClass().getName(), "geolocation from api : " + geocodingResult.geometry.location.lat + " " + geocodingResult.geometry.location.lng);
+                    return geolocation;
+                });
+
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new GeolocationException();
