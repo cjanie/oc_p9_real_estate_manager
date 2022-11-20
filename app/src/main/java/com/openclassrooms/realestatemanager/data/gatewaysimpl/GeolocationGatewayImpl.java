@@ -10,6 +10,7 @@ import com.openclassrooms.realestatemanager.BuildConfig;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.gateways.GeolocationGateway;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.GeolocationException;
+import com.openclassrooms.realestatemanager.data.database.wifimode.deserializers.GeolocationResponseRoot;
 
 import java.util.Arrays;
 
@@ -27,15 +28,19 @@ public class GeolocationGatewayImpl implements GeolocationGateway {
     @Override
     public Geolocation geolocalize(String address) throws GeolocationException {
 
+        // /maps/api/geocode/json
         GeocodingApiRequest request = GeocodingApi.newRequest(geoApiContext)
                 .address(address);
 
         try {
-            final GeocodingResult geocodingResult = request.await()[0];
 
+            final GeocodingResult geocodingResult = request.await()[0];
+            GeolocationResponseRoot responseRoot = (GeolocationResponseRoot) request.await()[0];
             Geolocation geolocation = new Geolocation(
                     geocodingResult.geometry.location.lat,
                     geocodingResult.geometry.location.lng
+                    //responseRoot.getResults().get(0).getGeometry().getLocation().getLat(),
+                    //responseRoot.getResults().get(0).getGeometry().getLocation().getLng()
             );
             return geolocation;
 
