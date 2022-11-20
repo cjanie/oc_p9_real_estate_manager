@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.data.database.wifimode.deserializers;
+package com.openclassrooms.realestatemanager.data.webservices.mapapi.deserializers;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -15,6 +15,8 @@ import com.openclassrooms.realestatemanager.data.database.dao.EstateDAO;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateCommandGatewayImpl;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateGatewayImpl;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.GeolocationGatewayImpl;
+import com.openclassrooms.realestatemanager.data.webservices.GeolocationRepository;
+import com.openclassrooms.realestatemanager.data.webservices.retrofit.GoogleMapsHttpClientProvider;
 import com.openclassrooms.realestatemanager.dateprovider.DateProvider;
 import com.openclassrooms.realestatemanager.dateprovider.RealDateProvider;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
@@ -29,6 +31,10 @@ public class Launch extends Application {
     private AppDataBase appDataBase;
 
     private EstateDAO estateDAO;
+
+    private GoogleMapsHttpClientProvider googleMapsHttpClientProvider;
+
+    private GeolocationRepository geolocationRepository;
 
     // Gateways
     private EstateGateway estateGateway;
@@ -68,6 +74,20 @@ public class Launch extends Application {
         return this.estateDAO;
     }
 
+    private GoogleMapsHttpClientProvider googleMapsHttpClientProvider() {
+        if(this.googleMapsHttpClientProvider == null) {
+            this.googleMapsHttpClientProvider = new GoogleMapsHttpClientProvider();
+        }
+        return this.googleMapsHttpClientProvider;
+    }
+
+    private synchronized GeolocationRepository geolocationRepository() {
+        if(this.geolocationRepository == null) {
+            this.geolocationRepository = new GeolocationRepository(this.googleMapsHttpClientProvider());
+        }
+        return this.geolocationRepository;
+    }
+
     // Gateways
     private synchronized EstateGateway estateGateway() {
         if(this.estateGateway == null) {
@@ -85,7 +105,7 @@ public class Launch extends Application {
 
     private synchronized GeolocationGateway geolocationGateway() {
         if(this.geolocationGateway == null) {
-            this.geolocationGateway = new GeolocationGatewayImpl();
+            this.geolocationGateway = new GeolocationGatewayImpl(this.geolocationRepository());
         }
         return this.geolocationGateway;
     }

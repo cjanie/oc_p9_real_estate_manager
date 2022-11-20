@@ -1,53 +1,27 @@
 package com.openclassrooms.realestatemanager.data.gatewaysimpl;
 
-import android.os.Build;
-
-import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
-import com.google.maps.GeocodingApiRequest;
-import com.google.maps.model.GeocodingResult;
-import com.openclassrooms.realestatemanager.BuildConfig;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.gateways.GeolocationGateway;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.GeolocationException;
-import com.openclassrooms.realestatemanager.data.database.wifimode.deserializers.GeolocationResponseRoot;
+import com.openclassrooms.realestatemanager.data.webservices.GeolocationRepository;
 
-import java.util.Arrays;
+
+import java.util.List;
+
+import io.reactivex.Observable;
 
 public class GeolocationGatewayImpl implements GeolocationGateway {
 
-    GeoApiContext geoApiContext;
+    private GeolocationRepository geolocationRepository;
 
-    private final String apiKey = BuildConfig.GOOGLE_PLACE_API_KEY;
-
-    public GeolocationGatewayImpl() {
-        this.geoApiContext = new GeoApiContext();
-        this.geoApiContext.setApiKey(this.apiKey);
+    public GeolocationGatewayImpl(GeolocationRepository geolocationRepository) {
+        this.geolocationRepository = geolocationRepository;
     }
 
     @Override
-    public Geolocation geolocalize(String address) throws GeolocationException {
-
-        // /maps/api/geocode/json
-        GeocodingApiRequest request = GeocodingApi.newRequest(geoApiContext)
-                .address(address);
-
-        try {
-
-            final GeocodingResult geocodingResult = request.await()[0];
-            GeolocationResponseRoot responseRoot = (GeolocationResponseRoot) request.await()[0];
-            Geolocation geolocation = new Geolocation(
-                    geocodingResult.geometry.location.lat,
-                    geocodingResult.geometry.location.lng
-                    //responseRoot.getResults().get(0).getGeometry().getLocation().getLat(),
-                    //responseRoot.getResults().get(0).getGeometry().getLocation().getLng()
-            );
-            return geolocation;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new GeolocationException();
-        }
+    public Observable<List<Geolocation>> geolocalize(String address) throws GeolocationException {
+        return this.geolocationRepository.getGeolocationFromAddress(address);
     }
+
 
 }

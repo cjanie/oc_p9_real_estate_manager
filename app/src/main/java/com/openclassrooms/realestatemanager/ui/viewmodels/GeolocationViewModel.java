@@ -1,5 +1,8 @@
 package com.openclassrooms.realestatemanager.ui.viewmodels;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -12,6 +15,8 @@ import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.Ge
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.schedulers.Schedulers;
 
 public class GeolocationViewModel extends ViewModel {
 
@@ -30,21 +35,13 @@ public class GeolocationViewModel extends ViewModel {
     }
 
     // action
-    public void fetchGeolocationsToUpdateLiveData(List<Estate> ungeolocalizedEstates) throws GeolocationException, PayloadException {
-        List<Estate> geolocalized = new ArrayList<>();
+    public void fetchGeolocationsToUpdateLiveData(List<Estate> ungeolocalizedEstates) throws PayloadException {
         if(!ungeolocalizedEstates.isEmpty()) {
-            for(Estate estate: ungeolocalizedEstates) {
-                Geolocation geolocation = null;
-                try {
-                    geolocation = this.geolocalizeFromAddressUseCase.handle(estate.getStreetNumberAndStreetName() + " " + estate.getLocation() + " " + estate.getCountry());
-                    estate.setLatitude(geolocation.getLatitude());
-                    estate.setLongitude(geolocation.getLongitude());
-                    geolocalized.add(estate);
-                } catch (GeolocationException | PayloadException e) {
-                    throw e;
-                }
-            }
+            this.geolocalizeFromAddressUseCase.handle(ungeolocalizedEstates)
+                    .subscribe(
+                            estates -> this.geolocalizedEstates.postValue(estates),
+                            error -> Log.e(this.getClass().getName(), "fetchGeolocationsToUpdateLiveData subscribe error : " + error.getClass().getName())
+                    );
         }
-        this.geolocalizedEstates.postValue(geolocalized);
     }
 }
