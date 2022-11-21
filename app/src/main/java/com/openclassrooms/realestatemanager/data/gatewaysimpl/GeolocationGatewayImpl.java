@@ -20,14 +20,9 @@ public class GeolocationGatewayImpl implements GeolocationGateway {
         this.geolocationRepository = geolocationRepository;
     }
 
-
     @Override
     public Observable<List<Geolocation>> geolocalize(String streetNumberAndName, String location, String country) throws GeolocationException {
         return this.geolocationRepository.getGeolocationFromAddress(streetNumberAndName, location, country);
     }
 
-    public Observable<Estate> getObservableFromIterable(List<Estate> estates) {
-        return Observable.fromIterable(estates)
-                .observeOn(Schedulers.io());
-    }
 }
