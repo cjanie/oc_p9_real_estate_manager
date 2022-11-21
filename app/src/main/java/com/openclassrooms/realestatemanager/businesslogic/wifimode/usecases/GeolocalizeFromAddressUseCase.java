@@ -21,24 +21,16 @@ public class GeolocalizeFromAddressUseCase {
 
     GeolocationGateway geolocationGateway;
 
-    private Map<Estate, List<Geolocation>> estateGeolocationsMap;
-
-    private BehaviorSubject<Map<Estate, List<Geolocation>>> mapSubject;
-
     public GeolocalizeFromAddressUseCase(GeolocationGateway geolocationGateway) {
         this.geolocationGateway = geolocationGateway;
-        this.estateGeolocationsMap = new HashMap<>();
-        this.mapSubject = BehaviorSubject.create();
-        this.mapSubject.onNext(new HashMap<>());
     }
 
+    public Observable<List<Estate>> handle(Observable<Estate> observableFromIterable) throws PayloadException {
 
-    public Observable<List<Estate>> handle(List<Estate> estates) throws PayloadException {
-        return Observable.fromIterable(estates)
-                .observeOn(Schedulers.io())
+        return observableFromIterable
                 .doOnError(throwable -> Log.e(this.getClass().getName(), "fetchGeolocationsToUpdateLiveData doOnError : " + throwable.getClass().getName()))
 
-                .flatMap(estate -> this.handle(estate)
+                .flatMap(estate -> this.geolocalize(estate)
                         .map(geolocations -> {
                             if(!geolocations.isEmpty()) {
                                 estate.setLatitude(geolocations.get(0).getLatitude());
@@ -47,8 +39,9 @@ public class GeolocalizeFromAddressUseCase {
                             } else {
                                 throw new GeolocationException();
                             }
-                        })
-        ).toList().toObservable();
+                        }))
+                .toList()
+                .toObservable();
     }
 
     private void checkPayload(Estate estate) throws PayloadException {
@@ -61,17 +54,9 @@ public class GeolocalizeFromAddressUseCase {
         }
     }
 
-
-    public Observable<List<Geolocation>> handle(Estate estate) throws PayloadException, GeolocationException {
+    private Observable<List<Geolocation>> geolocalize(Estate estate) throws PayloadException, GeolocationException {
         this.checkPayload(estate);
-        String address = estate.getStreetNumberAndStreetName() + " " + estate.getLocation() + " " + estate.getCountry();
-        return this.geolocalise(address);
+        return this.geolocationGateway.geolocalize(estate.getStreetNumberAndStreetName(), estate.getLocation(), estate.getCountry());
     }
 
-    private Observable<List<Geolocation>> geolocalise(String address) throws GeolocationException, PayloadException {
-        if(address == null || address.isEmpty()) {
-            throw new PayloadException();
-        }
-        return this.geolocationGateway.geolocalize(address);
-    }
 }

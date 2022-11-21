@@ -24,9 +24,10 @@ public class GeolocationRepository {
         return this.geolocationRequest.getData(address, GoogleMapsRequestConfig.API_KEY);
     }
 
-    public Observable<List<Geolocation>> getGeolocationFromAddress(String address) {
-        String formatedAddress = address.replace(" ", "%20");
-        return this.getGeolocationFromAddressResponseRoot(formatedAddress).map(response -> {
+    public Observable<List<Geolocation>> getGeolocationFromAddress(String streetNumberAndName, String location, String country) {
+        String address = streetNumberAndName + " " + location + " " + country;
+        address = address.replace(" ", "%20");
+        return this.getGeolocationFromAddressResponseRoot(address).map(response -> {
             List<Geolocation> geolocations = new ArrayList<>();
             if(!response.getResults().isEmpty()) {
                 for(Result r: response.getResults()) {

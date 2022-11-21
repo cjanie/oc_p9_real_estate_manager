@@ -16,6 +16,7 @@ import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.Ge
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
 public class GeolocationViewModel extends ViewModel {
@@ -37,7 +38,9 @@ public class GeolocationViewModel extends ViewModel {
     // action
     public void fetchGeolocationsToUpdateLiveData(List<Estate> ungeolocalizedEstates) throws PayloadException {
         if(!ungeolocalizedEstates.isEmpty()) {
-            this.geolocalizeFromAddressUseCase.handle(ungeolocalizedEstates)
+            Observable<Estate> observableFromIterable = Observable.fromIterable(ungeolocalizedEstates)
+                    .observeOn(Schedulers.io());
+            this.geolocalizeFromAddressUseCase.handle(observableFromIterable)
                     .subscribe(
                             estates -> this.geolocalizedEstates.postValue(estates),
                             error -> Log.e(this.getClass().getName(), "fetchGeolocationsToUpdateLiveData subscribe error : " + error.getClass().getName())

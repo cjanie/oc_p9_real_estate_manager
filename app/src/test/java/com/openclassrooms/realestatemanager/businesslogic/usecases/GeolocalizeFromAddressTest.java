@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.businesslogic.usecases;
 
+import android.os.Handler;
+
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.PayloadException;
@@ -22,7 +24,7 @@ import io.reactivex.Observable;
 class InMemoryGeolocationGateway implements GeolocationGateway {
 
     @Override
-    public Observable<List<Geolocation>> geolocalize(String address) {
+    public Observable<List<Geolocation>> geolocalize(String streetNumberAndName, String location, String country) throws GeolocationException {
         return Observable.just(Arrays.asList(new Geolocation(0.0, 0.0)));
     }
 }
@@ -33,26 +35,19 @@ public class GeolocalizeFromAddressTest {
     public void returnsLatitudeAndLongitude() throws GeolocationException, PayloadException {
         InMemoryGeolocationGateway geolocationGateway = new InMemoryGeolocationGateway();
         GeolocalizeFromAddressUseCase geolocalizeUseCase = new GeolocalizeFromAddressUseCase(geolocationGateway);
-        List<Geolocation> results = new ArrayList<>();
+
+        List<Estate> results = new ArrayList<>();
+
         Estate estate = new Estate();
         estate.setStreetNumberAndStreetName("2 passage Lonjon");
         estate.setLocation("Montpellier");
         estate.setCountry("France");
-        geolocalizeUseCase.handle(estate).subscribe(results::addAll);
+
+        Observable<Estate> observableFromIterable = Observable.fromIterable(Arrays.asList(estate));
+        geolocalizeUseCase.handle(observableFromIterable).subscribe(results::addAll);
+        Assertions.assertEquals(1, results.size());
         Assertions.assertNotNull(results.get(0).getLatitude());
         Assertions.assertNotNull(results.get(0).getLongitude());
-    }
-
-    @Test
-    public void addressShouldBeDefined() {
-        InMemoryGeolocationGateway geolocationGateway = new InMemoryGeolocationGateway();
-        GeolocalizeFromAddressUseCase geolocalizeUseCase = new GeolocalizeFromAddressUseCase(geolocationGateway);
-        Assertions.assertThrows(PayloadException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                geolocalizeUseCase.handle((Estate) null);
-            }
-        });
     }
 
     @Test
@@ -66,7 +61,10 @@ public class GeolocalizeFromAddressTest {
         List<Estate> estates = Arrays.asList(estate1);
 
         List<Estate> results = new ArrayList<>();
-        geolocalizeUseCase.handle(estates).subscribe(results::addAll);
+
+        Observable<Estate> observableFromIterable = Observable.fromIterable(estates);
+        geolocalizeUseCase.handle(observableFromIterable).subscribe(results::addAll);
+
         Assertions.assertNotNull(results.get(0).getLatitude());
         Assertions.assertNotNull(results.get(0).getLongitude());
     }
