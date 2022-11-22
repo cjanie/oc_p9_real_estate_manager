@@ -25,7 +25,16 @@ public class GeolocalizeFromAddressUseCase {
         this.geolocationGateway = geolocationGateway;
     }
 
-    public Observable<List<Estate>> handle(Observable<Estate> observableFromIterable) throws PayloadException {
+    public Observable<Estate> handleOne(Estate estate) throws GeolocationException {
+        return this.geolocationGateway.geolocalize(estate.getStreetNumberAndStreetName(), estate.getLocation(), estate.getCountry())
+                .map(geolocations -> {
+                    estate.setLatitude(geolocations.get(0).getLatitude());
+                    estate.setLongitude(geolocations.get(0).getLongitude());
+                    return estate;
+                });
+    }
+
+    public Observable<List<Estate>> handleList(Observable<Estate> observableFromIterable) throws PayloadException {
 
         return observableFromIterable
                 .doOnError(throwable -> Log.e(this.getClass().getName(), "fetchGeolocationsToUpdateLiveData doOnError : " + throwable.getClass().getName()))

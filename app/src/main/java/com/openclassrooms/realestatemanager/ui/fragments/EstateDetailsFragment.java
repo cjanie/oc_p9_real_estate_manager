@@ -148,13 +148,11 @@ public class EstateDetailsFragment extends BaseFragment {
                 this.country.setText(estate.getCountry());
             }
 
-            if(estate.getLatitude() != null && estate.getLongitude() != null) {
-                String titleForMarker = estate.getStreetNumberAndStreetName() != null ? estate.getStreetNumberAndStreetName(): estate.getLocation();
-                MapsFragment mapsFragment = new MapEstateFragment(estate.getLatitude(), estate.getLongitude(), titleForMarker);
-                this.getChildFragmentManager().beginTransaction()
-                        .replace(R.id.frame_layout_google_map, mapsFragment)
-                        .commit();
-            }
+            MapsFragment mapsFragment = new MapEstateFragment(estate);
+            this.getChildFragmentManager().beginTransaction()
+                    .replace(R.id.frame_layout_google_map, mapsFragment)
+                    .commit();
+
 
         });
 

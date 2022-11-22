@@ -1,7 +1,5 @@
 package com.openclassrooms.realestatemanager.businesslogic.usecases;
 
-import android.os.Handler;
-
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.PayloadException;
@@ -11,13 +9,10 @@ import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.Ge
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.Observable;
 
@@ -32,7 +27,7 @@ class InMemoryGeolocationGateway implements GeolocationGateway {
 public class GeolocalizeFromAddressTest {
 
     @Test
-    public void returnsLatitudeAndLongitude() throws GeolocationException, PayloadException {
+    public void returnsLatitudeAndLongitudeOfEstates() throws PayloadException {
         InMemoryGeolocationGateway geolocationGateway = new InMemoryGeolocationGateway();
         GeolocalizeFromAddressUseCase geolocalizeUseCase = new GeolocalizeFromAddressUseCase(geolocationGateway);
 
@@ -44,26 +39,24 @@ public class GeolocalizeFromAddressTest {
         estate.setCountry("France");
 
         Observable<Estate> observableFromIterable = Observable.fromIterable(Arrays.asList(estate));
-        geolocalizeUseCase.handle(observableFromIterable).subscribe(results::addAll);
+        geolocalizeUseCase.handleList(observableFromIterable).subscribe(results::addAll);
         Assertions.assertEquals(1, results.size());
         Assertions.assertNotNull(results.get(0).getLatitude());
         Assertions.assertNotNull(results.get(0).getLongitude());
     }
 
     @Test
-    public void geolocationsToEstates() throws PayloadException {
+    public void returnsLatitudeAndLongitudeOfEstate() throws PayloadException, GeolocationException {
         InMemoryGeolocationGateway geolocationGateway = new InMemoryGeolocationGateway();
         GeolocalizeFromAddressUseCase geolocalizeUseCase = new GeolocalizeFromAddressUseCase(geolocationGateway);
-        Estate estate1 = new Estate();
-        estate1.setStreetNumberAndStreetName("2 passage Lonjon");
-        estate1.setLocation("Montpellier");
-        estate1.setCountry("France");
-        List<Estate> estates = Arrays.asList(estate1);
+        Estate estate = new Estate();
+        estate.setStreetNumberAndStreetName("2 passage Lonjon");
+        estate.setLocation("Montpellier");
+        estate.setCountry("France");
 
         List<Estate> results = new ArrayList<>();
 
-        Observable<Estate> observableFromIterable = Observable.fromIterable(estates);
-        geolocalizeUseCase.handle(observableFromIterable).subscribe(results::addAll);
+        geolocalizeUseCase.handleOne(estate).subscribe(results::add);
 
         Assertions.assertNotNull(results.get(0).getLatitude());
         Assertions.assertNotNull(results.get(0).getLongitude());
