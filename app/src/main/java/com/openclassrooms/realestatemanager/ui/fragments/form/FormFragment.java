@@ -22,6 +22,7 @@ import androidx.preference.PreferenceManager;
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.businesslogic.entities.Media;
 import com.openclassrooms.realestatemanager.ui.LocationActivity;
 import com.openclassrooms.realestatemanager.ui.enums.Action;
 import com.openclassrooms.realestatemanager.ui.SettingsActivity;
@@ -157,9 +158,9 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
     }
 
     @Override
-    public void setEstateMediaData(List<String> media) {
-        this.formViewModel.setEstateDataMedia(media);
-        this.handleProgressBarStepMedia(this.isCompleteMedia(media));
+    public void setEstateMediaData(List<Media> mediaList) {
+        this.formViewModel.setEstateDataMedia(mediaList);
+        this.handleProgressBarStepMedia(this.isCompleteMedia(mediaList));
     }
 
     @Override
@@ -225,11 +226,11 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
 
 
     protected boolean isCompleteMedia(Estate estate) {
-        return !estate.getMedia().isEmpty();
+        return !estate.getMediaList().isEmpty();
     }
 
-    protected boolean isCompleteMedia(List<String> media) {
-        return !media.isEmpty();
+    protected boolean isCompleteMedia(List<Media> mediaList) {
+        return !mediaList.isEmpty();
     }
 
     protected boolean isCompleteGeolocation(Estate estate) {

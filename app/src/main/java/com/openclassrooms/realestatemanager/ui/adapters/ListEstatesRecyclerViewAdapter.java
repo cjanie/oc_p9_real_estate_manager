@@ -70,8 +70,8 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
             ((ItemViewHolder) holder).price.setText(this.handleDevise.getPreferenceDeviseAsString() + " " + this.handleDevise.getPriceInPreferenceDevise(estate));
 
-            if(estate.getMedia() != null && !estate.getMedia().isEmpty()) {
-                ((ItemViewHolder) holder).photo.setImageBitmap(BitmapFactory.decodeFile(estate.getMedia().get(0)));
+            if(estate.getMediaList() != null && !estate.getMediaList().isEmpty()) {
+                ((ItemViewHolder) holder).photo.setImageBitmap(BitmapFactory.decodeFile(estate.getMediaList().get(0).getPath()));
             }
 
             boolean isTablet = holder.itemView.getContext().getResources().getBoolean(R.bool.is_tablet);

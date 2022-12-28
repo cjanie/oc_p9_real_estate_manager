@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.businesslogic.entities.Media;
 import com.openclassrooms.realestatemanager.ui.adapters.PhotosRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 import com.openclassrooms.realestatemanager.ui.utils.StorageManagerUtil;
@@ -115,12 +116,12 @@ public class FormMediaFragment extends FormSaveSkipFragment implements
         this.skip.setOnClickListener(this);
 
         // Read media when update mode
-        List<String> media = this.getFormData().getMedia();
+        List<Media> mediaList = this.getFormData().getMediaList();
 
-        if(!media.isEmpty()) {
+        if(!mediaList.isEmpty()) {
             List<Bitmap> bitmaps = new ArrayList<>();
-            for (String path : media) {
-                Bitmap bitmap = BitmapFactory.decodeFile(path);
+            for (Media media : mediaList) {
+                Bitmap bitmap = BitmapFactory.decodeFile(media.getPath());
                 bitmaps.add(bitmap);
             }
             this.photosAdapter.updateList(bitmaps);
@@ -154,7 +155,15 @@ public class FormMediaFragment extends FormSaveSkipFragment implements
                 paths.add(path);
             }
             // Save file paths in db
-            this.saveFilePathsInDb(paths);
+            List<Media> mediaList = new ArrayList<>();
+            if(!paths.isEmpty()) {
+                for(String path: paths) {
+                    Media media = new Media();
+                    media.setPath(path);
+                    mediaList.add(media);
+                }
+            }
+            this.saveFilePathsInDb(mediaList);
         }
     }
 
@@ -163,14 +172,14 @@ public class FormMediaFragment extends FormSaveSkipFragment implements
         return path;
     }
 
-    private void saveFilePathsInDb(List<String> paths) {
-        List<String> pathsExisting = this.getFormData().getMedia();
+    private void saveFilePathsInDb(List<Media> mediaList) {
+        List<Media> mediaListExisting = this.getFormData().getMediaList();
 
-        List<String> pathsUpdate = new ArrayList<>();
-        pathsUpdate.addAll(pathsExisting);
-        pathsUpdate.addAll(paths);
+        List<Media> mediaListUpdate = new ArrayList<>();
+        mediaListUpdate.addAll(mediaListExisting);
+        mediaListUpdate.addAll(mediaList);
 
-        this.handleMediaData.setEstateMediaData(pathsUpdate);
+        this.handleMediaData.setEstateMediaData(mediaListUpdate);
         this.saveEstateDataUpdate.saveEstateDataUpdate();
     }
 
@@ -180,6 +189,6 @@ public class FormMediaFragment extends FormSaveSkipFragment implements
     }
 
     interface HandleMediaData {
-        void setEstateMediaData(List<String> media);
+        void setEstateMediaData(List<Media> mediaList);
     }
 }

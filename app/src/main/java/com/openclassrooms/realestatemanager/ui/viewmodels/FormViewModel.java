@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.businesslogic.entities.Media;
 import com.openclassrooms.realestatemanager.businesslogic.enums.Devise;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateType;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SaveEstateUseCase;
@@ -73,8 +74,8 @@ public class FormViewModel extends ViewModel {
         this.estateData.setDescription(description);
     }
 
-    public void setEstateDataMedia(List<String> media) {
-        this.estateData.setMedia(media);
+    public void setEstateDataMedia(List<Media> mediaList) {
+        this.estateData.setMediaList(mediaList);
     }
 
     public void setEstateDataGeolocation(Double latitude, Double longitude) {

@@ -41,7 +41,7 @@ public class Estate {
 
     private String description;
 
-    private List<String> media;
+    private List<Media> mediaList;
 
     private Double latitude;
 
@@ -58,7 +58,7 @@ public class Estate {
     // Constructor
 
     public Estate() {
-        this.media = new ArrayList<>();
+        this.mediaList = new ArrayList<>();
     }
 
     // Getters and setters
@@ -183,12 +183,12 @@ public class Estate {
         this.description = description;
     }
 
-    public List<String> getMedia() {
-        return media;
+    public List<Media> getMediaList() {
+        return mediaList;
     }
 
-    public void setMedia(List<String> media) {
-        this.media = media;
+    public void setMediaList(List<Media> mediaList) {
+        this.mediaList = mediaList;
     }
 
     public Double getLatitude() {
