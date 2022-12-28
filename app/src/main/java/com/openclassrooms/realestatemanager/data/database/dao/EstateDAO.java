@@ -16,16 +16,16 @@ import java.util.List;
 public interface EstateDAO {
 
     //@Query("SELECT id, type, location, priceInDollars, mediaPaths, latitude, longitude FROM Estate")
-    @Query("SELECT * FROM Estate")
+    @Query("SELECT id, type, location, priceInDollars, mediaList, status FROM Estate")
     List<Estate> findAll();
 
-    @Query("SELECT id, type, location, priceInDollars, mediaList FROM Estate WHERE type= :type")
+    @Query("SELECT id, type, location, priceInDollars, mediaList, status FROM Estate WHERE type= :type")
     List<Estate> searchByType(String type);
 
-    @Query("SELECT id, type, location, priceInDollars, mediaList FROM Estate WHERE location= :location")
+    @Query("SELECT id, type, location, priceInDollars, mediaList, status FROM Estate WHERE location= :location")
     List<Estate> searchByLocation(String location);
 
-    @Query("SELECT id, type, location, priceInDollars, mediaList FROM Estate WHERE priceInDollars<= :maxPriceInDollars")
+    @Query("SELECT id, type, location, priceInDollars, mediaList, status FROM Estate WHERE priceInDollars<= :maxPriceInDollars")
     List<Estate> searchUnderMaxPrice(Float maxPriceInDollars);
 
     @Query("SELECT * FROM Estate WHERE id= :id")

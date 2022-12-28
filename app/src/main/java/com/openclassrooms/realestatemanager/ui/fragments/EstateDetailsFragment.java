@@ -1,11 +1,10 @@
 package com.openclassrooms.realestatemanager.ui.fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,7 +19,6 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Media;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.ui.adapters.MediaReadRecyclerViewAdapter;
-import com.openclassrooms.realestatemanager.ui.adapters.PhotosRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.ui.viewmodels.DetailsViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
@@ -32,8 +30,8 @@ public class EstateDetailsFragment extends BaseFragment {
 
     private final int LAYOUT_ID = R.layout.fragment_details;
 
-    private SharedViewModel sharedViewModel;
-    private DetailsViewModel detailsViewModel;
+    protected SharedViewModel sharedViewModel;
+    protected DetailsViewModel detailsViewModel;
 
     private RecyclerView photosRecyclerView;
     private MediaReadRecyclerViewAdapter mediaRecyclerViewAdapter;

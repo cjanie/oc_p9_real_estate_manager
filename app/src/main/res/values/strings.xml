@@ -38,6 +38,7 @@
     <string name="devise">Devise</string>
     <string name="dollar">$</string>
     <string name="euro">€</string>
+    <string name="sell">Sell</string>
 
     <string name="notification_saved">Saved estate with id</string>
     <string name="user_name_preference_key">user_name_preference</string>
