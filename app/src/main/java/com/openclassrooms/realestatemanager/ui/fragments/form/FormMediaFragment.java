@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -22,6 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.businesslogic.entities.Media;
+import com.openclassrooms.realestatemanager.ui.adapters.MediaWriteRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.ui.adapters.PhotosRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 import com.openclassrooms.realestatemanager.ui.utils.StorageManagerUtil;
@@ -30,13 +31,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FormMediaFragment extends FormSaveSkipFragment implements
-        View.OnClickListener {
+        View.OnClickListener,
+        MediaWriteRecyclerViewAdapter.UpdateMedia {
 
     private final int LAYOUT_ID = R.layout.fragment_form_media;
 
     private RecyclerView photosRecyclerView;
     private PhotosRecyclerViewAdapter photosAdapter;
     private List<Bitmap> photos;
+
+    private MediaWriteRecyclerViewAdapter mediaRecyclerViewAdapter;
+    private List<Media> mediaList;
 
     private Button camera;
 
@@ -68,6 +73,7 @@ public class FormMediaFragment extends FormSaveSkipFragment implements
                         Intent intent = result.getData();
                         if(intent.getExtras() != null) {
                             Bitmap photo = (Bitmap) intent.getExtras().get("data");
+                            photosRecyclerView.setAdapter(photosAdapter);
                             photos.add(photo);
                             enableButton(save);
                             photosAdapter.updateList(photos);
@@ -92,6 +98,7 @@ public class FormMediaFragment extends FormSaveSkipFragment implements
         this.storageManagerUtil = new StorageManagerUtil();
 
         this.photos = new ArrayList<>();
+        this.mediaList = new ArrayList<>();
     }
 
     @Nullable
@@ -107,24 +114,17 @@ public class FormMediaFragment extends FormSaveSkipFragment implements
         this.photosRecyclerView.setLayoutManager(horizontalLayoutManager);
 
         this.photosAdapter = new PhotosRecyclerViewAdapter();
-
-        this.photosRecyclerView.setAdapter(photosAdapter);
+        this.mediaRecyclerViewAdapter = new MediaWriteRecyclerViewAdapter(this);
+        //this.photosRecyclerView.setAdapter(photosAdapter);
+        this.photosRecyclerView.setAdapter(mediaRecyclerViewAdapter);
 
         this.camera.setOnClickListener(this);
         this.save.setOnClickListener(this);
         this.skip.setOnClickListener(this);
 
         // Read media when update mode
-        List<String> media = this.getFormData().getMedia();
-
-        if(!media.isEmpty()) {
-            List<Bitmap> bitmaps = new ArrayList<>();
-            for (String path : media) {
-                Bitmap bitmap = BitmapFactory.decodeFile(path);
-                bitmaps.add(bitmap);
-            }
-            this.photosAdapter.updateList(bitmaps);
-        }
+        this.mediaList = this.getFormData().getMediaList();
+        this.mediaRecyclerViewAdapter.updateList(this.mediaList);
         return root;
     }
 
@@ -136,7 +136,9 @@ public class FormMediaFragment extends FormSaveSkipFragment implements
 
         } else if(view.getId() == R.id.button_save_form) {
             this.launcherRequestPermissionToWriteStorage.launch(this.PERMISSION_WRITE_STORAGE);
-            this.next();
+            if(this.isMediaFormComplete()) {
+                this.next();
+            }
 
         } else if(view.getId() == R.id.button_skip_form) {
             this.next();
@@ -154,7 +156,25 @@ public class FormMediaFragment extends FormSaveSkipFragment implements
                 paths.add(path);
             }
             // Save file paths in db
-            this.saveFilePathsInDb(paths);
+            List<Media> newMediaList = new ArrayList<>();
+            if(!paths.isEmpty()) {
+                for(String path: paths) {
+                    Media media = new Media();
+                    media.setPath(path);
+                    newMediaList.add(media);
+                }
+            }
+            this.saveFilePathsInDb(newMediaList);
+            this.photos.clear();
+
+            // Change adapter to update media with name
+            this.mediaList = this.getFormData().getMediaList();
+            this.photosRecyclerView.setAdapter(mediaRecyclerViewAdapter);
+            mediaRecyclerViewAdapter.updateList(this.mediaList);
+
+        } else if(!this.mediaList.isEmpty()) {
+            this.handleMediaData.setEstateMediaData(this.mediaList);
+            this.saveEstateDataUpdate.saveEstateDataUpdate();
         }
     }
 
@@ -163,15 +183,40 @@ public class FormMediaFragment extends FormSaveSkipFragment implements
         return path;
     }
 
-    private void saveFilePathsInDb(List<String> paths) {
-        List<String> pathsExisting = this.getFormData().getMedia();
+    private void saveFilePathsInDb(List<Media> mediaList) {
+        List<Media> mediaListExisting = this.getFormData().getMediaList();
 
-        List<String> pathsUpdate = new ArrayList<>();
-        pathsUpdate.addAll(pathsExisting);
-        pathsUpdate.addAll(paths);
+        List<Media> mediaListUpdate = new ArrayList<>();
+        mediaListUpdate.addAll(mediaListExisting);
+        mediaListUpdate.addAll(mediaList);
 
-        this.handleMediaData.setEstateMediaData(pathsUpdate);
+        this.handleMediaData.setEstateMediaData(mediaListUpdate);
         this.saveEstateDataUpdate.saveEstateDataUpdate();
+    }
+
+    private boolean isMediaFormComplete() {
+        if(!this.mediaList.isEmpty()) {
+            for(Media media: this.mediaList) {
+                if(media.getName() == null || media.getName().isEmpty()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void updateMedia(Media media) {
+        this.mediaList = this.getFormData().getMediaList();
+        if(!this.mediaList.isEmpty()) {
+            for(Media m: mediaList) {
+                if(m.getPath().equals(media.getPath())) {
+                    m.setName(media.getName());
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -179,7 +224,12 @@ public class FormMediaFragment extends FormSaveSkipFragment implements
         return FormStepEnum.MEDIA;
     }
 
+    @Override
+    public void enableSaveButton() {
+        this.enableButton(this.save);
+    }
+
     interface HandleMediaData {
-        void setEstateMediaData(List<String> media);
+        void setEstateMediaData(List<Media> mediaList);
     }
 }

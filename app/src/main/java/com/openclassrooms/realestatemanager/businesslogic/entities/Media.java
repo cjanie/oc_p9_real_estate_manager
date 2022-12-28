@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.data.database.dtoentities;
+package com.openclassrooms.realestatemanager.businesslogic.entities;
 
 public class Media {
 

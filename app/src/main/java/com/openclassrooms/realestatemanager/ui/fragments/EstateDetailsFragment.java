@@ -17,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.businesslogic.entities.Media;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
+import com.openclassrooms.realestatemanager.ui.adapters.MediaReadRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.ui.adapters.PhotosRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.ui.viewmodels.DetailsViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
@@ -34,11 +36,11 @@ public class EstateDetailsFragment extends BaseFragment {
     private DetailsViewModel detailsViewModel;
 
     private RecyclerView photosRecyclerView;
-    private PhotosRecyclerViewAdapter photosRecyclerViewAdapter;
+    private MediaReadRecyclerViewAdapter mediaRecyclerViewAdapter;
 
-    TextView status;
-    TextView statusDate;
-    TextView agent;
+    private TextView status;
+    private TextView statusDate;
+    private TextView agent;
 
     private TextView surface;
     private TextView numberOfRooms;
@@ -92,18 +94,20 @@ public class EstateDetailsFragment extends BaseFragment {
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
         this.photosRecyclerView.setLayoutManager(horizontalLayoutManager);
 
-        this.photosRecyclerViewAdapter = new PhotosRecyclerViewAdapter();
-        this.photosRecyclerView.setAdapter(this.photosRecyclerViewAdapter);
+        this.mediaRecyclerViewAdapter = new MediaReadRecyclerViewAdapter();
+        this.photosRecyclerView.setAdapter(this.mediaRecyclerViewAdapter);
 
         this.detailsViewModel.getEstate().observe(this.getActivity(), estate -> {
-            List<Bitmap> photos = new ArrayList<>();
-            if(!estate.getMedia().isEmpty()) {
-                for(String path: estate.getMedia()) {
-                    Bitmap bitmap = BitmapFactory.decodeFile(path);
-                    photos.add(bitmap);
+
+            List<Media> mediaList = new ArrayList<>();
+
+            if(!estate.getMediaList().isEmpty()) {
+                for(Media media: estate.getMediaList()) {
+                    mediaList.add(media);
                 }
             }
-            this.photosRecyclerViewAdapter.updateList(photos);
+
+            this.mediaRecyclerViewAdapter.updateList(mediaList);
 
             this.status.setText(estate.getStatus().toString());
 

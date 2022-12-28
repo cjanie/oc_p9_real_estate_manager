@@ -48,7 +48,7 @@ public class Estate {
     private String description;
 
     @TypeConverters({MediaConverter.class})
-    private List<String> mediaPaths;
+    private List<Media> mediaList;
 
     private Double latitude;
 
@@ -62,6 +62,9 @@ public class Estate {
 
     private String agentName;
 
+    public Estate() {
+        this.mediaList = new ArrayList<>();
+    }
 
     public Integer getId() {
         return id;
@@ -167,12 +170,12 @@ public class Estate {
         this.description = description;
     }
 
-    public List<String> getMediaPaths() {
-        return mediaPaths;
+    public List<Media> getMediaList() {
+        return mediaList;
     }
 
-    public void setMediaPaths(List<String> mediaPaths) {
-        this.mediaPaths = mediaPaths;
+    public void setMediaList(List<Media> mediaList) {
+        this.mediaList = mediaList;
     }
 
     public Double getLatitude() {
