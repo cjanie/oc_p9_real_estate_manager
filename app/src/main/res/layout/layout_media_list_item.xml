@@ -13,4 +13,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/textView_media"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/media"
+        android:textColor="@color/white"
+        android:background="@color/black_transparent_80_per_cent"
+        android:padding="@dimen/padding"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView_media"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/imageView_media"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/editText_media"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/media"
+        android:background="@color/white"
+        android:padding="@dimen/padding"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView_media"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/imageView_media"
+        android:visibility="gone"/>
+
+    <Space
+        android:layout_width="@dimen/padding"
+        android:layout_height="@dimen/padding"
+        app:layout_constraintStart_toEndOf="@id/imageView_media"
+        app:layout_constraintTop_toTopOf="@id/imageView_media"
+        app:layout_constraintBottom_toBottomOf="@id/imageView_media"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
