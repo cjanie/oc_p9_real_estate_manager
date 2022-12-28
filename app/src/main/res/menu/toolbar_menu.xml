@@ -22,7 +22,7 @@
         android:id="@+id/menu_item_home"
         android:icon="@drawable/ic_baseline_home_24"
         android:title="@string/home"
-        app:showAsAction="ifRoom"/>
+        />
     <item
         android:id="@+id/menu_item_map"
         android:icon="@drawable/ic_baseline_map_24"
@@ -33,5 +33,11 @@
         android:icon="@drawable/ic_baseline_settings_24"
         android:title="@string/settings"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_item_sell"
+        android:icon="@drawable/ic_baseline_sell_24"
+        android:title="@string/sell"
+        app:showAsAction="never"
+        />
 
 </menu>

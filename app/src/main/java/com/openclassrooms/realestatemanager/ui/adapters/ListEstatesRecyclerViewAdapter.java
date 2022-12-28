@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.ui.enums.Action;
 import com.openclassrooms.realestatemanager.ui.fragments.HandleDevise;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
@@ -86,6 +87,7 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
             holder.itemView.setOnClickListener(view -> {
                 handleEstateDetails.setEstateSelectionId(estate.getId());
+                handleEstateDetails.setEstateSelectionStatus(estate.getStatus());
                 handleEstateDetails.onDetailsCalled();
 
                 if(isTablet) {
@@ -136,6 +138,7 @@ public class ListEstatesRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     public interface HandleEstateDetails {
         void setEstateSelectionId(int estateId);
+        void setEstateSelectionStatus(EstateStatus estateStatus);
         void onDetailsCalled();
         LiveData<Integer> getEstateSelectionId();
     }

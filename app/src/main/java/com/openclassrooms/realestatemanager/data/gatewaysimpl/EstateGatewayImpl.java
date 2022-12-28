@@ -78,7 +78,7 @@ public class EstateGatewayImpl implements EstateGateway {
 
         estate.setStatus(dto.getStatus());
         estate.setDateOfEntreeIntoMarket(dto.getDateOfEntryIntoMarket());
-
+        estate.setDateOfSale(dto.getDateOfSale());
         Agent agent = new Agent();
         agent.setName(dto.getAgentName());
         estate.setAgent(agent);

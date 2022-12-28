@@ -8,6 +8,7 @@ import com.openclassrooms.realestatemanager.businesslogic.usecases.GetEstateById
 import com.openclassrooms.realestatemanager.businesslogic.usecases.GetEstatesUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SaveEstateUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SearchEstatesUseCase;
+import com.openclassrooms.realestatemanager.businesslogic.usecases.SellEstateUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.gateways.GeolocationGateway;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.usecases.GeolocalizeFromAddressUseCase;
 import com.openclassrooms.realestatemanager.data.database.AppDataBase;
@@ -25,6 +26,7 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewM
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.GeolocationViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.SearchViewModelFactory;
+import com.openclassrooms.realestatemanager.ui.viewmodels.factories.SellViewModelFactory;
 
 public class Launch extends Application {
 
@@ -51,6 +53,7 @@ public class Launch extends Application {
     private SearchEstatesUseCase searchEstatesUseCase;
     private GetEstateByIdUseCase getEstateByIdUseCase;
     private GeolocalizeFromAddressUseCase geolocalizeFromAddressUseCase;
+    private SellEstateUseCase sellEstateUseCase;
 
     // View Model Factory
     private EstatesViewModelFactory estatesViewModelFactory;
@@ -58,7 +61,7 @@ public class Launch extends Application {
     private SearchViewModelFactory searchViewModelFactory;
     private DetailsViewModelFactory detailsViewModelFactory;
     private GeolocationViewModelFactory geolocationViewModelFactory;
-
+    private SellViewModelFactory sellViewModelFactory;
     // Show Notification Action
     private ShowNotificationAction showNotificationAction;
 
@@ -164,6 +167,13 @@ public class Launch extends Application {
         return this.geolocalizeFromAddressUseCase;
     }
 
+    private synchronized SellEstateUseCase sellEstateUseCase() {
+        if(this.sellEstateUseCase == null) {
+            this.sellEstateUseCase = new SellEstateUseCase(this.estateCommandGateway());
+        }
+        return this.sellEstateUseCase;
+    }
+
     // View Model Factories
     public synchronized EstatesViewModelFactory estatesViewModelFactory() {
         if(this.estatesViewModelFactory == null) {
@@ -200,6 +210,13 @@ public class Launch extends Application {
             );
         }
         return this.geolocationViewModelFactory;
+    }
+
+    public synchronized SellViewModelFactory sellViewModelFactory() {
+        if(this.sellViewModelFactory == null) {
+            this.sellViewModelFactory = new SellViewModelFactory(this.sellEstateUseCase());
+        }
+        return this.sellViewModelFactory;
     }
 
     public synchronized ShowNotificationAction showNotificationAction() {

@@ -13,6 +13,12 @@ public enum Action {
             return visitor.visitEdit();
         }
     },
+    SELL {
+        @Override
+        public <E> E accept(ActionVisitor<E> visitor) {
+            return visitor.visitSell();
+        }
+    },
     SEARCH {
         @Override
         public <E> E accept(ActionVisitor<E> visitor) {

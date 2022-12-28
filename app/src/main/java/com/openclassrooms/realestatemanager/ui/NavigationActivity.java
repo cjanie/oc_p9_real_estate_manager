@@ -19,6 +19,7 @@ import com.openclassrooms.realestatemanager.ui.fragments.MapEstatesFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.SearchFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.form.FormAddEstateFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.form.FormUpdateEstateFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.SellEstateFragment;
 
 public abstract class NavigationActivity extends LocationActivity implements ListEstatesRecyclerViewAdapter.HandleEstateDetails {
 
@@ -115,6 +116,12 @@ public abstract class NavigationActivity extends LocationActivity implements Lis
             }
 
             @Override
+            public Boolean visitSell() {
+                fullScreenOnMobileAndTablet(fragment);
+                return true;
+            }
+
+            @Override
             public Boolean visitSearch() {
                 fullScreenOnMobileAndTablet(fragment);
                 return true;
@@ -151,6 +158,11 @@ public abstract class NavigationActivity extends LocationActivity implements Lis
             @Override
             public Fragment visitEdit() {
                 return new FormUpdateEstateFragment(NavigationActivity.this);
+            }
+
+            @Override
+            public Fragment visitSell() {
+                return new SellEstateFragment();
             }
 
             @Override

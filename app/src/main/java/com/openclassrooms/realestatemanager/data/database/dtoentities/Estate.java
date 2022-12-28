@@ -60,6 +60,9 @@ public class Estate {
     @TypeConverters(LocalDateConverter.class)
     private LocalDate dateOfEntryIntoMarket;
 
+    @TypeConverters(LocalDateConverter.class)
+    private LocalDate dateOfSale;
+
     private String agentName;
 
     public Estate() {
@@ -208,6 +211,14 @@ public class Estate {
 
     public void setDateOfEntryIntoMarket(LocalDate dateOfEntryIntoMarket) {
         this.dateOfEntryIntoMarket = dateOfEntryIntoMarket;
+    }
+
+    public LocalDate getDateOfSale() {
+        return dateOfSale;
+    }
+
+    public void setDateOfSale(LocalDate dateOfSale) {
+        this.dateOfSale = dateOfSale;
     }
 
     public String getAgentName() {

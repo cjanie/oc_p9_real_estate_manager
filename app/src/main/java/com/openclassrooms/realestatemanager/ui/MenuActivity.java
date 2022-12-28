@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.ui.enums.Action;
 import com.openclassrooms.realestatemanager.ui.enums.ActionVisitor;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
@@ -29,6 +30,7 @@ public class MenuActivity extends NavigationActivity {
         menuItemIdToActionMap.put(R.id.menu_item_home, Action.HOME);
         menuItemIdToActionMap.put(R.id.menu_item_add, Action.ADD);
         menuItemIdToActionMap.put(R.id.menu_item_edit, Action.EDIT);
+        menuItemIdToActionMap.put(R.id.menu_item_sell, Action.SELL);
         menuItemIdToActionMap.put(R.id.menu_item_search, Action.SEARCH);
         menuItemIdToActionMap.put(R.id.menu_item_map, Action.MAP);
     }
@@ -61,6 +63,8 @@ public class MenuActivity extends NavigationActivity {
     private Integer handleMenuItemVisibilityWhenAction(Action action, Menu menu) {
 
         this.setMenuItemVisible(menu, R.id.menu_item_edit, false);
+        this.setMenuItemVisible(menu, R.id.menu_item_sell, false);
+
         return action.accept(new ActionVisitor<Integer>() {
 
             @Override
@@ -82,6 +86,12 @@ public class MenuActivity extends NavigationActivity {
             }
 
             @Override
+            public Integer visitSell() {
+                setMenuItemVisible(menu, R.id.menu_item_sell, false);
+                return R.id.menu_item_sell;
+            }
+
+            @Override
             public Integer visitSearch() {
                 setMenuItemVisible(menu, R.id.menu_item_search, false);
                 return R.id.menu_item_search;
@@ -90,6 +100,11 @@ public class MenuActivity extends NavigationActivity {
             @Override
             public Integer visitDetails() {
                 setMenuItemVisible(menu, R.id.menu_item_edit, true); // So
+                sharedViewModel.getEstateSelectionStatus().observe(MenuActivity.this, estateStatus -> {
+                    if(estateStatus.equals(EstateStatus.SALE)) {
+                        setMenuItemVisible(menu, R.id.menu_item_sell, true);
+                    }
+                });
                 return -1;
             }
 
@@ -141,6 +156,12 @@ public class MenuActivity extends NavigationActivity {
             }
 
             @Override
+            public Boolean visitSell() {
+                onSellCalled();
+                return true;
+            }
+
+            @Override
             public Boolean visitSearch() {
                 onSearchCalled();
                 return true;
@@ -173,6 +194,10 @@ public class MenuActivity extends NavigationActivity {
         this.sharedViewModel.updateAction(Action.EDIT);
     }
 
+    private void onSellCalled() {
+        this.sharedViewModel.updateAction(Action.SELL);
+    }
+
     private void onSearchCalled() {
         this.sharedViewModel.updateAction(Action.SEARCH);
     }
@@ -184,6 +209,11 @@ public class MenuActivity extends NavigationActivity {
     @Override
     public void setEstateSelectionId(int estateId) {
         this.sharedViewModel.updateEstateSelection(estateId);
+    }
+
+    @Override
+    public void setEstateSelectionStatus(EstateStatus estateStatus) {
+        this.sharedViewModel.updateEstateSelection(estateStatus);
     }
 
     @Override
