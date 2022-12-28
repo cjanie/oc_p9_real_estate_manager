@@ -19,6 +19,7 @@ import com.openclassrooms.realestatemanager.data.webservices.GeolocationReposito
 import com.openclassrooms.realestatemanager.data.webservices.retrofit.GoogleMapsHttpClientProvider;
 import com.openclassrooms.realestatemanager.dateprovider.DateProvider;
 import com.openclassrooms.realestatemanager.dateprovider.RealDateProvider;
+import com.openclassrooms.realestatemanager.ui.notifications.ShowNotificationAction;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
@@ -58,6 +59,8 @@ public class Launch extends Application {
     private DetailsViewModelFactory detailsViewModelFactory;
     private GeolocationViewModelFactory geolocationViewModelFactory;
 
+    // Show Notification Action
+    private ShowNotificationAction showNotificationAction;
 
     /////
 
@@ -197,5 +200,12 @@ public class Launch extends Application {
             );
         }
         return this.geolocationViewModelFactory;
+    }
+
+    public synchronized ShowNotificationAction showNotificationAction() {
+        if(this.showNotificationAction == null) {
+            this.showNotificationAction = new ShowNotificationAction(this);
+        }
+        return this.showNotificationAction;
     }
 }

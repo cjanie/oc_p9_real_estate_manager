@@ -1,10 +1,17 @@
 package com.openclassrooms.realestatemanager.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -28,7 +35,18 @@ public abstract class MapWifiFragment extends MapsFragment {
 
     private WifiManager wifiManager;
 
-    private final String api = "";
+    ActivityResultLauncher wifiLauncher = this.registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if(result.getResultCode() == Activity.RESULT_OK) {
+
+                Log.e(TAG, result.getResultCode() + " result code from wifi launcher");
+            }
+
+        }
+    });
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +56,7 @@ public abstract class MapWifiFragment extends MapsFragment {
         this.geolocationViewModel = new ViewModelProvider(this, geolocationViewModelFactory).get(GeolocationViewModel.class);
 
         this.wifiManager = (WifiManager) this.getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        this.wifiLauncher.launch(new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY));
     }
 
     protected boolean isWifiAvailable() {
@@ -46,34 +65,6 @@ public abstract class MapWifiFragment extends MapsFragment {
 
     protected void setWifiEnabled(boolean enable) {
         Utils.setWifiEnabled(this.wifiManager, enable, this.getActivity());
-    }
-
-    protected Geolocation geolocalizeAddress(String streetNumberAndName, String location, String country) throws PayloadException, GeolocationException {
-        if(streetNumberAndName != null && location != null && country != null) {
-
-            GeoApiContext geoApiContext = new GeoApiContext();
-            geoApiContext.setApiKey(BuildConfig.GOOGLE_PLACE_API_KEY);
-            // Get latitude and longitude from address in api
-            GeocodingApiRequest request = GeocodingApi.newRequest(geoApiContext)
-                    .address(streetNumberAndName + " " + location + " " + country);
-
-            try {
-
-                Arrays.stream(request.await()).map(geocodingResult -> {
-                    Geolocation geolocation = new Geolocation(
-                            geocodingResult.geometry.location.lat,
-                            geocodingResult.geometry.location.lng);
-                    Log.d(this.getClass().getName(), "geolocation from api : " + geocodingResult.geometry.location.lat + " " + geocodingResult.geometry.location.lng);
-                    return geolocation;
-                });
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new GeolocationException();
-            }
-
-        }
-        throw new PayloadException();
     }
 
 

@@ -169,48 +169,5 @@ public class MapEstatesFragment extends MapWifiFragment {
 
     }
 
-    private List<Estate> getGeolocalizedEstates(List<Estate> estates) throws WifiException, GeolocationException, PayloadException {
-        if(this.isWifiAvailable()) {
-            return this.geolocalizeEstates(estates);
-        } else {
-
-            throw new WifiException();
-        }
-    }
-
-    private List<Estate> geolocalizeEstates(List<Estate> estates) throws GeolocationException, PayloadException {
-        List<Estate> geolocalizedEstates = new ArrayList<>();
-        if(!estates.isEmpty()) {
-            for(Estate estate: estates) {
-                if(estate.getStreetNumberAndStreetName() != null) {
-
-
-
-
-                        Estate geolocalizedEstate = this.geolocalizeEstate(estate);
-                        geolocalizedEstates.add(geolocalizedEstate);
-
-                }
-            }
-        }
-        return geolocalizedEstates;
-    }
-
-    private Estate geolocalizeEstate(Estate estate) throws GeolocationException, PayloadException {
-        if(estate.getLatitude() != null && estate.getLongitude() != null) {
-            return estate;
-        } else {
-            Geolocation geolocation = this.geolocalizeAddress(
-                    estate.getStreetNumberAndStreetName(),
-                    estate.getLocation(),
-                    estate.getCountry());
-
-            Estate geolocalizedEstate = estate;
-            geolocalizedEstate.setLatitude(geolocation.getLatitude());
-            geolocalizedEstate.setLongitude(geolocation.getLongitude());
-            return geolocalizedEstate;
-        }
-    }
-
 }
 

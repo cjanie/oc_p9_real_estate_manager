@@ -1,5 +1,8 @@
 package com.openclassrooms.realestatemanager.ui.fragments.form;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,10 +27,15 @@ import com.openclassrooms.realestatemanager.ui.enums.Action;
 import com.openclassrooms.realestatemanager.ui.SettingsActivity;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 import com.openclassrooms.realestatemanager.ui.fragments.UseSharedPreferenceFragment;
+import com.openclassrooms.realestatemanager.ui.notifications.ConfigureNotification;
+import com.openclassrooms.realestatemanager.ui.notifications.NotificationReceiver;
+import com.openclassrooms.realestatemanager.ui.notifications.ShowNotificationAction;
 import com.openclassrooms.realestatemanager.ui.viewmodels.FormViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 public abstract class FormFragment extends UseSharedPreferenceFragment implements
@@ -162,7 +170,18 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
 
     @Override
     public void saveEstateDataUpdate() {
-        this.formViewModel.saveEstateDataUpdate();
+        Long id = this.formViewModel.saveEstateDataUpdate();
+        ShowNotificationAction showNotificationAction = ((Launch)this.getActivity().getApplicationContext()).showNotificationAction();
+        showNotificationAction.setNotificationId(Integer.parseInt(id.toString()));
+
+        AlarmManager alarmManager = (AlarmManager) this.getContext().getSystemService(Context.ALARM_SERVICE);
+        
+        Intent intent = new Intent(this.getContext(), NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        //alarmManager.set(AlarmManager.RTC_WAKEUP, 2000, pendingIntent);
+        LocalDateTime dateTime = LocalDateTime.now().plusSeconds(10);
+        long timeToEpoch = dateTime.toEpochSecond(ZoneOffset.UTC);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeToEpoch, AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
     }
 
     @Override

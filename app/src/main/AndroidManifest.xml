@@ -47,6 +47,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.MenuActivity" />
+        <receiver android:name=".ui.notifications.NotificationReceiver"/>s
     </application>
 
 </manifest>

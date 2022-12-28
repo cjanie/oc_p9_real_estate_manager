@@ -39,6 +39,7 @@
     <string name="dollar">$</string>
     <string name="euro">€</string>
 
+    <string name="notification_saved">Saved estate with id</string>
     <string name="user_name_preference_key">user_name_preference</string>
     <string name="devise_preference_key">devise_preference</string>
 
