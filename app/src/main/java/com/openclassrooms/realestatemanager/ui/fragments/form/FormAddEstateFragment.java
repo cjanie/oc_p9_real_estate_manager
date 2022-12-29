@@ -17,8 +17,11 @@ import java.time.LocalDate;
 
 public class FormAddEstateFragment extends FormFragment {
 
-    public FormAddEstateFragment(LocationActivity locationActivity) {
+    private HandleNotification handleNotification;
+
+    public FormAddEstateFragment(LocationActivity locationActivity, HandleNotification handleNotification) {
         super(locationActivity);
+        this.handleNotification = handleNotification;
     }
 
     @Nullable
@@ -35,6 +38,20 @@ public class FormAddEstateFragment extends FormFragment {
         return estate;
     }
 
+    @Override
+    public void saveEstateDataUpdate() {
+        Long id = this.formViewModel.saveEstateDataUpdate();
 
+        // For notification
+        if(id != null && id > 0) {
+            this.handleNotification.setSavedEstateToNotify(this.formViewModel.getEstateData());
+        }
+    }
+
+
+
+    public interface HandleNotification {
+        void setSavedEstateToNotify(Estate estate);
+    }
 
 }

@@ -6,13 +6,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.ui.utils.NotificationUtils;
 import com.openclassrooms.realestatemanager.ui.utils.Utils;
 
 public class MainActivity extends BaseActivity {
@@ -40,7 +39,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        this.makeSimpleNotification();
     }
 
     private void configureTextViewMain(){
@@ -53,44 +51,5 @@ public class MainActivity extends BaseActivity {
         this.textViewQuantity.setTextSize(20);
         this.textViewQuantity.setText(quantity);
     }
-
-    // Notification
-    // https://medium.com/@myofficework000/android-notification-in-koltin-7a81f6b766bb
-    private NotificationChannel notificationChannel;
-    private NotificationManager notificationManager;
-    private Notification.Builder notificationBuilder;
-    private final String channelId = "ChannelId";
-    private final String channelDescription = "ChannelDescription";
-    private String notificationTitle;//this.getString(R.string.app_name);
-    private String notificationContent;//this.getString(R.string.notification_saved);
-    private int smallIconId = R.drawable.ic_baseline_location_city_24;
-
-    private void makeSimpleNotification() {
-        this.getNotificationChannel();
-
-        this.notificationBuilder = new Notification.Builder(this, this.channelId)
-                .setContentTitle(this.notificationTitle)
-                .setContentText(this.notificationContent)
-                .setSmallIcon(smallIconId)
-                .setContentIntent(this.setPendingIntent(this));
-
-        this.notificationManager.notify(1, this.notificationBuilder.build());
-    }
-
-    private void getNotificationChannel() {
-        this.notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        this.notificationChannel = new NotificationChannel(this.channelId, this.channelDescription, NotificationManager.IMPORTANCE_HIGH);
-        this.notificationChannel.enableLights(true);
-        this.notificationChannel.enableVibration(true);
-        this.notificationManager.createNotificationChannel(this.notificationChannel);
-    }
-
-
-
-    private PendingIntent setPendingIntent(Context context) {
-        Intent intent = new Intent(this, MainActivity.class);
-        return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-    }
-
 
 }

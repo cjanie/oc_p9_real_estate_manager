@@ -18,10 +18,13 @@ import com.openclassrooms.realestatemanager.ui.fragments.EstatesFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.MapEstatesFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.SearchFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.form.FormAddEstateFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.form.FormFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.form.FormUpdateEstateFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.SellEstateFragment;
 
-public abstract class NavigationActivity extends LocationActivity implements ListEstatesRecyclerViewAdapter.HandleEstateDetails {
+public abstract class NavigationActivity extends LocationActivity implements
+        ListEstatesRecyclerViewAdapter.HandleEstateDetails,
+        FormAddEstateFragment.HandleNotification {
 
     private final int LAYOUT_ID = R.layout.activity_navigation;
 
@@ -100,6 +103,7 @@ public abstract class NavigationActivity extends LocationActivity implements Lis
             @Override
             public Boolean visitHome() {
                 fullScreenOnMobileAndTablet(fragment);
+                handleNotification();
                 return true;
             }
 
@@ -152,7 +156,7 @@ public abstract class NavigationActivity extends LocationActivity implements Lis
 
             @Override
             public Fragment visitAdd() {
-                return new FormAddEstateFragment(NavigationActivity.this);
+                return new FormAddEstateFragment(NavigationActivity.this, NavigationActivity.this);
             }
 
             @Override
@@ -181,5 +185,7 @@ public abstract class NavigationActivity extends LocationActivity implements Lis
             }
         });
     }
+
+    protected abstract void handleNotification();
 
 }

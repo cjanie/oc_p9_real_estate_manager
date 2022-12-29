@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.ui.enums.Action;
 
@@ -14,6 +15,8 @@ public class SharedViewModel extends ViewModel {
     private MutableLiveData<Integer> estateSelectionId;
 
     private MutableLiveData<EstateStatus> estateSelectionStatus;
+
+    private Estate savedEstateToNotify;
 
     public SharedViewModel() {
         this.menuAction = new MutableLiveData<>();
@@ -47,8 +50,20 @@ public class SharedViewModel extends ViewModel {
         this.estateSelectionStatus.setValue(estateStatus);
     }
 
+    public Estate getSavedEstateToNotify() {
+        return this.savedEstateToNotify;
+    }
+
+    public void updateSavedEstateToNotify(Estate estate) {
+        this.savedEstateToNotify= estate;
+    }
+
     public void initEstateSelection() {
         this.estateSelectionId = new MutableLiveData<>();
         this.estateSelectionStatus = new MutableLiveData<>();
+    }
+
+    public void initSavedEstateToNotify() {
+        this.savedEstateToNotify = null;
     }
 }
