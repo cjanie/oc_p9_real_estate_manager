@@ -6,6 +6,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+
+import androidx.core.app.NotificationCompat;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
@@ -26,21 +29,52 @@ public class NotificationUtils {
     }
 
     public void makeNotification(Estate estate) {
-        this.makeSimpleNotification(estate.getId());
+        String estateId = String.valueOf(estate.getId());
+
+        if(!estate.getMediaList().isEmpty()) {
+            this.makeBigPictureNotification(estateId, estate.getMediaList().get(0).getPath());
+        } else {
+            if(estate.getStreetNumberAndStreetName() != null && estate.getLocation() != null) {
+                this.makeInboxStyleNotification(estateId, estate.getStreetNumberAndStreetName(), estate.getLocation());
+            } else {
+                this.makeSimpleNotification(estateId);
+            }
+        }
     }
 
-    private void makeSimpleNotification(long estateId) {
+    private void makeSimpleNotification(String estateId) {
         NotificationManager notificationManager = (NotificationManager) this.context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         this.initNotificationChannel(notificationManager);
 
-        Notification.Builder notificationBuilder = new Notification.Builder(this.context, this.getChannelId())
-                .setContentTitle(this.getNotificationTitle())
-                .setContentText(this.getNotificationContent(estateId))
-                .setSmallIcon(smallIconId)
-                .setContentIntent(this.createPendingIntent());
+        notificationManager.notify(Integer.parseInt(estateId), this.getNotificationBuilder(estateId).build());
+    }
 
-        notificationManager.notify(1, notificationBuilder.build());
+    private void makeBigPictureNotification(String estateId, String picturePath) {
+        NotificationManager notificationManager = (NotificationManager) this.context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        this.initNotificationChannel(notificationManager);
+
+        NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle();
+        style.bigPicture(BitmapFactory.decodeFile(picturePath));
+
+        NotificationCompat.Builder notificationBuilder = this.getNotificationBuilder(estateId);
+        notificationBuilder.setStyle(style);
+        notificationManager.notify(Integer.parseInt(estateId), notificationBuilder.build());
+    }
+
+    private void makeInboxStyleNotification(String estateId, String address, String location) {
+        NotificationManager notificationManager = (NotificationManager) this.context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        this.initNotificationChannel(notificationManager);
+
+        NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
+        style.addLine(address);
+        style.addLine(location);
+
+        NotificationCompat.Builder notificationBuilder = this.getNotificationBuilder(estateId);
+        notificationBuilder.setStyle(style);
+        notificationManager.notify(Integer.parseInt(estateId), notificationBuilder.build());
     }
 
     private void initNotificationChannel(NotificationManager notificationManager) {
@@ -50,11 +84,19 @@ public class NotificationUtils {
         notificationManager.createNotificationChannel(this.notificationChannel);
     }
 
+    private NotificationCompat.Builder getNotificationBuilder(String estateId) {
+        return new NotificationCompat.Builder(this.context, this.getChannelId())
+                .setContentTitle(this.getNotificationTitle())
+                .setContentText(this.getNotificationContent(estateId))
+                .setSmallIcon(this.smallIconId)
+                .setContentIntent(this.createPendingIntent());
+    }
+
     private String getNotificationTitle() {
         return this.context.getString(R.string.app_name);
     }
 
-    private String getNotificationContent(long estateId) {
+    private String getNotificationContent(String estateId) {
         return this.context.getString(R.string.notification_content) + " " + estateId;
     }
 
@@ -70,6 +112,5 @@ public class NotificationUtils {
         Intent intent = new Intent(this.context, this.packageContextClass);
         return PendingIntent.getActivity(this.context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
     }
-
 
 }
