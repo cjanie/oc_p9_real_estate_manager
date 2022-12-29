@@ -99,9 +99,9 @@ public class MenuActivity extends NavigationActivity {
 
             @Override
             public Integer visitDetails() {
-                setMenuItemVisible(menu, R.id.menu_item_edit, true); // So
                 sharedViewModel.getEstateSelectionStatus().observe(MenuActivity.this, estateStatus -> {
                     if(estateStatus.equals(EstateStatus.SALE)) {
+                        setMenuItemVisible(menu, R.id.menu_item_edit, true); // So
                         setMenuItemVisible(menu, R.id.menu_item_sell, true);
                     }
                 });
