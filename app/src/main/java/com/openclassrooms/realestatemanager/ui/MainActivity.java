@@ -6,8 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -57,34 +55,44 @@ public class MainActivity extends BaseActivity {
     // Notification
     // https://medium.com/@myofficework000/android-notification-in-koltin-7a81f6b766bb
     private NotificationChannel notificationChannel;
-    private NotificationManager notificationManager;
-    private Notification.Builder notificationBuilder;
-    private final String channelId = "ChannelId";
-    private final String channelDescription = "ChannelDescription";
-    private String notificationTitle;//this.getString(R.string.app_name);
-    private String notificationContent;//this.getString(R.string.notification_saved);
-    private int smallIconId = R.drawable.ic_baseline_location_city_24;
+    private final int smallIconId = R.drawable.ic_baseline_location_city_24;
 
     private void makeSimpleNotification() {
-        this.getNotificationChannel();
+        NotificationManager notificationManager = notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        this.notificationBuilder = new Notification.Builder(this, this.channelId)
-                .setContentTitle(this.notificationTitle)
-                .setContentText(this.notificationContent)
+        this.initNotificationChannel(notificationManager);
+
+        Notification.Builder notificationBuilder = new Notification.Builder(this, this.getChannelId())
+                .setContentTitle(this.getNotificationTitle())
+                .setContentText(this.getNotificationContent())
                 .setSmallIcon(smallIconId)
                 .setContentIntent(this.setPendingIntent(this));
 
-        this.notificationManager.notify(1, this.notificationBuilder.build());
+        notificationManager.notify(1, notificationBuilder.build());
     }
 
-    private void getNotificationChannel() {
-        this.notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        this.notificationChannel = new NotificationChannel(this.channelId, this.channelDescription, NotificationManager.IMPORTANCE_HIGH);
+    private void initNotificationChannel(NotificationManager notificationManager) {
+        this.notificationChannel = new NotificationChannel(this.getChannelId(), this.getChannelDescription(), NotificationManager.IMPORTANCE_HIGH);
         this.notificationChannel.enableLights(true);
         this.notificationChannel.enableVibration(true);
-        this.notificationManager.createNotificationChannel(this.notificationChannel);
+        notificationManager.createNotificationChannel(this.notificationChannel);
     }
 
+    private String getNotificationTitle() {
+        return this.getString(R.string.app_name);
+    }
+
+    private String getNotificationContent() {
+        return this.getString(R.string.notification_content);
+    }
+
+    private String getChannelId() {
+        return "Notification Channel" + this.getString(R.string.app_name);
+    }
+
+    private String getChannelDescription() {
+        return this.getString(R.string.notification_channel_description);
+    }
 
 
     private PendingIntent setPendingIntent(Context context) {

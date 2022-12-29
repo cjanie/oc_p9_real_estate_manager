@@ -40,7 +40,11 @@
     <string name="euro">€</string>
     <string name="sell">Sell</string>
 
-    <string name="notification_saved">Saved estate with id</string>
+    <!-- Notification -->
+    <string name="notification_channel_description">Channel to notify when estate has been added with success</string>
+    <string name="notification_content">Saved estate with id</string>
+
+    <!-- Preferences -->
     <string name="user_name_preference_key">user_name_preference</string>
     <string name="devise_preference_key">devise_preference</string>
 
