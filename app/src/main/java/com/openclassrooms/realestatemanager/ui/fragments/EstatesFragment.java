@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.ui.adapters.ListEstatesRecyclerViewAdapter;
+import com.openclassrooms.realestatemanager.ui.utils.NotificationUtils;
 import com.openclassrooms.realestatemanager.ui.viewmodels.EstatesViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
@@ -60,6 +61,8 @@ public class EstatesFragment extends UseSharedPreferenceFragment {
                 estates -> this.adapter.updateList(estates)
                 );
         this.estatesViewModel.fetchEstatesToUpdateLiveData();
+
         return root;
     }
+
 }

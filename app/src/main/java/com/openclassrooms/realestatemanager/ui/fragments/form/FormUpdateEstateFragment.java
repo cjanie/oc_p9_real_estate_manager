@@ -75,4 +75,9 @@ public class FormUpdateEstateFragment extends FormFragment {
         return this.formViewModel.getEstateData();
     }
 
+    @Override
+    public void saveEstateDataUpdate() {
+        this.formViewModel.saveEstateDataUpdate();
+    }
+
 }

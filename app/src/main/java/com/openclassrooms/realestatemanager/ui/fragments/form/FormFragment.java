@@ -1,8 +1,5 @@
 package com.openclassrooms.realestatemanager.ui.fragments.form;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -32,8 +29,6 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.FormViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 
 public abstract class FormFragment extends UseSharedPreferenceFragment implements
@@ -56,6 +51,8 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
     protected SharedViewModel sharedViewModel;
 
     private LocationActivity locationActivity;
+
+
 
     public FormFragment(LocationActivity locationActivity) {
         this.locationActivity = locationActivity;
@@ -164,11 +161,6 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
     public void setGeolocation(Double latitude, Double longitude) {
         this.formViewModel.setEstateDataGeolocation(latitude, longitude);
         this.handleProgressBarStepGeolocation(this.isCompleteGeolocation(latitude, longitude));
-    }
-
-    @Override
-    public void saveEstateDataUpdate() {
-        Long id = this.formViewModel.saveEstateDataUpdate();
     }
 
     @Override

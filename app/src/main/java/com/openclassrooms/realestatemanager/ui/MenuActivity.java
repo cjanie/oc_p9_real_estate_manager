@@ -11,9 +11,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.ui.enums.Action;
 import com.openclassrooms.realestatemanager.ui.enums.ActionVisitor;
+import com.openclassrooms.realestatemanager.ui.utils.NotificationUtils;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 
 import java.util.HashMap;
@@ -46,6 +48,16 @@ public class MenuActivity extends NavigationActivity {
             this.showFragmentForAction(action);
             this.invalidateMenu(); // Launches creation of the menu
         });
+
+
+    }
+
+    @Override
+    protected void handleNotification() {
+        if(this.sharedViewModel.getSavedEstateToNotify() != null) {
+            new NotificationUtils(this.getApplicationContext(), this.getClass()).makeNotification(this.sharedViewModel.getSavedEstateToNotify());
+            this.sharedViewModel.initSavedEstateToNotify();
+        }
     }
 
     @Override
@@ -226,4 +238,8 @@ public class MenuActivity extends NavigationActivity {
         return this.sharedViewModel.getEstateSelectionId();
     }
 
+    @Override
+    public void setSavedEstateToNotify(Estate estate) {
+        this.sharedViewModel.updateSavedEstateToNotify(estate);
+    }
 }
