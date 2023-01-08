@@ -6,6 +6,7 @@ import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.Pa
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.gateways.GeolocationGateway;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.usecases.GeolocalizeFromAddressUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.GeolocationException;
+import com.openclassrooms.realestatemanager.data.gatewaysimpl.InMemoryGeolocationGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,14 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.Observable;
-
-class InMemoryGeolocationGateway implements GeolocationGateway {
-
-    @Override
-    public Observable<List<Geolocation>> geolocalize(String streetNumberAndName, String location, String country) throws GeolocationException {
-        return Observable.just(Arrays.asList(new Geolocation(0.0, 0.0)));
-    }
-}
 
 public class GeolocalizeFromAddressTest {
 

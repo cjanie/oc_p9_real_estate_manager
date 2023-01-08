@@ -1,20 +1,15 @@
 package com.openclassrooms.realestatemanager.ui;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.ui.utils.NotificationUtils;
 import com.openclassrooms.realestatemanager.ui.utils.Utils;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends ConnectivityActivity {
 
     private TextView textViewMain;
     private TextView textViewQuantity;
@@ -38,7 +33,6 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     private void configureTextViewMain(){

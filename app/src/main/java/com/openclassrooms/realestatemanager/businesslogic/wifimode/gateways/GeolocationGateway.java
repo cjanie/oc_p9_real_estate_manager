@@ -9,5 +9,5 @@ import java.util.List;
 import io.reactivex.Observable;
 
 public interface GeolocationGateway {
-    Observable<List<Geolocation>> geolocalize(String streetNumberAndName, String location, String country) throws GeolocationException;
+    Observable<List<Geolocation>> geolocalize(String streetNumberAndName, String location, String country);
 }

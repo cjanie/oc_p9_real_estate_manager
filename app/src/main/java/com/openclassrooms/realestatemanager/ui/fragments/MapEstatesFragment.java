@@ -3,7 +3,6 @@ package com.openclassrooms.realestatemanager.ui.fragments;
 import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -22,11 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
-import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
 import com.openclassrooms.realestatemanager.ui.LocationActivity;
-import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.GeolocationException;
-import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.PayloadException;
-import com.openclassrooms.realestatemanager.ui.exceptions.WifiException;
 import com.openclassrooms.realestatemanager.ui.viewmodels.EstatesViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
 
@@ -43,6 +38,7 @@ public class MapEstatesFragment extends MapWifiFragment {
 
     private GoogleMap map;
 
+    private final List<Estate> ungeolocalizedEstates;
 
     private ActivityResultLauncher launcherLocationPermission = this.registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
@@ -53,6 +49,7 @@ public class MapEstatesFragment extends MapWifiFragment {
 
     public MapEstatesFragment(LocationActivity locationActivity) {
         this.locationActivity = locationActivity;
+        this.ungeolocalizedEstates = new ArrayList<>();
     }
 
     @Override
@@ -63,26 +60,15 @@ public class MapEstatesFragment extends MapWifiFragment {
     }
 
     @Override
+    protected void fetchGeolocationDataWhenWifiEnabled() {
+        this.geolocationViewModel.fetchGeolocationsToUpdateLiveData(this.ungeolocalizedEstates);
+    }
+
+    @Override
     protected void updateMap(GoogleMap googleMap) {
         // Put the markers on the map observing list from the view model
         this.estatesViewModel.getEstates().observe(this.getViewLifecycleOwner(), estates -> {
-
-            try {
                 this.setUpMap(estates);
-
-            } catch (WifiException e) {
-                e.printStackTrace();
-                this.setWifiEnabled(true);
-                Toast.makeText(this.getContext(), e.getClass().getName(), Toast.LENGTH_LONG).show();
-
-                // TODO call back on connectivity result
-                // OK > this.setUpMap(estates, googleMap);
-                // Not OK > this.onBackPressed
-            } catch (PayloadException | GeolocationException e) {
-                e.printStackTrace();
-                Toast.makeText(this.getContext(), e.getClass().getName(), Toast.LENGTH_LONG).show();
-
-            }
         });
         this.estatesViewModel.fetchEstatesToUpdateLiveData();
 
@@ -109,26 +95,20 @@ public class MapEstatesFragment extends MapWifiFragment {
                 .setTitle(estate.getStreetNumberAndStreetName() != null ? estate.getStreetNumberAndStreetName() : "");
     }
 
-    private void setUpMap(List<Estate> estates) throws WifiException, PayloadException, GeolocationException {
+    private void setUpMap(List<Estate> estates) {
         if(!estates.isEmpty()) {
-
-            List<Estate> ungeolocalised = new ArrayList<>();
 
             for(Estate e: estates) {
                 if(e.getLatitude() != null && e.getLongitude() != null) {
                     this.addMarker(e);
                 } else {
                     if(e.getStreetNumberAndStreetName() != null && e.getLocation() != null && e.getCountry() != null) {
-                        ungeolocalised.add(e);
+                        this.ungeolocalizedEstates.add(e);
                     }
                 }
             }
-            this.geolocationViewModel.fetchGeolocationsToUpdateLiveData(ungeolocalised);
-
-
+            this.checkWifiToFetchGeolocationData();
         }
-
-
     }
 
     @SuppressLint("MissingPermission")
@@ -166,7 +146,6 @@ public class MapEstatesFragment extends MapWifiFragment {
     private void displayMyPosition() {
         this.map.setMyLocationEnabled(true);
         this.map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(myPosition.getLatitude(), myPosition.getLongitude())));
-
     }
 
 }

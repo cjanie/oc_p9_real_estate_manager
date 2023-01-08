@@ -90,6 +90,16 @@ public class Utils {
         }
     }
 
+    public static void checkWifi(WifiManager wifiManager, Activity activity) {
+        if(!wifiManager.isWifiEnabled()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                goToSettingsInternetConnectivity(activity);
+            } else {
+                enableWifi(wifiManager);
+            }
+        }
+    }
+
     private static void enableWifi(WifiManager wifiManager) {
         wifiManager.setWifiEnabled(true);
     }

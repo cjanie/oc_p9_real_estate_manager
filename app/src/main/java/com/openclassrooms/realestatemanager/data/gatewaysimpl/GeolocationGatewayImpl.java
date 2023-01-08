@@ -21,7 +21,7 @@ public class GeolocationGatewayImpl implements GeolocationGateway {
     }
 
     @Override
-    public Observable<List<Geolocation>> geolocalize(String streetNumberAndName, String location, String country) throws GeolocationException {
+    public Observable<List<Geolocation>> geolocalize(String streetNumberAndName, String location, String country) {
         return this.geolocationRepository.getGeolocationFromAddress(streetNumberAndName, location, country);
     }
 

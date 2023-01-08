@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
+import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.GeolocationException;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.PayloadException;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.usecases.GeolocalizeFromAddressUseCase;
@@ -28,11 +29,14 @@ public class GeolocationViewModel extends ViewModel {
     // For one
     private MutableLiveData<Estate> geolocalisedEstate;
 
+    private MutableLiveData<List<Geolocation>> geolocationResults;
+
     public GeolocationViewModel(GeolocalizeFromAddressUseCase geolocalizeFromAddressUseCase) {
         this.geolocalizeFromAddressUseCase = geolocalizeFromAddressUseCase;
 
         this.geolocalizedEstates = new MutableLiveData<>(new ArrayList<>());
         this.geolocalisedEstate = new MutableLiveData<>();
+        this.geolocationResults = new MutableLiveData<>();
     }
 
     // Getters to observe result
@@ -44,8 +48,12 @@ public class GeolocationViewModel extends ViewModel {
         return this.geolocalisedEstate;
     }
 
+    public LiveData<List<Geolocation>> getGeolocationResults() {
+        return this.geolocationResults;
+    }
+
     // Action for list
-    public void fetchGeolocationsToUpdateLiveData(List<Estate> ungeolocalizedEstates) throws PayloadException {
+    public void fetchGeolocationsToUpdateLiveData(List<Estate> ungeolocalizedEstates) {
         if(!ungeolocalizedEstates.isEmpty()) {
             Observable<Estate> observableFromIterable = Observable.fromIterable(ungeolocalizedEstates)
                     .observeOn(Schedulers.io());
@@ -59,13 +67,24 @@ public class GeolocationViewModel extends ViewModel {
     }
 
     // Action for one
-    public void fetchGeolocationsToUpdateLiveData(Estate ungeolocalizedEstate) throws GeolocationException {
+    public void fetchGeolocationsToUpdateLiveData(Estate ungeolocalizedEstate) {
         this.geolocalizeFromAddressUseCase.handleOne(ungeolocalizedEstate)
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                         estate -> this.geolocalisedEstate.postValue(estate),
                         error -> Log.e(this.getClass().getName(), "fetchGeolocationsToUpdateLiveData subscribe error : " + error.getClass().getName())
+                );
+    }
+
+    public void fetchGeolocationResultsToUpdateLiveData(Estate ungeolocalizedEstate) {
+        this.geolocalizeFromAddressUseCase.getGeolocationResults(ungeolocalizedEstate)
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        geolocations -> this.geolocationResults.postValue(geolocations),
+                        error -> Log.e(this.getClass().getName(), "fetchGeolocationResultsToUpdateLiveData subscribe error : " + error.getClass().getName())
+
                 );
     }
 }
