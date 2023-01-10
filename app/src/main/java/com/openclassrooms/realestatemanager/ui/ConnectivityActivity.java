@@ -1,10 +1,5 @@
 package com.openclassrooms.realestatemanager.ui;
 
-import static com.openclassrooms.realestatemanager.ui.utils.HttpConnectionConfig.CONNECT_TIME_OUT;
-import static com.openclassrooms.realestatemanager.ui.utils.HttpConnectionConfig.REQUEST_METHOD;
-import static com.openclassrooms.realestatemanager.ui.utils.HttpConnectionConfig.PING_URL;
-import static com.openclassrooms.realestatemanager.ui.utils.HttpConnectionConfig.READ_TIME_OUT;
-
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -19,12 +14,6 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.ui.viewmodels.ConnectivityViewModel;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import io.reactivex.Observable;
 
 public class ConnectivityActivity extends BaseActivity {
 
@@ -115,7 +104,5 @@ public class ConnectivityActivity extends BaseActivity {
     private enum NetworkState {
         ON_AVAILABLE, ON_LOST, ON_CAPABILITIES_CHANGED
     }
-
-
 
 }

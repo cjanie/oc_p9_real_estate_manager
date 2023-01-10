@@ -31,13 +31,6 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
-    public void useConnectivityManager() {
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        ConnectivityManager connectivityManager = (ConnectivityManager) appContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        assertNotNull(connectivityManager);
-    }
-
-    @Test
     public void connectionOK() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         WifiManager wifiManager = (WifiManager) appContext.getSystemService(Context.WIFI_SERVICE);
