@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.openclassrooms.realestatemanager.Launch;
 
 import com.openclassrooms.realestatemanager.ui.utils.Utils;
-import com.openclassrooms.realestatemanager.ui.viewmodels.GeolocationViewModel;
-import com.openclassrooms.realestatemanager.ui.viewmodels.factories.GeolocationViewModelFactory;
+import com.openclassrooms.realestatemanager.ui.viewmodels.GeocodingViewModel;
+import com.openclassrooms.realestatemanager.ui.viewmodels.factories.GeocodingViewModelFactory;
 
 public abstract class MapWifiFragment extends MapsFragment {
 
-    protected GeolocationViewModel geolocationViewModel;
+    protected GeocodingViewModel geocodingViewModel;
 
     private WifiManager wifiManager;
 
@@ -23,8 +23,8 @@ public abstract class MapWifiFragment extends MapsFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        GeolocationViewModelFactory geolocationViewModelFactory = ((Launch)this.getActivity().getApplicationContext()).geolocationViewModelFactory();
-        this.geolocationViewModel = new ViewModelProvider(this, geolocationViewModelFactory).get(GeolocationViewModel.class);
+        GeocodingViewModelFactory geocodingViewModelFactory = ((Launch)this.getActivity().getApplicationContext()).geolocationViewModelFactory();
+        this.geocodingViewModel = new ViewModelProvider(this, geocodingViewModelFactory).get(GeocodingViewModel.class);
 
         this.wifiManager = (WifiManager) this.getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }

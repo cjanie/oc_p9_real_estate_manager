@@ -19,7 +19,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class GeolocationViewModel extends ViewModel {
+public class GeocodingViewModel extends ViewModel {
 
     private GeolocalizeFromAddressUseCase geolocalizeFromAddressUseCase;
 
@@ -31,7 +31,7 @@ public class GeolocationViewModel extends ViewModel {
 
     private MutableLiveData<List<Geolocation>> geolocationResults;
 
-    public GeolocationViewModel(GeolocalizeFromAddressUseCase geolocalizeFromAddressUseCase) {
+    public GeocodingViewModel(GeolocalizeFromAddressUseCase geolocalizeFromAddressUseCase) {
         this.geolocalizeFromAddressUseCase = geolocalizeFromAddressUseCase;
 
         this.geolocalizedEstates = new MutableLiveData<>(new ArrayList<>());

@@ -23,7 +23,7 @@ import com.openclassrooms.realestatemanager.dateprovider.RealDateProvider;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
-import com.openclassrooms.realestatemanager.ui.viewmodels.factories.GeolocationViewModelFactory;
+import com.openclassrooms.realestatemanager.ui.viewmodels.factories.GeocodingViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.SearchViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.SellViewModelFactory;
 
@@ -59,7 +59,7 @@ public class Launch extends Application {
     private FormViewModelFactory formViewModelFactory;
     private SearchViewModelFactory searchViewModelFactory;
     private DetailsViewModelFactory detailsViewModelFactory;
-    private GeolocationViewModelFactory geolocationViewModelFactory;
+    private GeocodingViewModelFactory geocodingViewModelFactory;
     private SellViewModelFactory sellViewModelFactory;
 
     /////
@@ -200,13 +200,13 @@ public class Launch extends Application {
         return this.detailsViewModelFactory;
     }
 
-    public synchronized GeolocationViewModelFactory geolocationViewModelFactory() {
-        if(this.geolocationViewModelFactory == null) {
-            this.geolocationViewModelFactory = new GeolocationViewModelFactory(
+    public synchronized GeocodingViewModelFactory geolocationViewModelFactory() {
+        if(this.geocodingViewModelFactory == null) {
+            this.geocodingViewModelFactory = new GeocodingViewModelFactory(
                     this.geolocalizeFromAddressUseCase()
             );
         }
-        return this.geolocationViewModelFactory;
+        return this.geocodingViewModelFactory;
     }
 
     public synchronized SellViewModelFactory sellViewModelFactory() {

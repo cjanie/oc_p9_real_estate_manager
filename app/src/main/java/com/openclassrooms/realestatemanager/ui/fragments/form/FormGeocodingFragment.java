@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 
 public class FormGeocodingFragment extends FormSaveSkipFragment implements View.OnClickListener {
@@ -35,23 +34,14 @@ public class FormGeocodingFragment extends FormSaveSkipFragment implements View.
 
         this.skip.setOnClickListener(this);
         this.save.setOnClickListener(this);
+
+        this.handleGeocodingData.updateGeocodingRequestToSetGeocodingData();
         return root;
     }
 
     @Override
     protected void save() {
-        Geolocation geolocation = this.requestGeocodingData();
-        this.handleGeocodingData.setEstateGeocodingData(geolocation.getLatitude(), geolocation.getLongitude());
         this.saveEstateDataUpdate.saveEstateDataUpdate();
-    }
-
-    private Geolocation requestGeocodingData() {
-        Double latitude = 0.0; // TODO Geocoding request via view model
-        Double longitude = 0.0;
-        Geolocation geolocation = new Geolocation();
-        geolocation.setLatitude(latitude);
-        geolocation.setLongitude(longitude);
-        return geolocation;
     }
 
     @Override
@@ -66,11 +56,17 @@ public class FormGeocodingFragment extends FormSaveSkipFragment implements View.
             this.save();
             this.next();
         } else {
+            this.resetGeocodingData();
             this.next();
         }
     }
 
+    private void resetGeocodingData() {
+        this.handleGeocodingData.resetGeocodingData();
+    }
+
     public interface HandleGeocodingData {
-        void setEstateGeocodingData(double latitude, double longitude);
+        void updateGeocodingRequestToSetGeocodingData();
+        void resetGeocodingData();
     }
 }

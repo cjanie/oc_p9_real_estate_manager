@@ -1,14 +1,10 @@
 package com.openclassrooms.realestatemanager.ui.fragments;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
-import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
-import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.GeolocationException;
 
 public class MapEstateFragment extends MapWifiFragment {
 
@@ -22,7 +18,7 @@ public class MapEstateFragment extends MapWifiFragment {
     protected void updateMap(GoogleMap googleMap) {
 
 /*
-        this.geolocationViewModel.getGeolocalizedEstate().observe(this.getViewLifecycleOwner(),
+        this.geocodingViewModel.getGeolocalizedEstate().observe(this.getViewLifecycleOwner(),
                 estate -> {
                     LatLng position = new LatLng(estate.getLatitude(), estate.getLongitude());
                     String title = estate.getStreetNumberAndStreetName() != null ? estate.getStreetNumberAndStreetName() : "";
@@ -33,7 +29,7 @@ public class MapEstateFragment extends MapWifiFragment {
                 });
 
  */
-        this.geolocationViewModel.getGeolocationResults().observe(this.getViewLifecycleOwner(),
+        this.geocodingViewModel.getGeolocationResults().observe(this.getViewLifecycleOwner(),
                 geolocations -> {
                     if(!geolocations.isEmpty()) {
                         for(int i=0; i<geolocations.size(); i++) {
@@ -65,8 +61,8 @@ public class MapEstateFragment extends MapWifiFragment {
     @Override
     protected void fetchGeolocationDataWhenWifiEnabled() {
 
-        this.geolocationViewModel.fetchGeolocationsToUpdateLiveData(this.estate);
-        this.geolocationViewModel.fetchGeolocationResultsToUpdateLiveData(this.estate);
+        this.geocodingViewModel.fetchGeolocationsToUpdateLiveData(this.estate);
+        this.geocodingViewModel.fetchGeolocationResultsToUpdateLiveData(this.estate);
 
     }
 }

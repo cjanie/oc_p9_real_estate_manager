@@ -61,7 +61,7 @@ public class MapEstatesFragment extends MapWifiFragment {
 
     @Override
     protected void fetchGeolocationDataWhenWifiEnabled() {
-        this.geolocationViewModel.fetchGeolocationsToUpdateLiveData(this.ungeolocalizedEstates);
+        this.geocodingViewModel.fetchGeolocationsToUpdateLiveData(this.ungeolocalizedEstates);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class MapEstatesFragment extends MapWifiFragment {
         });
         this.estatesViewModel.fetchEstatesToUpdateLiveData();
 
-        this.geolocationViewModel.getGeolocalizedEstates().observe(this.getViewLifecycleOwner(), estates -> {
+        this.geocodingViewModel.getGeolocalizedEstates().observe(this.getViewLifecycleOwner(), estates -> {
             if(!estates.isEmpty()) {
                 for(Estate estate: estates) {
                     this.addMarker(estate);
