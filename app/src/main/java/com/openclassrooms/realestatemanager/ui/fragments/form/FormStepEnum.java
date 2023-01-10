@@ -30,10 +30,17 @@ public enum FormStepEnum {
         public <E> E accept(FormStepVisitor<E> visitor) {
             return visitor.visitDescriptionDetails();
         }
-    }, ADDRESS {
+    }
+    , ADDRESS {
         @Override
         public <E> E accept(FormStepVisitor<E> visitor) {
             return visitor.visitAddress();
+        }
+    }
+    , GEOCODING {
+        @Override
+        public <E> E accept(FormStepVisitor<E> visitor) {
+            return visitor.visitGeocoding();
         }
     };
 

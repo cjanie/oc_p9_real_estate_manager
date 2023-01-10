@@ -38,9 +38,11 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
         FormDescriptionFragment.HandleDescriptionData,
         FormMediaFragment.HandleMediaData,
         FormGeolocationPermissionFragmentForm.HandleGeolocation,
+        FormGeocodingFragment.HandleGeocodingData,
         SaveEstateDataUpdate,
         Next,
-        FormData, FormDelete {
+        FormData,
+        FormDelete {
 
     private final int LAYOUT_ID = R.layout.fragment_form;
 
@@ -164,6 +166,12 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
     }
 
     @Override
+    public void setEstateGeocodingData(double latitude, double longitude) {
+        this.formViewModel.setEstateDataGeolocation(latitude, longitude);
+        this.handleProgressBarStepGeocoding(this.isCompleteGeolocation(latitude, longitude));
+    }
+
+    @Override
     public Estate getData() {
         return this.formViewModel.getEstateData();
     }
@@ -242,6 +250,10 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
 
     protected void handleProgressBarStepGeolocation(boolean isComplete) {
         this.handleStepsProgressBar(FormStepEnum.GEOLOCATION.ordinal(), isComplete);
+    }
+
+    protected void handleProgressBarStepGeocoding(boolean isComplete) {
+        this.handleStepsProgressBar(FormStepEnum.GEOCODING.ordinal(), isComplete);
     }
 
     private void handleStepsProgressBar(int stepIndex, boolean isComplete) {
@@ -341,6 +353,11 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
                         FormFragment.this
                 );
             }
+
+            @Override
+            public FormSaveSkipFragment visitGeocoding() {
+                return new FormGeocodingFragment(FormFragment.this, FormFragment.this, FormFragment.this, FormFragment.this);
+            }
         });
     }
 
@@ -375,6 +392,12 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
             public Integer visitAddress() {
                 return R.drawable.ic_baseline_location_city_24;
             }
+
+            @Override
+            public Integer visitGeocoding() {
+                return R.drawable.ic_baseline_map_24;
+            }
+
         });
     }
 
