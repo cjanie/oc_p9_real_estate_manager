@@ -32,6 +32,14 @@ public class SaveEstateUseCase extends HasDeviseReference {
             LocalDate startDate = this.dateProvider.today();
             estate.setDateOfEntreeIntoMarket(startDate);
         }
+        return this.save(estate);
+    }
+
+    public Long handleUpdate(Estate estate) {
+        return this.save(estate);
+    }
+
+    private Long save(Estate estate) {
         return estateGateway.save(this.checkDeviseReference(estate));
     }
 }

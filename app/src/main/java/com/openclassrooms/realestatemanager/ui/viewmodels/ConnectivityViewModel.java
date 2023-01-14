@@ -21,7 +21,14 @@ public class ConnectivityViewModel extends ViewModel {
     private MutableLiveData<Boolean> isNetworkConnected;
 
     public ConnectivityViewModel() {
+
         this.isNetworkConnected = new MutableLiveData<>(false);
+        this.isNetworkConnectedSubject.subscribe(
+                isNetworkConnectedResult -> {
+                    //
+                    this.isNetworkConnected.postValue(isNetworkConnectedResult);
+                }
+        );
     }
 
     public LiveData<Boolean> isNetworkConnected() {
@@ -30,9 +37,6 @@ public class ConnectivityViewModel extends ViewModel {
 
     public void updateIsNetworkConnected() {
         this.updateIsNetworkConnectedSubject();
-        this.isNetworkConnectedSubject.subscribe(
-                isNetworkConnectedResult -> this.isNetworkConnected.postValue(isNetworkConnectedResult)
-        );
     }
 
     private BehaviorSubject<Boolean> isNetworkConnectedSubject = BehaviorSubject.create();

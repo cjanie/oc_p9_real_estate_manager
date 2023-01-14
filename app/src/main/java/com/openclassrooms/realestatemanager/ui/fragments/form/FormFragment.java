@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.fragments.form;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -30,13 +31,16 @@ import com.openclassrooms.realestatemanager.ui.enums.Action;
 import com.openclassrooms.realestatemanager.ui.SettingsActivity;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 import com.openclassrooms.realestatemanager.ui.fragments.UseSharedPreferenceFragment;
+import com.openclassrooms.realestatemanager.ui.utils.WorkStoreGatewayConfig;
 import com.openclassrooms.realestatemanager.ui.viewmodels.FormViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.GeocodingViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.GeocodingViewModelFactory;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public abstract class FormFragment extends UseSharedPreferenceFragment implements
         FormMandatoryFragment.HandleFormMandatoryFields,
@@ -186,6 +190,7 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
     @Override
     public void updateGeocodingRequestToSetGeocodingData() {
         if(this.getData().getLatitude() == null && this.getData().getLongitude() == null) {
+
             this.geocodingViewModel.getGeolocationResults().observe(this,
                     geolocations -> {
                         if(!geolocations.isEmpty()) {
@@ -197,6 +202,18 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
                     });
             this.geocodingViewModel.fetchGeolocationResultsToUpdateLiveData(this.getData());
         }
+    }
+
+    protected void saveIdForGeocodingRequestWorker(Long id) {
+        String preferencesName = WorkStoreGatewayConfig.PREFERENCES_NAME;
+        String preferenceKey = WorkStoreGatewayConfig.PREFERENCE_KEY;
+
+        SharedPreferences preferences = this.getContext().getApplicationContext().getSharedPreferences(preferencesName, Context.MODE_PRIVATE);
+
+        Set<String> idsInPreferences = preferences.getStringSet(preferenceKey, new HashSet<>());
+
+        idsInPreferences.add(id.toString());
+        preferences.edit().putStringSet(preferenceKey, idsInPreferences).commit();
     }
 
     private MarkerOptions getMarker(Geolocation geolocation) {

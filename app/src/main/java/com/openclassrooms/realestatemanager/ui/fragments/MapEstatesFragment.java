@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.ui.fragments;
 import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -28,7 +29,7 @@ import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewM
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapEstatesFragment extends MapWifiFragment {
+public class MapEstatesFragment extends MapsFragment {
 
     private EstatesViewModel estatesViewModel;
 
@@ -37,8 +38,6 @@ public class MapEstatesFragment extends MapWifiFragment {
     private Location myPosition;
 
     private GoogleMap map;
-
-    private final List<Estate> ungeolocalizedEstates;
 
     private ActivityResultLauncher launcherLocationPermission = this.registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
@@ -49,7 +48,6 @@ public class MapEstatesFragment extends MapWifiFragment {
 
     public MapEstatesFragment(LocationActivity locationActivity) {
         this.locationActivity = locationActivity;
-        this.ungeolocalizedEstates = new ArrayList<>();
     }
 
     @Override
@@ -59,56 +57,40 @@ public class MapEstatesFragment extends MapWifiFragment {
         this.estatesViewModel = new ViewModelProvider(this, estatesViewModelFactory).get(EstatesViewModel.class);
     }
 
-    @Override
-    protected void fetchGeolocationDataWhenWifiEnabled() {
-        this.geocodingViewModel.fetchGeolocationsToUpdateLiveData(this.ungeolocalizedEstates);
-    }
 
     @Override
     protected void updateMap(GoogleMap googleMap) {
+
+        this.map = googleMap;
+
         // Put the markers on the map observing list from the view model
-        this.estatesViewModel.getEstates().observe(this.getViewLifecycleOwner(), estates -> {
-                this.setUpMap(estates);
+        this.estatesViewModel.getEstates().observe(this.getViewLifecycleOwner(),
+                estates -> {
+                    if(!estates.isEmpty()) {
+                        for(Estate e: estates) {
+                            if(e.getLatitude() != null && e.getLongitude() != null) {
+                                this.addMarker(e, this.map);
+                            }
+                        }
+                    }
         });
         this.estatesViewModel.fetchEstatesToUpdateLiveData();
 
-        this.geocodingViewModel.getGeolocalizedEstates().observe(this.getViewLifecycleOwner(), estates -> {
-            if(!estates.isEmpty()) {
-                for(Estate estate: estates) {
-                    this.addMarker(estate);
-                }
-
-            }
-        });
-
-        this.map = googleMap;
-        // Enable my position
+        // Display my position
         this.locationActivity.launchLocationPermissionRequest(this.launcherLocationPermission);
 
-        this.map.setMinZoomPreference(6.0f);
-        this.map.setMaxZoomPreference(14.0f);
+        this.configZoom();
     }
 
-    private void addMarker(Estate estate) {
-        this.map.addMarker(new MarkerOptions()
+    private void addMarker(Estate estate, GoogleMap googleMap) {
+        googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(estate.getLatitude(), estate.getLongitude())))
                 .setTitle(estate.getStreetNumberAndStreetName() != null ? estate.getStreetNumberAndStreetName() : "");
     }
 
-    private void setUpMap(List<Estate> estates) {
-        if(!estates.isEmpty()) {
-
-            for(Estate e: estates) {
-                if(e.getLatitude() != null && e.getLongitude() != null) {
-                    this.addMarker(e);
-                } else {
-                    if(e.getStreetNumberAndStreetName() != null && e.getLocation() != null && e.getCountry() != null) {
-                        this.ungeolocalizedEstates.add(e);
-                    }
-                }
-            }
-            this.checkWifiToFetchGeolocationData();
-        }
+    private void configZoom() {
+        this.map.setMinZoomPreference(6.0f);
+        this.map.setMaxZoomPreference(14.0f);
     }
 
     @SuppressLint("MissingPermission")

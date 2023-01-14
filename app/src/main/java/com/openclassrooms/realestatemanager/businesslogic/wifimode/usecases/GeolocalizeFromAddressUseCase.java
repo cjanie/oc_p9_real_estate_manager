@@ -4,9 +4,11 @@ import android.util.Log;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
+import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.NetworkException;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.PayloadException;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.gateways.GeolocationGateway;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.GeolocationException;
+import com.openclassrooms.realestatemanager.businesslogic.wifimode.gateways.NetworkGateway;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,20 +23,28 @@ public class GeolocalizeFromAddressUseCase {
 
     GeolocationGateway geolocationGateway;
 
-    public GeolocalizeFromAddressUseCase(GeolocationGateway geolocationGateway) {
+    NetworkGateway networkGateway;
+
+    public GeolocalizeFromAddressUseCase(GeolocationGateway geolocationGateway, NetworkGateway networkGateway) {
         this.geolocationGateway = geolocationGateway;
+        this.networkGateway = networkGateway;
     }
 
     public Observable<Estate> handleOne(Estate estate) {
+
         return this.geolocationGateway.geolocalize(estate.getStreetNumberAndStreetName(), estate.getLocation(), estate.getCountry())
                 .map(geolocations -> {
                     estate.setLatitude(geolocations.get(0).getLatitude());
                     estate.setLongitude(geolocations.get(0).getLongitude());
                     return estate;
                 });
+
+
     }
 
     public Observable<List<Geolocation>> getGeolocationResults(Estate estate) {
+        // if !internet Observable.error(new Exception());
+        // stocke var internet depuis view model
         return this.geolocationGateway.geolocalize(estate.getStreetNumberAndStreetName(), estate.getLocation(), estate.getCountry());
     }
 

@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.fragments.form;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,11 +11,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.enums.EstateStatus;
 import com.openclassrooms.realestatemanager.ui.LocationActivity;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FormAddEstateFragment extends FormFragment {
 
@@ -42,13 +47,15 @@ public class FormAddEstateFragment extends FormFragment {
     public void saveEstateDataUpdate() {
         Long id = this.formViewModel.saveEstateDataUpdate();
 
-        // For notification
         if(id != null && id > 0) {
-            this.handleNotification.setSavedEstateToNotify(this.formViewModel.getEstateData());
+            // For notification
+            this.handleNotification.setSavedEstateToNotify(this.getData());
+            // For geocoding request worker
+            if(this.isCompleteAddress(this.getData())) {
+                this.saveIdForGeocodingRequestWorker(id);
+            }
         }
     }
-
-
 
     public interface HandleNotification {
         void setSavedEstateToNotify(Estate estate);

@@ -16,7 +16,7 @@ import java.util.List;
 public interface EstateDAO {
 
     //@Query("SELECT id, type, location, priceInDollars, mediaPaths, latitude, longitude FROM Estate")
-    @Query("SELECT id, type, location, priceInDollars, mediaList, status FROM Estate")
+    @Query("SELECT id, type, location, priceInDollars, mediaList, status, latitude, longitude FROM Estate")
     List<Estate> findAll();
 
     @Query("SELECT id, type, location, priceInDollars, mediaList, status FROM Estate WHERE type= :type")

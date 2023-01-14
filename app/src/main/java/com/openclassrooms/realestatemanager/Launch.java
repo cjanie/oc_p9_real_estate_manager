@@ -10,16 +10,21 @@ import com.openclassrooms.realestatemanager.businesslogic.usecases.SaveEstateUse
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SearchEstatesUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.usecases.SellEstateUseCase;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.gateways.GeolocationGateway;
+import com.openclassrooms.realestatemanager.businesslogic.wifimode.gateways.NetworkGateway;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.usecases.GeolocalizeFromAddressUseCase;
 import com.openclassrooms.realestatemanager.data.database.AppDataBase;
 import com.openclassrooms.realestatemanager.data.database.dao.EstateDAO;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateCommandGatewayImpl;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.EstateGatewayImpl;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.GeolocationGatewayImpl;
+import com.openclassrooms.realestatemanager.data.gatewaysimpl.NetworkGatewayImpl;
 import com.openclassrooms.realestatemanager.data.webservices.GeolocationRepository;
 import com.openclassrooms.realestatemanager.data.webservices.retrofit.GoogleMapsHttpClientProvider;
 import com.openclassrooms.realestatemanager.dateprovider.DateProvider;
 import com.openclassrooms.realestatemanager.dateprovider.RealDateProvider;
+import com.openclassrooms.realestatemanager.ui.utils.WorkStore;
+import com.openclassrooms.realestatemanager.ui.utils.WorkStoreGateway;
+import com.openclassrooms.realestatemanager.ui.utils.WorkStoreGatewayImpl;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.DetailsViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.EstatesViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
@@ -42,6 +47,9 @@ public class Launch extends Application {
     private EstateGateway estateGateway;
     private EstateCommandGateway estateCommandGateway;
     private GeolocationGateway geolocationGateway;
+    private NetworkGateway networkGateway;
+    private WorkStoreGateway workStoreGateway;
+    private WorkStore workStore;
 
     // Providers
     private DateProvider dateProvider;
@@ -113,6 +121,27 @@ public class Launch extends Application {
         return this.geolocationGateway;
     }
 
+    private synchronized NetworkGateway networkGateway() {
+        if(this.networkGateway == null) {
+            this.networkGateway = new NetworkGatewayImpl();
+        }
+        return this.networkGateway;
+    }
+
+    private synchronized WorkStoreGateway workStoreGateway() {
+        if(this.workStoreGateway == null) {
+            this.workStoreGateway = new WorkStoreGatewayImpl(this);
+        }
+        return this.workStoreGateway;
+    }
+
+    public synchronized WorkStore workStore() {
+        if(this.workStore == null) {
+            this.workStore = new WorkStore(this.workStoreGateway());
+        }
+        return this.workStore;
+    }
+
     // Providers
     private synchronized DateProvider dateProvider() {
         if(this.dateProvider == null) {
@@ -129,7 +158,7 @@ public class Launch extends Application {
         return this.getEstatesUseCase;
     }
 
-    private synchronized SaveEstateUseCase saveEstateUseCase() {
+    public synchronized SaveEstateUseCase saveEstateUseCase() {
         if(this.saveEstateUseCase == null) {
             this.saveEstateUseCase = new SaveEstateUseCase(
                     this.estateCommandGateway(),
@@ -146,7 +175,7 @@ public class Launch extends Application {
         return this.searchEstatesUseCase;
     }
 
-    private synchronized GetEstateByIdUseCase getEstateByIdUseCase() {
+    public synchronized GetEstateByIdUseCase getEstateByIdUseCase() {
         if(this.getEstateByIdUseCase == null) {
             this.getEstateByIdUseCase = new GetEstateByIdUseCase(
                     this.estateGateway()
@@ -155,10 +184,11 @@ public class Launch extends Application {
         return this.getEstateByIdUseCase;
     }
 
-    private synchronized GeolocalizeFromAddressUseCase geolocalizeFromAddressUseCase() {
+    public synchronized GeolocalizeFromAddressUseCase geolocalizeFromAddressUseCase() {
         if(this.geolocalizeFromAddressUseCase == null) {
             this.geolocalizeFromAddressUseCase = new GeolocalizeFromAddressUseCase(
-                    this.geolocationGateway()
+                    this.geolocationGateway(),
+                    this.networkGateway()
             );
         }
         return this.geolocalizeFromAddressUseCase;
