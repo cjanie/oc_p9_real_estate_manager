@@ -19,4 +19,8 @@ public class WorkStore {
     public Set<String> getBackLog() {
         return workStoreGateway.getBacklog();
     }
+
+    public void addTask(String task) {
+        this.workStoreGateway.getBacklog().add(task);
+    }
 }

@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.fragments.form;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,20 +10,29 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.ui.fragments.MapEstateFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.MapEstateWifiFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.MapsFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
+import com.openclassrooms.realestatemanager.ui.utils.WorkStore;
+import com.openclassrooms.realestatemanager.ui.utils.WorkStoreGatewayConfig;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class FormGeocodingFragment extends FormSaveSkipFragment implements View.OnClickListener {
 
-    private HandleGeocodingData handleGeocodingData;
-
     private Button skip;
     private Button save;
+    private MapsFragment mapsFragment;
 
-    public FormGeocodingFragment(SaveEstateDataUpdate saveEstateDataUpdate, Next next, FormData formData, HandleGeocodingData handleGeocodingData) {
+    public FormGeocodingFragment(SaveEstateDataUpdate saveEstateDataUpdate, Next next, FormData formData) {
         super(saveEstateDataUpdate, next, formData);
-        this.handleGeocodingData = handleGeocodingData;
     }
 
     @Nullable
@@ -35,8 +46,22 @@ public class FormGeocodingFragment extends FormSaveSkipFragment implements View.
         this.skip.setOnClickListener(this);
         this.save.setOnClickListener(this);
 
-        this.handleGeocodingData.updateGeocodingRequestToSetGeocodingData();
+        if(this.getFormData().getLatitude() != null && this.getFormData().getLongitude() != null) {
+            this.mapsFragment = new MapEstateFragment(this.getFormData());
+        } else {
+            this.mapsFragment = new MapEstateWifiFragment(this.getFormData());
+            this.enableButton(this.save);
+        }
+
+        this.showMap();
         return root;
+    }
+
+    private void showMap() {
+        FragmentManager fragmentManager = this.getParentFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.frame_layout_form_map, this.mapsFragment)
+                .commit();
     }
 
     @Override
@@ -56,17 +81,7 @@ public class FormGeocodingFragment extends FormSaveSkipFragment implements View.
             this.save();
             this.next();
         } else {
-            this.resetGeocodingData();
             this.next();
         }
-    }
-
-    private void resetGeocodingData() {
-        this.handleGeocodingData.resetGeocodingData();
-    }
-
-    public interface HandleGeocodingData {
-        void updateGeocodingRequestToSetGeocodingData();
-        void resetGeocodingData();
     }
 }

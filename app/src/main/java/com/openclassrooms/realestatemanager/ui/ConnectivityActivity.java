@@ -35,16 +35,20 @@ public class ConnectivityActivity extends BaseActivity {
         this.connectivityViewModel.isNetworkConnected().observe(this, isNetworkConnected -> {
             if(isNetworkConnected) {
                 Toast.makeText(this, "network connected", Toast.LENGTH_LONG).show();
-                WorkManager workManager = WorkManager.getInstance(this);
-                workManager.enqueue(OneTimeWorkRequest.from(GeocodingRequestWorker.class));
-                // TODO make workmanager doWork
-                Log.i(this.getClass().getName(), "TODO Make workManager doWork()");
+                this.doWork();
             } else {
                 Toast.makeText(this, "network not connected", Toast.LENGTH_LONG).show();
             }
         });
 
         this.handleNetworkCallbackRegistration();
+    }
+
+    private void doWork() {
+        Log.i(this.getClass().getName(), "Make workManager doWork()");
+
+        WorkManager workManager = WorkManager.getInstance(this);
+        workManager.enqueue(OneTimeWorkRequest.from(GeocodingRequestWorker.class));
     }
 
     private void handleNetworkCallbackRegistration() {
