@@ -1,12 +1,10 @@
 package com.openclassrooms.realestatemanager.businesslogic.usecases;
 
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
-import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
-import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.PayloadException;
-import com.openclassrooms.realestatemanager.businesslogic.wifimode.gateways.GeolocationGateway;
+import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.NetworkException;
 import com.openclassrooms.realestatemanager.businesslogic.wifimode.usecases.GeolocalizeFromAddressUseCase;
-import com.openclassrooms.realestatemanager.businesslogic.wifimode.exceptions.GeolocationException;
 import com.openclassrooms.realestatemanager.data.gatewaysimpl.InMemoryGeolocationGateway;
+import com.openclassrooms.realestatemanager.data.gatewaysimpl.InMemoryNetworkGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,17 +17,27 @@ import io.reactivex.Observable;
 
 public class GeolocalizeFromAddressTest {
 
-    @Test
-    public void returnsLatitudeAndLongitudeOfEstates() throws PayloadException {
+    private GeolocalizeFromAddressUseCase createUseCase(boolean isNetworkConnected) {
         InMemoryGeolocationGateway geolocationGateway = new InMemoryGeolocationGateway();
-        GeolocalizeFromAddressUseCase geolocalizeUseCase = new GeolocalizeFromAddressUseCase(geolocationGateway);
+        InMemoryNetworkGateway networkGateway = new InMemoryNetworkGateway();
+        networkGateway.setNetworkConnected(isNetworkConnected);
+        return new GeolocalizeFromAddressUseCase(geolocationGateway, networkGateway);
+    }
 
-        List<Estate> results = new ArrayList<>();
-
+    private Estate createEstateWithAddress() {
         Estate estate = new Estate();
         estate.setStreetNumberAndStreetName("2 passage Lonjon");
         estate.setLocation("Montpellier");
         estate.setCountry("France");
+        return estate;
+    }
+
+    @Test
+    public void returnsLatitudeAndLongitudeOfEstates() {
+        GeolocalizeFromAddressUseCase geolocalizeUseCase = this.createUseCase(true);
+        List<Estate> results = new ArrayList<>();
+
+        Estate estate = this.createEstateWithAddress();
 
         Observable<Estate> observableFromIterable = Observable.fromIterable(Arrays.asList(estate));
         geolocalizeUseCase.handleList(observableFromIterable).subscribe(results::addAll);
@@ -39,13 +47,10 @@ public class GeolocalizeFromAddressTest {
     }
 
     @Test
-    public void returnsLatitudeAndLongitudeOfEstate() throws PayloadException, GeolocationException {
-        InMemoryGeolocationGateway geolocationGateway = new InMemoryGeolocationGateway();
-        GeolocalizeFromAddressUseCase geolocalizeUseCase = new GeolocalizeFromAddressUseCase(geolocationGateway);
-        Estate estate = new Estate();
-        estate.setStreetNumberAndStreetName("2 passage Lonjon");
-        estate.setLocation("Montpellier");
-        estate.setCountry("France");
+    public void returnsLatitudeAndLongitudeOfEstate() {
+        GeolocalizeFromAddressUseCase geolocalizeUseCase = this.createUseCase(true);
+
+        Estate estate = this.createEstateWithAddress();
 
         List<Estate> results = new ArrayList<>();
 
@@ -55,5 +60,11 @@ public class GeolocalizeFromAddressTest {
         Assertions.assertNotNull(results.get(0).getLongitude());
     }
 
-
+    @Test
+    public void requestsNetwork() {
+        GeolocalizeFromAddressUseCase geolocaliseUseCase = this.createUseCase(false);
+        Assertions.assertThrows(NetworkException.class, () -> {
+           geolocaliseUseCase.handleOne(this.createEstateWithAddress());
+        });
+    }
 }

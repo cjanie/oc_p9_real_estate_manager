@@ -77,7 +77,17 @@ public class FormUpdateEstateFragment extends FormFragment {
 
     @Override
     public void saveEstateDataUpdate() {
-        this.formViewModel.saveEstateDataUpdate();
+
+        Long id = this.formViewModel.saveEstateDataUpdate();
+
+        // For geocoding request worker
+        if(id != null && id > 0) {
+            if(this.getData().getLatitude() == null || this.getData().getLongitude() == null) {
+                if (this.isCompleteAddress(this.getData())) {
+                    this.saveIdForGeocodingRequestWorker(id);
+                }
+            }
+        }
     }
 
 }

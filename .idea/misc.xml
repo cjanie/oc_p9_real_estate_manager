@@ -28,6 +28,7 @@
         <entry key="app/src/main/res/layout/fragment_form_camera.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_form_description.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_form_description_details.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_form_geocoding.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_form_mandatory_fields.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_form_media.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_geolocation.xml" value="0.1" />

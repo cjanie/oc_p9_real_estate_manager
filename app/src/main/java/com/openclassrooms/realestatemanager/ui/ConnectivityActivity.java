@@ -5,6 +5,7 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,7 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
+import com.openclassrooms.realestatemanager.ui.utils.GeocodingRequestWorker;
 import com.openclassrooms.realestatemanager.ui.viewmodels.ConnectivityViewModel;
 
 public class ConnectivityActivity extends BaseActivity {
@@ -31,12 +35,20 @@ public class ConnectivityActivity extends BaseActivity {
         this.connectivityViewModel.isNetworkConnected().observe(this, isNetworkConnected -> {
             if(isNetworkConnected) {
                 Toast.makeText(this, "network connected", Toast.LENGTH_LONG).show();
+                this.doWork();
             } else {
                 Toast.makeText(this, "network not connected", Toast.LENGTH_LONG).show();
             }
         });
 
         this.handleNetworkCallbackRegistration();
+    }
+
+    private void doWork() {
+        Log.i(this.getClass().getName(), "Make workManager doWork()");
+
+        WorkManager workManager = WorkManager.getInstance(this);
+        workManager.enqueue(OneTimeWorkRequest.from(GeocodingRequestWorker.class));
     }
 
     private void handleNetworkCallbackRegistration() {
@@ -74,6 +86,8 @@ public class ConnectivityActivity extends BaseActivity {
             public void onAvailable(@NonNull Network network) {
                 super.onAvailable(network);
                 connectivityViewModel.updateIsNetworkConnected();
+                // TODO Worker on available network
+
             }
 
             @Override

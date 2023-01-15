@@ -7,4 +7,5 @@ public interface FormStepVisitor<T> {
     T visitDescription();
     T visitDescriptionDetails();
     T visitAddress();
+    T visitGeocoding();
 }
