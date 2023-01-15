@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.ui.fragments.form;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,31 +16,25 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.openclassrooms.realestatemanager.Launch;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Estate;
 import com.openclassrooms.realestatemanager.businesslogic.entities.Media;
-import com.openclassrooms.realestatemanager.businesslogic.wifimode.entities.Geolocation;
 import com.openclassrooms.realestatemanager.ui.LocationActivity;
 import com.openclassrooms.realestatemanager.ui.enums.Action;
 import com.openclassrooms.realestatemanager.ui.SettingsActivity;
 import com.openclassrooms.realestatemanager.ui.fragments.Next;
 import com.openclassrooms.realestatemanager.ui.fragments.UseSharedPreferenceFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.form.progressbar.ProgressBarHandler;
+import com.openclassrooms.realestatemanager.ui.fragments.form.progressbar.StepIconVisitor;
 import com.openclassrooms.realestatemanager.ui.utils.WorkStore;
-import com.openclassrooms.realestatemanager.ui.utils.WorkStoreGatewayConfig;
 import com.openclassrooms.realestatemanager.ui.viewmodels.FormViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.GeocodingViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.SharedViewModel;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.FormViewModelFactory;
 import com.openclassrooms.realestatemanager.ui.viewmodels.factories.GeocodingViewModelFactory;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public abstract class FormFragment extends UseSharedPreferenceFragment implements
         FormMandatoryFragment.HandleFormMandatoryFields,
@@ -67,7 +60,7 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
 
     private LocationActivity locationActivity;
 
-
+    private ProgressBarHandler progressBarHandler;
 
     public FormFragment(LocationActivity locationActivity) {
         this.locationActivity = locationActivity;
@@ -79,6 +72,7 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
         View root = inflater.inflate(this.LAYOUT_ID, container, false);
 
         this.formStepsProgressBar = root.findViewById(R.id.layout_form_steps_progress_bar);
+        this.progressBarHandler = new ProgressBarHandler(this.formStepsProgressBar);
         this.configureProgressBar(inflater);
 
         FormViewModelFactory formViewModelFactory = ((Launch)this.getActivity().getApplication()).formViewModelFactory();
@@ -109,8 +103,8 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
             final int stepIndex = i;
             View view = inflater.inflate(R.layout.layout_form_step_checked_icon, this.formStepsProgressBar, false);
             ImageView imageView = view.findViewById(R.id.form_step_icon);
-            imageView.setImageDrawable(this.getResources().getDrawable(this.getIconForStep(FormStepEnum.values()[i])));
-            imageView.setColorFilter(this.getResources().getColor(R.color.black));
+            imageView.setImageDrawable(this.getContext().getDrawable(new StepIconVisitor().getIconForStep(FormStepEnum.values()[i])));
+            imageView.setColorFilter(this.getContext().getColor(R.color.black));
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -250,43 +244,33 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
 
    // Progress bar steps
     protected void handleProgressBarStepMandatory(boolean isComplete) {
-        this.handleStepsProgressBar(FormStepEnum.MANDATORY.ordinal(), isComplete);
+        this.progressBarHandler.handleStepsProgressBar(FormStepEnum.MANDATORY.ordinal(), isComplete);
     }
 
     protected void handleProgressBarStepAddress(boolean isComplete) {
-        this.handleStepsProgressBar(FormStepEnum.ADDRESS.ordinal(), isComplete);
+        this.progressBarHandler.handleStepsProgressBar(FormStepEnum.ADDRESS.ordinal(), isComplete);
     }
 
     protected void handleProgressBarStepDescription(boolean isComplete) {
-        this.handleStepsProgressBar(FormStepEnum.DESCRIPTION.ordinal(), isComplete);
+        this.progressBarHandler.handleStepsProgressBar(FormStepEnum.DESCRIPTION.ordinal(), isComplete);
     }
 
     protected void handleProgressBarStepDescriptionDetails(boolean isComplete) {
-        this.handleStepsProgressBar(FormStepEnum.DESCRIPTION_DETAILS.ordinal(), isComplete);
+        this.progressBarHandler.handleStepsProgressBar(FormStepEnum.DESCRIPTION_DETAILS.ordinal(), isComplete);
     }
 
     protected void handleProgressBarStepMedia(boolean isComplete) {
-        this.handleStepsProgressBar(FormStepEnum.MEDIA.ordinal(), isComplete);
+        this.progressBarHandler.handleStepsProgressBar(FormStepEnum.MEDIA.ordinal(), isComplete);
     }
 
     protected void handleProgressBarStepGeolocation(boolean isComplete) {
-        this.handleStepsProgressBar(FormStepEnum.GEOLOCATION.ordinal(), isComplete);
+        this.progressBarHandler.handleStepsProgressBar(FormStepEnum.GEOLOCATION.ordinal(), isComplete);
     }
 
     protected void handleProgressBarStepGeocoding(boolean isComplete) {
-        this.handleStepsProgressBar(FormStepEnum.GEOCODING.ordinal(), isComplete);
+        this.progressBarHandler.handleStepsProgressBar(FormStepEnum.GEOCODING.ordinal(), isComplete);
     }
 
-    private void handleStepsProgressBar(int stepIndex, boolean isComplete) {
-        ImageView stepIcon = this.formStepsProgressBar.getChildAt(stepIndex).findViewById(R.id.form_step_icon);
-        if(isComplete) {
-            int colorSuccess = this.getResources().getColor(R.color.green);
-            stepIcon.setColorFilter(colorSuccess);
-        } else {
-            int colorDefault = this.getResources().getColor(R.color.black);
-            stepIcon.setColorFilter(colorDefault);
-        }
-    }
 
     @Override
     public void next(FormStep actualFragment) {
@@ -379,46 +363,6 @@ public abstract class FormFragment extends UseSharedPreferenceFragment implement
             public FormSaveSkipFragment visitGeocoding() {
                 return new FormGeocodingFragment(FormFragment.this, FormFragment.this, FormFragment.this);
             }
-        });
-    }
-
-    private int getIconForStep(FormStepEnum step) {
-        return step.accept(new FormStepVisitor<Integer>() {
-            @Override
-            public Integer visitMandatory() {
-                return R.drawable.ic_baseline_lightbulb_24;
-            }
-
-            @Override
-            public Integer visitMedia() {
-                return R.drawable.ic_baseline_add_a_photo_24;
-            }
-
-            @Override
-            public Integer visitGeolocation() {
-                return R.drawable.ic_baseline_my_location_24;
-            }
-
-            @Override
-            public Integer visitDescription() {
-                return R.drawable.ic_baseline_description_24;
-            }
-
-            @Override
-            public Integer visitDescriptionDetails() {
-                return R.drawable.ic_baseline_square_foot_24;
-            }
-
-            @Override
-            public Integer visitAddress() {
-                return R.drawable.ic_baseline_location_city_24;
-            }
-
-            @Override
-            public Integer visitGeocoding() {
-                return R.drawable.ic_baseline_map_24;
-            }
-
         });
     }
 
