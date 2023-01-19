@@ -136,4 +136,8 @@ dependencies {
     // optional - Multiprocess support
     implementation "androidx.work:work-multiprocess:$work_version"
 
+    // BLUR
+    implementation 'jp.wasabeef:blurry:4.0.1'
+    implementation 'com.eightbitlab:blurview:1.6.1'
+
 }

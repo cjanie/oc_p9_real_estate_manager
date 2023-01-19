@@ -138,4 +138,16 @@
         app:layout_constraintStart_toStartOf="@id/bedrooms_title"
         app:layout_constraintTop_toBottomOf="@+id/bedrooms_title" />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:alpha="0.4"
+        android:scaleType="centerCrop"
+        android:src="@drawable/arbre_blanc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/bedrooms_value"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
