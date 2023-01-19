@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.RenderEffect;
 import android.graphics.Shader;
 import android.net.ConnectivityManager;
@@ -69,16 +70,17 @@ public class MainActivity extends ConnectivityActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.S)
     private void blur() {
-        RenderEffect renderEffect = RenderEffect.createBlurEffect(60, 60, Shader.TileMode.MIRROR);
-        this.imageView.setAlpha(0.4f);
+        RenderEffect renderEffect = RenderEffect.createBlurEffect(40, 40, Shader.TileMode.MIRROR);
         this.imageView.setRenderEffect(renderEffect);
+
     }
 
     private void useBlurView() {
         BlurView blurView = this.findViewById(R.id.blur_layout);
         ViewGroup viewGroup = this.findViewById(R.id.image_view_wall_paper_layout);
         blurView.setupWith(viewGroup)
-                .setBlurAlgorithm(new RenderScriptBlur(this)).setBlurRadius(5f);
+                .setBlurAlgorithm(new RenderScriptBlur(this))
+                .setBlurRadius(2f);
 
     }
 
