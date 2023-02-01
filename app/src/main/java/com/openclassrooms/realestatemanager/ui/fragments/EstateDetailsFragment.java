@@ -151,9 +151,12 @@ public class EstateDetailsFragment extends BaseFragment {
             }
 
             MapsFragment mapsFragment = new MapEstateFragment(estate);
-            this.getChildFragmentManager().beginTransaction()
-                    .replace(R.id.frame_layout_google_map, mapsFragment)
-                    .commit();
+            if(this.isAdded()) {
+                this.getChildFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout_google_map, mapsFragment)
+                        .commit();
+
+            }
 
 
         });
