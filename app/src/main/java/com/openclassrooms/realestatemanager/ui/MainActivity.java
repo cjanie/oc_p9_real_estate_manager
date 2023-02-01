@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.ui.utils.UseBlurLib;
 import com.openclassrooms.realestatemanager.ui.utils.Utils;
 
 import eightbitlab.com.blurview.BlurView;
@@ -45,7 +46,9 @@ public class MainActivity extends ConnectivityActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             this.blur();
         } else {
-            this.useBlurLib();
+            BlurView blurView = this.findViewById(R.id.blur_layout);
+            ViewGroup viewGroup = this.findViewById(R.id.image_view_wall_paper_layout);
+            new UseBlurLib().blur(blurView, viewGroup);
         }
     }
 
@@ -68,12 +71,6 @@ public class MainActivity extends ConnectivityActivity {
         imageView.setRenderEffect(renderEffect);
     }
 
-    private void useBlurLib() {
-        BlurView blurView = this.findViewById(R.id.blur_layout);
-        ViewGroup viewGroup = this.findViewById(R.id.image_view_wall_paper_layout);
-        blurView.setupWith(viewGroup)
-                .setBlurAlgorithm(new RenderScriptBlur(this))
-                .setBlurRadius(2f);
-    }
+
 
 }

@@ -16,13 +16,17 @@
             android:id="@+id/image_view_wall_paper_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
                 android:id="@+id/image_view_wall_paper"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/arbre_blanc"
                 android:scaleType="centerCrop"
-                />
+                android:src="@drawable/arbre_blanc"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <eightbitlab.com.blurview.BlurView
