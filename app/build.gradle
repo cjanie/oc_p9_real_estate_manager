@@ -1,39 +1,143 @@
-//apply plugin: 'com.android.application'
-
 plugins {
     id('com.android.application')
     // ...
-    id("de.mannodermaus.android-junit5")
+    id("de.mannodermaus.android-junit5") // Junit5
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
+def apikeyPropertiesFile = rootProject.file("apikey.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
 android {
-    compileSdk 32
+
+    compileSdk 33
+
     defaultConfig {
         applicationId "com.openclassrooms.realestatemanager"
-        minSdkVersion 19
-        targetSdk 32
+        minSdkVersion 21
+
+        targetSdk 33
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def addConstant = {constantName, constantValue ->
+            manifestPlaceholders += [ (constantName):constantValue]
+            buildConfigField "String", "${constantName}", "\"${constantValue}\""
+        }
+
+        addConstant("GOOGLE_PLACE_API_KEY", apikeyProperties['GOOGLE_PLACE_API_KEY'])
     }
+
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // https://developer.android.com/studio/build/shrink-code
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    //androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    //androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
+    // For RecyclerView
+    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.9.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'androidx.preference:preference:1.1.1'
+
+    // Instrumented tests
+
+    // Core library
+    def androidXTestVersion0 = "1.5.0"
+    androidTestImplementation "androidx.test:core:$androidXTestVersion0"
+
+    // AndroidJUnitRunner and JUnit Rules
+    def androidXTestVersion = "1.5.0"
+    androidTestImplementation "androidx.test:runner:$androidXTestVersion"
+    androidTestImplementation "androidx.test:rules:$androidXTestVersion"
+
+    // Assertions
+    def testJunitVersion = "1.1.4"
+    androidTestImplementation "androidx.test.ext:junit:$testJunitVersion"
+    def truthVersion = "1.5.0"
+    androidTestImplementation "androidx.test.ext:truth:$truthVersion"
+
+    // Espresso dependencies
+    def espressoVersion = "3.5.0"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-accessibility:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-web:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso.idling:idling-concurrent:$espressoVersion"
+
+    // The following Espresso dependency can be either "implementation",
+    // or "androidTestImplementation", depending on whether you want the
+    // dependency to appear on your APK’"s compile classpath or the test APK
+    // classpath.
+    androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
+
+    // Unit tests
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.8.2"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.8.2"
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.8.2"
     testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.8.2"
+
+    // GLIDE
+    // Glide v4 uses annotation processor
+    // see https://bumptech.github.io/glide/doc/generatedapi.html
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+    // DATABASE
+    //ROOM
+    implementation 'androidx.room:room-runtime:2.0.0'
+    annotationProcessor 'androidx.room:room-compiler:2.0.0'
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.7'
+
+    // Geocoding
+    def geocodingVersion = "2.0.10"
+    //implementation "com.google.appengine:appengine-api-1.0-sdk:$geocodingVersion"
+    implementation "com.google.maps:google-maps-services:0.1.3"
+
+    // RETROFIT
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
+    // REACTIVE X
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.7'
+
+    // Notifs
+    def work_version = "2.7.1"
+
+    // (Java only)
+    implementation "androidx.work:work-runtime:$work_version"
+
+    // optional - RxJava2 support
+    implementation "androidx.work:work-rxjava2:$work_version"
+
+    // optional - GCMNetworkManager support
+    implementation "androidx.work:work-gcm:$work_version"
+
+    // optional - Test helpers
+    androidTestImplementation "androidx.work:work-testing:$work_version"
+
+    // optional - Multiprocess support
+    implementation "androidx.work:work-multiprocess:$work_version"
+
+    // BLUR
+    implementation 'jp.wasabeef:blurry:4.0.1'
+    implementation 'com.eightbitlab:blurview:1.6.1'
+
 }

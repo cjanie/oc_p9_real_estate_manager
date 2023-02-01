@@ -1,0 +1,17 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/user">
+        <EditTextPreference
+            app:key="@string/user_name_preference_key"
+            android:title="@string/user_name"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/devise">
+        <SwitchPreferenceCompat
+            app:key="@string/devise_preference_key"
+            app:title="@string/euro" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

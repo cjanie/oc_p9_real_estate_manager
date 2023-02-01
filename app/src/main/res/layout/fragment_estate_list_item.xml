@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- include composants "atomic design"
+    https://deezer.io/a-journey-towards-atomic-design-on-android-at-deezer-f384928bb04e
+    -->
+
+    <ImageView
+        android:id="@+id/estate_list_item_photo"
+        android:layout_width="@dimen/photo_size"
+        android:layout_height="@dimen/photo_size"
+        android:src="@drawable/ic_baseline_insert_photo_24"
+        android:backgroundTint="@color/orange"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/estate_list_item_type"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/app_name"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/padding"
+        android:layout_marginTop="@dimen/padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/estate_list_item_photo"
+        app:layout_constraintTop_toTopOf="@id/estate_list_item_photo"
+        app:layout_constraintBottom_toTopOf="@id/estate_list_item_location"/>
+
+    <TextView
+        android:id="@+id/estate_list_item_location"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/app_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/estate_list_item_type"
+        app:layout_constraintTop_toBottomOf="@id/estate_list_item_type"
+        app:layout_constraintBottom_toTopOf="@id/estate_list_item_price"/>
+
+    <TextView
+        android:id="@+id/estate_list_item_price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/big_text"
+        android:layout_marginBottom="@dimen/padding"
+        app:layout_constraintTop_toBottomOf="@+id/estate_list_item_location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/estate_list_item_type"
+        app:layout_constraintBottom_toBottomOf="@id/estate_list_item_photo"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

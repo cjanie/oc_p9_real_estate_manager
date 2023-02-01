@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/label_estate_type"
+        android:layout_width="@dimen/label_min_width"
+        android:layout_height="wrap_content"
+        android:text="@string/type"
+        style="@style/label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <AutoCompleteTextView
+        android:id="@+id/auto_complete_estate_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/label_estate_type"
+        app:layout_constraintTop_toTopOf="@+id/label_estate_type" />
+
+    <Space
+        android:id="@+id/space_1"
+        android:layout_width="@dimen/padding"
+        android:layout_height="@dimen/padding"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/auto_complete_estate_type"/>
+
+    <TextView
+        android:id="@+id/label_estate_location"
+        android:layout_width="@dimen/label_min_width"
+        android:layout_height="wrap_content"
+        android:text="@string/location"
+        style="@style/label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/space_1" />
+
+    <AutoCompleteTextView
+        android:id="@+id/auto_complete_estate_location"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        app:layout_constraintTop_toTopOf="@id/label_estate_location"
+        app:layout_constraintStart_toEndOf="@id/label_estate_location"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Space
+        android:id="@+id/space_2"
+        android:layout_width="@dimen/padding"
+        android:layout_height="@dimen/padding"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/auto_complete_estate_location" />
+
+    <TextView
+        android:id="@+id/label_estate_max_price"
+        android:layout_width="@dimen/label_min_width"
+        android:layout_height="wrap_content"
+        android:text="@string/max_price"
+        style="@style/label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/space_2" />
+    <EditText
+        android:id="@+id/edit_text_estate_max_price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        app:layout_constraintTop_toTopOf="@id/label_estate_max_price"
+        app:layout_constraintStart_toEndOf="@id/label_estate_max_price"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Space
+        android:id="@+id/space_3"
+        android:layout_width="@dimen/big_space"
+        android:layout_height="@dimen/big_space"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_text_estate_max_price" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/space_3">
+        <Button
+            android:id="@+id/button_reset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/ButtonReset"/>
+        <Button
+            android:id="@+id/button_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/ButtonSearch"
+            />
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

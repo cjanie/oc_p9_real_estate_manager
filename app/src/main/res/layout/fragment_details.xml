@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:id="@+id/details_root_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/layout_estate_status"/>
+
+        <Space
+            android:layout_width="@dimen/big_space"
+            android:layout_height="@dimen/big_space"/>
+
+        <TextView
+            android:id="@+id/estate_details_media_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/media"
+            style="@style/Title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <include
+            layout="@layout/layout_media_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="@dimen/big_space"
+            android:layout_height="@dimen/big_space"/>
+
+        <include
+            layout="@layout/layout_details_description"/>
+
+        <Space
+            android:layout_width="@dimen/big_space"
+            android:layout_height="@dimen/big_space"/>
+
+        <LinearLayout
+            android:id="@+id/details_flex_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="2"
+            >
+
+            <include
+                layout="@layout/layout_details_description_details"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_weight="1"/>
+
+            <Space
+                android:layout_width="@dimen/big_space"
+                android:layout_height="@dimen/big_space"/>
+
+            <include
+                layout="@layout/layout_details_address"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/frame_layout_google_map"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/map_min_height"
+            android:layout_marginVertical="@dimen/big_space"/>
+
+
+    </LinearLayout>
+
+</ScrollView>

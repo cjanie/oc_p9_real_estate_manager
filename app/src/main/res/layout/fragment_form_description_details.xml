@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/label_surface"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/surface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/label"/>
+
+    <EditText
+        android:id="@+id/editText_surface"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_surface" />
+
+    <ImageButton
+        android:id="@+id/button_delete_surface"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:src="@drawable/ic_baseline_delete_outline_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/label_surface"
+        app:layout_constraintBottom_toBottomOf="@+id/label_surface"/>
+
+
+    <TextView
+        android:id="@+id/label_numberOfRooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/number_of_rooms"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_surface"
+        style="@style/label"/>
+
+    <EditText
+        android:id="@+id/editText_numberOfRooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_numberOfRooms" />
+
+    <ImageButton
+        android:id="@+id/button_delete_rooms"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:src="@drawable/ic_baseline_delete_outline_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/label_numberOfRooms"
+        app:layout_constraintBottom_toBottomOf="@+id/label_numberOfRooms"/>
+
+
+    <TextView
+        android:id="@+id/label_numberOfBathrooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/number_of_bathrooms"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_numberOfRooms"
+        style="@style/label"/>
+
+    <EditText
+        android:id="@+id/editText_numberOfBathrooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_numberOfBathrooms" />
+
+    <ImageButton
+        android:id="@+id/button_delete_bathrooms"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:src="@drawable/ic_baseline_delete_outline_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/label_numberOfBathrooms"
+        app:layout_constraintBottom_toBottomOf="@+id/label_numberOfBathrooms"/>
+
+
+    <TextView
+        android:id="@+id/label_numberOfBedrooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/number_of_bedrooms"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_numberOfBathrooms"
+        style="@style/label"/>
+
+    <EditText
+        android:id="@+id/editText_numberOfBedrooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_numberOfBedrooms" />
+
+    <ImageButton
+        android:id="@+id/button_delete_bedrooms"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:src="@drawable/ic_baseline_delete_outline_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/label_numberOfBedrooms"
+        app:layout_constraintBottom_toBottomOf="@+id/label_numberOfBedrooms"/>
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_numberOfBedrooms"
+        android:orientation="horizontal"
+        android:weightSum="2">
+        <Button
+            android:id="@+id/button_skip_form_description_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/ButtonSkip" />
+        <Button
+            android:id="@+id/button_save_form_description_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/ButtonSave" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
